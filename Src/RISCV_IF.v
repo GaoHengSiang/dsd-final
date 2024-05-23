@@ -1,0 +1,6 @@
+module decoder(
+
+);
+
+
+endmodule
