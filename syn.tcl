@@ -1,6 +1,6 @@
 
 set DESIGN CHIP
-set src [list Src/CHIP.v Src/cache.v]
+set src [list Src/CHIP.v Src/cache.v Src/alu.v Src/register_file.v Src/RISCV_Pipeline.v Src/RISCV_IF.v Src/RISCV_ID.v Src/RISCV_EX.v Src/RISCV_MEM.v Src/RISCV_WB.v]
 
 sh mkdir -p Work
 sh mkdir -p Report
