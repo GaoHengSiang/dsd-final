@@ -2,7 +2,7 @@ module alu(
     input   [3:0] op,
     input  [31:0] operand_a,
     input  [31:0] operand_b,
-    output [31:0] out,
+    output [31:0] out
 );
 
     // operations definition
@@ -37,16 +37,16 @@ module alu(
     wire padding;
 
     generate 
-        for (gen_i = 0; gen_i < 32; gen_i++) begin:gen_blk0
+        for (gen_i = 0; gen_i < 32; gen_i = gen_i+1) begin:gen_blk0
             assign operand_a_rev[gen_i] = operand_a[31-gen_i];
-            assign shift_left_result[gen_i] = shift_right_result[31-j];
+            assign shift_left_result[gen_i] = shift_right_result[31-gen_i];
         end
     endgenerate 
 
     // adder
     assign adder_b_neg = (op == SUB || op == SLT);
-    assign adder_in_a = {alu_operand_a, 1'b1};
-    assign adder_in_b = {alu_operand_b, 1'b0} ^ {33{adder_b_neg}};
+    assign adder_in_a = {operand_a, 1'b1};
+    assign adder_in_b = {operand_b, 1'b0} ^ {33{adder_b_neg}};
     assign adder_result_tmp = $signed(adder_in_a) + $signed(adder_in_b);
     assign adder_result = adder_result_tmp[32:1];
     
@@ -57,7 +57,7 @@ module alu(
 
     assign shift_op_a = shift_left ? operand_a_rev : operand_a;
     assign shift_in = {padding, shift_op_a};
-    assign shift_right_result = $unsigned($(signed(shift_in) >>> shift_amt));
+    assign shift_right_result = $unsigned(($signed(shift_in) >>> shift_amt));
     assign shift_result = shift_left ? shift_left_result : shift_right_result[31:0];
 
     // output assignment
