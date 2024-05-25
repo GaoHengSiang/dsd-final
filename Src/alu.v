@@ -1,5 +1,5 @@
 module alu(
-    input   [2:0] op,
+    input   [3:0] op,
     input  [31:0] operand_a,
     input  [31:0] operand_b,
     output [31:0] out,
@@ -13,9 +13,11 @@ module alu(
     localparam XOR       = 4;
     localparam SRA       = 5;
     localparam SRL       = 6;
-    localparam SLT       = 7;
+    localparam SLL       = 7;
+    localparam SLT       = 8;
 
 
+    genvar gen_i;
 
     // wire declaration
     reg  [31:0] alu_out;
@@ -24,10 +26,22 @@ module alu(
     wire        adder_b_neg;
     wire [33:0] adder_result_tmp;
 
-    wire [32:0] shift_op_a;
+    wire [31:0] operand_a_rev;
+    wire [31:0] shift_op_a;
+    wire [32:0] shift_in;
+    wire        shift_left;
     wire  [4:0] shift_amt;
-    wire [32:0] shift_result;
+    wire [32:0] shift_right_result;
+    wire [31:0] shift_left_result;
+    wire [31:0] shift_result;
     wire padding;
+
+    generate 
+        for (gen_i = 0; gen_i < 32; gen_i++) begin:gen_blk0
+            assign operand_a_rev[gen_i] = operand_a[31-gen_i];
+            assign shift_left_result[gen_i] = shift_right_result[31-j];
+        end
+    endgenerate 
 
     // adder
     assign adder_b_neg = (op == SUB || op == SLT);
@@ -38,10 +52,14 @@ module alu(
     
     // shifter
     assign padding = (operand_a[31] && (op == SRA))? 1 : 0;
+    assign shift_left = (op == SLL);
     assign shift_amt = operand_b[4:0];
-    assign shift_op_a = {padding, operand_a};
-    assign shift_result = $unsigned($(signed(shift_op_a) >>> shift_amt));
-    
+
+    assign shift_op_a = shift_left ? operand_a_rev : operand_a;
+    assign shift_in = {padding, shift_op_a};
+    assign shift_right_result = $unsigned($(signed(shift_in) >>> shift_amt));
+    assign shift_result = shift_left ? shift_left_result : shift_right_result[31:0];
+
     // output assignment
     assign out = alu_out;
     
@@ -64,8 +82,8 @@ module alu(
             XOR: begin
                 alu_out = operand_a ^ operand_b;
             end
-            SRA, SRL: begin
-                alu_out = shift_result[31:0];
+            SRA, SRL, SLL: begin
+                alu_out = shift_result;
             end
         endcase
     end
