@@ -7,23 +7,23 @@ module MEM_STAGE #(
     input rst_n,
     //PIPELINE INPUT FROM EX/MEM REGISTER
     input [BIT_W-1: 0] alu_result_in,
-    input [BIT_W-1: 0] second_opr_in,
-    input [BIT_W-1: 0] nxPC_in,
+    input [BIT_W-1: 0] mem_wdata_in,
         //various control signals input
     input memrd_in,
     input memwr_in,
         //transparent
+    input [BIT_W-1: 0] PC_plus_4_in,
     input [4: 0] rd_in,
     input mem2reg_in,
     input regwr_in,
 
     
     //PIPELINE OUTPUT TO MEM/WB REGISTER
-    output [BIT_W-1: 0] nx_PC,
     output [BIT_W-1: 0] alu_result_out,
     output [BIT_W-1: 0] mem_dat,
-    output [4: 0] rd_out,
         //various control signals output
+    output [BIT_W-1: 0] PC_plus_4_out,
+    output [4: 0] rd_out,
     output mem2reg_out,
     output regwr_out,
 
@@ -33,9 +33,10 @@ module MEM_STAGE #(
     output        DCACHE_wen,
     output [29:0] DCACHE_addr, //assume word address
     input  [31:0] DCACHE_rdata,
-    output [31:0] DCACHE_wdata
-    //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-    //maybe no need because forwarding is already done in ID stage
+    output [31:0] DCACHE_wdata,
+
+    //I/O FOR STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
+    output d_cache_stall
 );
 
     //Reg and Wire declaration
@@ -46,7 +47,12 @@ module MEM_STAGE #(
     reg [4: 0] rd_w;
     reg mem2reg_w, regwr_w;
     //Continuous assignments
-    assign //to dcache interface
+    //to dcache interface
+    assign DCACHE_ren = memrd_in;
+    assign DCACHE_wen = memwr_in;
+    assign DCACHE_addr = 
+    assign DCACHE_rdata = 
+    assign DCACHE_wdata = 
 
     //module instantiantion
 
