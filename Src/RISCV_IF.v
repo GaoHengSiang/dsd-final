@@ -2,6 +2,7 @@ module RISCV_IF(
     input         clk,
     input         rst_n,
     input         stall,
+    input         flush,
     input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal
     input  [31:0] pc_branch,
     input  [31:0] pc_j,
@@ -58,13 +59,8 @@ module RISCV_IF(
             pc_ppl_r <= 0;
             inst_ppl_r <= 0;
         end else begin
-            if (!(stall || ICACHE_stall)) begin
-                pc_r <= pc_w;
-                inst_ppl_r <= inst_ppl_w;
-            end else begin
-                pc_r <= pc_r;
-                inst_ppl_r <= NOP;
-            end
+            pc_r <= (stall || ICACHE_stall) ? pc_r : pc_w;
+            inst_ppl_r <= (flush || ICACHE_stall) ? NOP : inst_ppl_w;
             pc_ppl_r <= pc_ppl_w;
         end
     end
