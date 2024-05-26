@@ -88,17 +88,6 @@ module RISCV_ID(
         .reg_wen_o(reg_wen)
     );
 
-    register_file u1 (
-        .clk(clk),
-        .rst_n(rst_n),
-        .rs1(rs1),
-        .rs2(rs2),
-        .rd(rd),
-        .wen(1'b0),
-        .wrdata(32'h0),
-        .rddata1(rs1_rdata_w),
-        .rddata2(rs2_rdata_w)
-    );
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
