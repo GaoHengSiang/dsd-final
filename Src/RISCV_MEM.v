@@ -33,10 +33,8 @@ module MEM_STAGE #(
     output        DCACHE_wen,
     output [29:0] DCACHE_addr, //assume word address
     input  [31:0] DCACHE_rdata,
-    output [31:0] DCACHE_wdata,
+    output [31:0] DCACHE_wdata
 
-    //I/O FOR STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-    output d_cache_stall //not register blocked
 );
 
     //Reg and Wire declaration
@@ -61,9 +59,6 @@ module MEM_STAGE #(
     assign rd_out = rd_r;
     assign mem2reg_out = mem2reg_r;
     assign regwr_out = regwr_r;
-
-    //other
-    assign d_cache_stall_out = DCACHE_stall;
 
     //module instantiantion
     //none
