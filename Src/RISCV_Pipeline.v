@@ -76,6 +76,8 @@ module RISCV_Pipeline(
     
     //wire assignment 
     assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    assign IF_stall = DCACHE_stall;
+    assign ID_stall = DCACHE_stall;
 
     register_file reg_file(
         .clk(clk),
