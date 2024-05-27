@@ -46,7 +46,14 @@ module RISCV_Pipeline(
     wire [31:0] ID_EX_rs1_data_ppl, ID_EX_rs2_data_ppl;
     wire [31:0] ID_EX_imm_ppl;
     wire        ID_EX_alu_src_ppl;
+    wire [3: 0] ID_EX_alu_ctrl_ppl;
     wire [31:0] ID_EX_pc_ppl_out;
+    wire    ID_EX_jal_ppl,
+            ID_EX_jalr_ppl,
+            ID_EX_mem_ren_ppl,
+            ID_EX_mem_wen_ppl,
+            ID_EX_mem_to_reg_ppl,
+            ID_EX_reg_wen_ppl;
 
     //------EX/MEM pipeline reg------------
     wire [31: 0] EX_MEM_alu_result;
@@ -110,14 +117,20 @@ module RISCV_Pipeline(
         .flush(ID_flush),
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
-        //ID/EX
+        //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
         .rs1_data_ppl(ID_EX_rs1_data_ppl),
         .rs2_data_ppl(ID_EX_rs2_data_ppl),
         .imm_ppl(ID_EX_imm_ppl),
         .alu_src_ppl(ID_EX_alu_src_ppl),
+        .alu_ctrl_ppl(ID_EX_alu_ctrl_ppl),
         .pc_ppl_out(ID_EX_pc_ppl_out),
-
+        .jal_ppl(ID_EX_jal_ppl),
+        .jalr_ppl(ID_EX_jalr_ppl),
+        .mem_ren_ppl(ID_EX_mem_ren_ppl),
+        .mem_wen_ppl(ID_EX_mem_wen_ppl),
+        .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
+        .reg_wen_ppl(ID_EX_reg_wen_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
         //----------register_file interface-------------
@@ -142,16 +155,16 @@ module RISCV_Pipeline(
         .imm(ID_EX_imm_ppl),
         //various control signals input
         .alusrc_in(ID_EX_alu_src_ppl),
-        .aluctrl_in(), //**************************missing control from ID
-        .jal_in(),
-        .jalr_in(),
+        .aluctrl_in(ID_EX_alu_ctrl_ppl), //**************************missing control from ID
+        .jal_in(ID_EX_jal_ppl),
+        .jalr_in(ID_EX_jalr_ppl),
         .DCACHE_stall(DCACHE_stall),
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
-        .memrd_in(),
-        .memwr_in(),
-        .mem2reg_in(),
-        .regwr_in(),
+        .memrd_in(ID_EX_mem_ren_ppl),
+        .memwr_in(ID_EX_mem_ren_ppl),
+        .mem2reg_in(ID_EX_mem_to_reg_ppl),
+        .regwr_in(ID_EX_reg_wen_ppl),
 
 
     //PIPELINE OUTPUT TO EX/MEM REGISTER
@@ -204,10 +217,8 @@ module RISCV_Pipeline(
         .DCACHE_wen(DCACHE_wen),
         .DCACHE_addr(DCACHE_addr), //assume word address
         .DCACHE_rdata(DCACHE_rdata),
-        .DCACHE_wdata(DCACHE_wdata),
+        .DCACHE_wdata(DCACHE_wdata)
 
-    //I/O FOR STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-        .d_cache_stall() //REDUNDANT OUTPUT
     );
 
     always @(*) begin

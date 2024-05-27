@@ -3,13 +3,22 @@ module RISCV_ID(
     input         rst_n,
     input         stall,
     input         flush,
+    
     input  [31:0] inst_ppl,
     input  [31:0] pc_ppl,
     output  [4:0] rd_ppl,
     output [31:0] rs1_data_ppl, rs2_data_ppl,
     output [31:0] imm_ppl,
     output        alu_src_ppl,
+    output [3: 0] alu_ctrl_ppl,
     output [31:0] pc_ppl_out,
+    output        jal_ppl,
+    output        jalr_pplm,
+    output        mem_ren_ppl,
+    output        mem_wen_ppl,
+    output        mem_to_reg_ppl,
+    output        reg_wen_ppl,
+
 //----------register_file interface-------------
     output  [4:0] regfile_rs1, regfile_rs2,
     input  [31:0] regfile_rs1_data, regfile_rs2_data,
