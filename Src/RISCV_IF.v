@@ -19,8 +19,10 @@ module RISCV_IF(
 );
 
 //-------Pipeline Registers-------
-    reg [31:0] pc_ppl_r, pc_ppl_w;
-    reg [31:0] inst_ppl_r, inst_ppl_w;
+    reg [31:0] pc_ppl_r;
+    wire [31: 0] pc_ppl_w;
+    reg [31:0] inst_ppl_r;
+    wire [31: 0] inst_ppl_w;
 //-------Internal Registers-------
     reg [31:0] pc_r, pc_w;
     wire [31:0] pc_p4;
@@ -32,7 +34,8 @@ module RISCV_IF(
         //TODO: evaluate between case and if
         if (pc_src == 2'b01) begin //jal || jalr
             pc_w = pc_j;
-        end else if(pc_src = 2'b10) begin
+        end 
+        else if(pc_src == 2'b10) begin
             pc_w = pc_branch;
         end else begin
             pc_w = pc_p4;
