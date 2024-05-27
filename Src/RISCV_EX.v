@@ -35,9 +35,12 @@ module EX_STAGE #(
     output memwr_out,
     output mem2reg_out,
     output regwr_out,
-    output jump_out
+    output jump_out,
+    
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
+    output jump_noblock, //not blocked by register, signal for IF stage
+    output [31: 0] PC_result_noblock
 );
     //Reg and Wire declaration
     reg [BIT_W-1: 0] alu_result_r, alu_result_w;
@@ -64,6 +67,10 @@ module EX_STAGE #(
     assign regwr_out = regwr_r;
     assign jump_out = jump_r;
 
+    //direct output, no blocking!
+    assign jump_noblock = jalr_in || jal_in;
+    assign PC_result_noblock = alu_o_wire;
+    
     //module instantiation
     ALU #(.BIT_W(BIT_W)) alu_inst(
         .aluctrl(aluctrl_in),

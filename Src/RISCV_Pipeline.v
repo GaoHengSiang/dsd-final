@@ -27,13 +27,6 @@ module RISCV_Pipeline(
     wire  [31:0] IF_ID_inst_ppl;
     wire  [31:0] IF_ID_pc_ppl;
 
-
-    //TODO: finish this 
-    //NOT IMPLEMENTED YET
-    //assign IF_pc_src = {ID_branch_taken, // }; 
-
-
-
     //---------ID stage---------
     wire         ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
@@ -65,6 +58,7 @@ module RISCV_Pipeline(
         EX_MEM_mem2reg,
         EX_MEM_regwr,
         EX_MEM_jump;
+
         
     //------MEM/WB pipeline reg------------
     wire [31: 0]    MEM_WB_alu_result,
@@ -74,8 +68,14 @@ module RISCV_Pipeline(
     wire MEM_WB_mem2reg, MEM_WB_regwr, MEM_WB_jump;//********************MEM needs to have jump signal
                                                     //so that PC+4 can be stored into reg
     
-    //LOOP BACK
+    //LOOP BACK: reg or wires that go in the reverse direction
     reg [31: 0] rd_data;
+    //no_block
+    wire EX_jump_noblock;
+    wire [31: 0] EX_PC_result_noblock;
+    
+    //wire assignment 
+    assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
 
     register_file reg_file(
         .clk(clk),
@@ -99,7 +99,7 @@ module RISCV_Pipeline(
         .flush(IF_flush),
         .pc_src(IF_pc_src),
         .pc_branch(ID_pc_branch),
-        .pc_j(), // TODO: Connect to EX stage JAL or JALR result
+        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .ICACHE_stall(ICACHE_stall),
         .ICACHE_ren(ICACHE_ren),
         .ICACHE_wen(ICACHE_wen),
@@ -177,12 +177,11 @@ module RISCV_Pipeline(
         .memwr_out(EX_MEM_memwr),
         .mem2reg_out(EX_MEM_regwr),
         .regwr_out(EX_MEM_jump),
-        .jump_out(EX_MEM_jump) //********************ERROR, jump should not be register blocked
-                               //should correct PC immediately
-        //another signal should tell rd to store PC+4
-                               
-    //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-    //maybe no need because forwarding is already done in ID stage
+        .jump_out(EX_MEM_jump),
+        
+        //direct output, no register blocking
+        .jump_noblock(EX_jump_noblock),//should correct PC immediately
+        .PC_result_noblock(EX_PC_result_noblock)
     );
 
 
