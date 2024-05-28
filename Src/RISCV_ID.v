@@ -68,7 +68,7 @@ module RISCV_ID(
 
 
 
-    assign branch_taken = (regfile_rs1_data == regfile_rs2_data) ^ bne; 
+    assign branch_taken = ((regfile_rs1_data == regfile_rs2_data) ^ bne) & branch; 
     assign pc_branch = pc_ppl + imm;
 
     // pipeline reg output
@@ -85,14 +85,14 @@ module RISCV_ID(
     assign mem_wen_ppl = mem_wen_r;
     assign mem_to_reg_ppl = mem_to_reg_r;
     assign reg_wen_ppl = reg_wen_r;
-    
+
     decoder u0 (
         .inst_i(inst_ppl),
         .rs1_o(rs1),
         .rs2_o(rs2),
         .rd_o(rd),
         .imm_o(imm),
-        .alusrc_o(arc_src),
+        .alusrc_o(alu_src),
         .aluop_o(alu_op),
         .jal_o(jal),
         .jalr_o(jalr),

@@ -15,7 +15,7 @@ module EX_STAGE #(
     input [3: 0] aluctrl_in,
     input jal_in,
     input jalr_in,
-    input DCACHE_stall,
+    input stall,
 
     //transparent for this stage
     input [4: 0] rd_in,
@@ -84,15 +84,15 @@ module EX_STAGE #(
         alu_opB = alusrc_in? imm: rs2_dat_in;
     end
     always @(*) begin
-        alu_result_w    = DCACHE_stall? alu_result_r: alu_o_wire;
-        mem_wdata_w     = DCACHE_stall? mem_wdata_r: rs2_dat_in;
-        rd_w            = DCACHE_stall? rd_r: rd_in;
-        PC_plus_4_w     = DCACHE_stall? PC_plus_4_r: PC_in + 4;
-        memrd_w         = DCACHE_stall? memrd_r: memrd_in;
-        memwr_w         = DCACHE_stall? memwr_r: memwr_in;
-        mem2reg_w       = DCACHE_stall? mem2reg_r: mem2reg_in;
-        regwr_w         = DCACHE_stall? regwr_r: regwr_in;
-        jump_w          = DCACHE_stall? jump_r: jalr_in || jal_in;
+        alu_result_w    = stall? alu_result_r: alu_o_wire;
+        mem_wdata_w     = stall? mem_wdata_r: rs2_dat_in;
+        rd_w            = stall? rd_r: rd_in;
+        PC_plus_4_w     = stall? PC_plus_4_r: PC_in + 4;
+        memrd_w         = stall? memrd_r: memrd_in;
+        memwr_w         = stall? memwr_r: memwr_in;
+        mem2reg_w       = stall? mem2reg_r: mem2reg_in;
+        regwr_w         = stall? regwr_r: regwr_in;
+        jump_w          = stall? jump_r: jalr_in || jal_in;
 
     end
     //Sequential

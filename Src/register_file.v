@@ -5,8 +5,8 @@ module register_file(
         rs2,
         rd,
         wen,
-        rddata1,
-        rddata2,
+        rsdata1,
+        rsdata2,
         wrdata
 );
     parameter DATA_WIDTH = 32;
@@ -21,8 +21,8 @@ module register_file(
     integer i;
     reg [DATA_WIDTH-1:0]  reg_data_r[0:NR_REG-1], reg_data_w [1:NR_REG-1];
     
-    assign rddata1 = (wen && (rd == rs1))? wrdata : reg_data_r[rs1];
-    assign rddata2 = (wen && (rd == rs2))? wrdata : reg_data_r[rs2];
+    assign rsdata1 = (wen && (rd == rs1))? wrdata : reg_data_r[rs1];
+    assign rsdaat2 = (wen && (rd == rs2))? wrdata : reg_data_r[rs2];
 
     always @(*) begin
         for (i = 1; i < NR_REG; i = i + 1) reg_data_w[i] = (wen && (i == rd)) ? wrdata : reg_data_r[i];

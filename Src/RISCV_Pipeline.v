@@ -26,7 +26,6 @@ module RISCV_Pipeline(
     wire  [1:0]  IF_pc_src;
     wire  [31:0] IF_ID_inst_ppl;
     wire  [31:0] IF_ID_pc_ppl;
-
     //---------ID stage---------
     wire         ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
@@ -35,6 +34,7 @@ module RISCV_Pipeline(
     wire [31:0] ID_pc_branch;
 
     //-------ID/EX pipeline reg------------
+    wire        EX_stall;
     wire  [4:0] ID_EX_rd_ppl;
     wire [31:0] ID_EX_rs1_data_ppl, ID_EX_rs2_data_ppl;
     wire [31:0] ID_EX_imm_ppl;
@@ -76,9 +76,10 @@ module RISCV_Pipeline(
     
     //wire assignment 
     assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
-    assign IF_stall = DCACHE_stall;
-    assign ID_stall = DCACHE_stall;
-
+    assign IF_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
+    assign ID_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
+    assign IF_flush = ID_branch_taken;
+    assign EX_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
     register_file reg_file(
         .clk(clk),
         .rst_n(rst_n),
@@ -90,8 +91,8 @@ module RISCV_Pipeline(
         .wen(MEM_WB_regwr), //looped back from WB stage
         .wrdata(rd_data),
 
-        .rddata1(ID_regfile_rs1_data),
-        .rddata2(ID_regfile_rs2_data)
+        .rsdata1(ID_regfile_rs1_data),
+        .rsdata2(ID_regfile_rs2_data)
     );
 
     RISCV_IF IF(
@@ -99,7 +100,7 @@ module RISCV_Pipeline(
         .rst_n(rst_n),
         .stall(IF_stall),
         .flush(IF_flush),
-        .pc_src(IF_pc_src),
+        .pc_src({ID_branch_taken, EX_jump_noblock}), //TODO fixthis
         .pc_branch(ID_pc_branch),
         .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .ICACHE_stall(ICACHE_stall),
@@ -162,7 +163,7 @@ module RISCV_Pipeline(
         .aluctrl_in(ID_EX_alu_ctrl_ppl), //**************************missing control from ID
         .jal_in(ID_EX_jal_ppl),
         .jalr_in(ID_EX_jalr_ppl),
-        .DCACHE_stall(DCACHE_stall),
+        .stall(EX_stall),
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
@@ -179,8 +180,8 @@ module RISCV_Pipeline(
         //various control signals output
         .memrd_out(EX_MEM_memrd),
         .memwr_out(EX_MEM_memwr),
-        .mem2reg_out(EX_MEM_regwr),
-        .regwr_out(EX_MEM_jump),
+        .mem2reg_out(EX_MEM_mem2reg),
+        .regwr_out(EX_MEM_regwr),
         .jump_out(EX_MEM_jump),
         
         //direct output, no register blocking

@@ -4,7 +4,7 @@
 `timescale 1 ns/10 ps
 
 `define CYCLE 10 // You can modify your clock frequency
-`define MAX_CYCLES 10000000 // Max cycle count to stop the simulaiton. You can modify it
+`define MAX_CYCLES 1000000 // Max cycle count to stop the simulaiton. You can modify it
 
 `define SDFFILE   "./CHIP_syn.sdf"	// Modify your SDF file name
 

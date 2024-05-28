@@ -55,7 +55,7 @@ module RISCV_IF(
     // icache ctrl signal
     assign ICACHE_ren = 1;
     assign ICACHE_wen = 0;
-    assign ICACHE_addr = pc_r;
+    assign ICACHE_addr = pc_r[31:2];
     assign ICACHE_wdata = 0;
     
 
