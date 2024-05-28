@@ -72,10 +72,10 @@ module EX_STAGE #(
     assign PC_result_noblock = alu_o_wire;
     
     //module instantiation
-    ALU #(.BIT_W(BIT_W)) alu_inst(
-        .aluctrl(aluctrl_in),
-        .opA(alu_opA),
-        .opB(alu_opB),
+    alu alu_inst(
+        .op(aluctrl_in),
+        .operand_a(alu_opA),
+        .operand_b(alu_opB),
         .out(alu_o_wire)
     );
     //Combinational

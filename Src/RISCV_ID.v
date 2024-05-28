@@ -13,7 +13,7 @@ module RISCV_ID(
     output [3: 0] alu_ctrl_ppl,
     output [31:0] pc_ppl_out,
     output        jal_ppl,
-    output        jalr_pplm,
+    output        jalr_ppl,
     output        mem_ren_ppl,
     output        mem_wen_ppl,
     output        mem_to_reg_ppl,

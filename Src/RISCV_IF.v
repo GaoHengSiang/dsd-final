@@ -10,12 +10,12 @@ module RISCV_IF(
 	input  ICACHE_stall,
     output ICACHE_ren,
 	output ICACHE_wen,
-	output ICACHE_addr,
-	input  ICACHE_rdata,
-    output ICACHE_wdata,
+	output [29: 0] ICACHE_addr,
+	input  [31: 0] ICACHE_rdata,
+    output [31: 0] ICACHE_wdata,
 //-------Pipeline Registers-------
-    output inst_ppl,
-    output [31:0] pc_ppl
+    output [31: 0] inst_ppl,
+    output [31: 0] pc_ppl
 );
 
 //-------Pipeline Registers-------

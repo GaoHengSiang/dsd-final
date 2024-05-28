@@ -23,7 +23,7 @@ module RISCV_Pipeline(
     //---------IF stage---------
     wire         IF_stall;
     wire         IF_flush;
-    wire  [2:0]  IF_pc_src;
+    wire  [1:0]  IF_pc_src;
     wire  [31:0] IF_ID_inst_ppl;
     wire  [31:0] IF_ID_pc_ppl;
 
@@ -117,6 +117,7 @@ module RISCV_Pipeline(
         .rst_n(rst_n),
         .stall(ID_stall),
         .flush(ID_flush),
+
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         //ID/EX pipeline
