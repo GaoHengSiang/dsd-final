@@ -23,16 +23,9 @@ module RISCV_Pipeline(
     //---------IF stage---------
     wire         IF_stall;
     wire         IF_flush;
-    wire  [2:0]  IF_pc_src;
+    wire  [1:0]  IF_pc_src;
     wire  [31:0] IF_ID_inst_ppl;
     wire  [31:0] IF_ID_pc_ppl;
-
-
-    //TODO: finish this 
-    //NOT IMPLEMENTED YET
-    //assign IF_pc_src = {ID_branch_taken, // }; 
-
-
 
     //---------ID stage---------
     wire         ID_stall, ID_flush;
@@ -46,7 +39,14 @@ module RISCV_Pipeline(
     wire [31:0] ID_EX_rs1_data_ppl, ID_EX_rs2_data_ppl;
     wire [31:0] ID_EX_imm_ppl;
     wire        ID_EX_alu_src_ppl;
+    wire [3: 0] ID_EX_alu_ctrl_ppl;
     wire [31:0] ID_EX_pc_ppl_out;
+    wire    ID_EX_jal_ppl,
+            ID_EX_jalr_ppl,
+            ID_EX_mem_ren_ppl,
+            ID_EX_mem_wen_ppl,
+            ID_EX_mem_to_reg_ppl,
+            ID_EX_reg_wen_ppl;
 
     //------EX/MEM pipeline reg------------
     wire [31: 0] EX_MEM_alu_result;
@@ -58,6 +58,7 @@ module RISCV_Pipeline(
         EX_MEM_mem2reg,
         EX_MEM_regwr,
         EX_MEM_jump;
+
         
     //------MEM/WB pipeline reg------------
     wire [31: 0]    MEM_WB_alu_result,
@@ -67,8 +68,16 @@ module RISCV_Pipeline(
     wire MEM_WB_mem2reg, MEM_WB_regwr, MEM_WB_jump;//********************MEM needs to have jump signal
                                                     //so that PC+4 can be stored into reg
     
-    //LOOP BACK
+    //LOOP BACK: reg or wires that go in the reverse direction
     reg [31: 0] rd_data;
+    //no_block
+    wire EX_jump_noblock;
+    wire [31: 0] EX_PC_result_noblock;
+    
+    //wire assignment 
+    assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    assign IF_stall = DCACHE_stall;
+    assign ID_stall = DCACHE_stall;
 
     register_file reg_file(
         .clk(clk),
@@ -92,7 +101,7 @@ module RISCV_Pipeline(
         .flush(IF_flush),
         .pc_src(IF_pc_src),
         .pc_branch(ID_pc_branch),
-        .pc_j(), // TODO: Connect to EX stage JAL or JALR result
+        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .ICACHE_stall(ICACHE_stall),
         .ICACHE_ren(ICACHE_ren),
         .ICACHE_wen(ICACHE_wen),
@@ -108,16 +117,23 @@ module RISCV_Pipeline(
         .rst_n(rst_n),
         .stall(ID_stall),
         .flush(ID_flush),
+
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
-        //ID/EX
+        //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
         .rs1_data_ppl(ID_EX_rs1_data_ppl),
         .rs2_data_ppl(ID_EX_rs2_data_ppl),
         .imm_ppl(ID_EX_imm_ppl),
         .alu_src_ppl(ID_EX_alu_src_ppl),
+        .alu_ctrl_ppl(ID_EX_alu_ctrl_ppl),
         .pc_ppl_out(ID_EX_pc_ppl_out),
-
+        .jal_ppl(ID_EX_jal_ppl),
+        .jalr_ppl(ID_EX_jalr_ppl),
+        .mem_ren_ppl(ID_EX_mem_ren_ppl),
+        .mem_wen_ppl(ID_EX_mem_wen_ppl),
+        .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
+        .reg_wen_ppl(ID_EX_reg_wen_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
         //----------register_file interface-------------
@@ -142,16 +158,16 @@ module RISCV_Pipeline(
         .imm(ID_EX_imm_ppl),
         //various control signals input
         .alusrc_in(ID_EX_alu_src_ppl),
-        .aluctrl_in(), //**************************missing control from ID
-        .jal_in(),
-        .jalr_in(),
+        .aluctrl_in(ID_EX_alu_ctrl_ppl), //**************************missing control from ID
+        .jal_in(ID_EX_jal_ppl),
+        .jalr_in(ID_EX_jalr_ppl),
         .DCACHE_stall(DCACHE_stall),
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
-        .memrd_in(),
-        .memwr_in(),
-        .mem2reg_in(),
-        .regwr_in(),
+        .memrd_in(ID_EX_mem_ren_ppl),
+        .memwr_in(ID_EX_mem_ren_ppl),
+        .mem2reg_in(ID_EX_mem_to_reg_ppl),
+        .regwr_in(ID_EX_reg_wen_ppl),
 
 
     //PIPELINE OUTPUT TO EX/MEM REGISTER
@@ -164,12 +180,11 @@ module RISCV_Pipeline(
         .memwr_out(EX_MEM_memwr),
         .mem2reg_out(EX_MEM_regwr),
         .regwr_out(EX_MEM_jump),
-        .jump_out(EX_MEM_jump) //********************ERROR, jump should not be register blocked
-                               //should correct PC immediately
-        //another signal should tell rd to store PC+4
-                               
-    //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-    //maybe no need because forwarding is already done in ID stage
+        .jump_out(EX_MEM_jump),
+        
+        //direct output, no register blocking
+        .jump_noblock(EX_jump_noblock),//should correct PC immediately
+        .PC_result_noblock(EX_PC_result_noblock)
     );
 
 
@@ -204,10 +219,8 @@ module RISCV_Pipeline(
         .DCACHE_wen(DCACHE_wen),
         .DCACHE_addr(DCACHE_addr), //assume word address
         .DCACHE_rdata(DCACHE_rdata),
-        .DCACHE_wdata(DCACHE_wdata),
+        .DCACHE_wdata(DCACHE_wdata)
 
-    //I/O FOR STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
-        .d_cache_stall() //REDUNDANT OUTPUT
     );
 
     always @(*) begin
