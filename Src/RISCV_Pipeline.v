@@ -75,10 +75,12 @@ module RISCV_Pipeline(
     wire [31: 0] EX_PC_result_noblock;
     
     //wire assignment 
+    //FIXME: hazard detection
     assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
     assign ID_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
-    assign IF_flush = ID_branch_taken;
+    assign ID_flush = EX_jump_noblock; // TODO: plus load-use hazard
+    assign IF_flush = ID_branch_taken || EX_jump_noblock;
     assign EX_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
     register_file reg_file(
         .clk(clk),
@@ -91,8 +93,8 @@ module RISCV_Pipeline(
         .wen(MEM_WB_regwr), //looped back from WB stage
         .wrdata(rd_data),
 
-        .rsdata1(ID_regfile_rs1_data),
-        .rsdata2(ID_regfile_rs2_data)
+        .rddata1(ID_regfile_rs1_data),
+        .rddata2(ID_regfile_rs2_data)
     );
 
     RISCV_IF IF(
@@ -167,7 +169,7 @@ module RISCV_Pipeline(
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
-        .memwr_in(ID_EX_mem_ren_ppl),
+        .memwr_in(ID_EX_mem_wen_ppl),
         .mem2reg_in(ID_EX_mem_to_reg_ppl),
         .regwr_in(ID_EX_reg_wen_ppl),
 

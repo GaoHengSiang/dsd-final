@@ -8,12 +8,14 @@ sh mkdir -p Syn
 
 define_design_lib WORK -path Work
 
-analyze -format verilog "$DESIGN.v"
+analyze -format verilog $src
 elaborate $DESIGN
 current_design $DESIGN
+link
 
 source -echo -verbose CHIP_syn.sdc 
-compile_ultra
+ungroup CHIP
+compile
 
 write_sdf -version 2.1  -context verilog -load_delay cell "Syn/${DESIGN}_syn.sdf"
 write -format verilog -hierarchy -output "Syn/${DESIGN}_syn.v"

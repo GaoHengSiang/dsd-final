@@ -86,7 +86,7 @@ module decoder(
     assign reg_wen_o = reg_wen;
 
     // decode logic
-    always @(*) begin // synopsys full_case parallel_case
+    always @(*) begin 
         alu_op = ADD;
         reg_wen = 0;
         mem_to_reg = 0;
@@ -98,7 +98,7 @@ module decoder(
         jalr = 0;
         alu_src = 0;
         imm_select = I_IMM;
-        case (opcode) 
+        case (opcode) // synopsys full_case parallel_case
             OPCODE_OP: begin
                 reg_wen = 1;
                 mem_to_reg = 0;
@@ -187,11 +187,13 @@ module decoder(
             end
             OPCODE_JAL: begin 
                 jal = 1;
+                alu_src = 1;
                 reg_wen = 1;
                 imm_select = UJ_IMM;
             end
             OPCODE_JALR: begin
                 jalr = 1;
+                alu_src = 1;
                 reg_wen = 1;
                 imm_select = I_IMM;
             end
