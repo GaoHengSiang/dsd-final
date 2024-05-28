@@ -64,6 +64,8 @@ module alu(
     assign out = alu_out;
     
     always @(*) begin
+        //default 
+        alu_out = adder_result;
         case (op) 
             ADD, SUB: begin
                 alu_out = adder_result;
