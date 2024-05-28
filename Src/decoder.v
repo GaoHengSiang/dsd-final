@@ -51,15 +51,15 @@ module decoder(
     assign sbtype_imm = {{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
     assign ujtype_imm = {{(32-21){inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
 
-    wire [2:0] imm_select;
-    wire [3:0] alu_op;
-    wire alu_src;
-    wire reg_wen, mem_to_reg, mem_wen, mem_ren;
-    wire branch, jal, jalr
-    wire bne; // we do subtraction for BEQ, but if we encounter BNE, we need to negate the result
+    reg [2:0] imm_select;
+    reg [3:0] alu_op;
+    reg alu_src;
+    reg reg_wen, mem_to_reg, mem_wen, mem_ren;
+    reg branch, jal, jalr;
+    reg bne; // we do subtraction for BEQ, but if we encounter BNE, we need to negate the result
 
     
-    wire [31:0] imm_ext;
+    reg [31:0] imm_ext;
 
 
     assign opcode = inst_i[6:0];
@@ -133,8 +133,8 @@ module decoder(
                 endcase
             end
             OPCODE_OPIMM: begin
-                alc_src = 1;
-                alu_wen = 1;
+                alu_src = 1;
+                reg_wen = 1;
                 imm_select = I_IMM;
                 case (funct3) 
                     3'b000: begin // ADDI
@@ -210,5 +210,4 @@ module decoder(
     end
     
 endmodule
-
 
