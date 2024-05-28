@@ -77,8 +77,15 @@ module RISCV_ID(
     assign rs2_data_ppl = rs2_rdata_r;
     assign imm_ppl = imm_r;
     assign alu_src_ppl = alu_src_r;
+    assign alu_ctrl_ppl = alu_op_r;
     assign pc_ppl_out = pc_out_r;
-
+    assign jal_ppl = jal_r;
+    assign jalr_ppl = jalr_r;
+    assign mem_ren_ppl = mem_ren_r;
+    assign mem_wen_ppl = mem_wen_r;
+    assign mem_to_reg_ppl = mem_to_reg_r;
+    assign reg_wen_ppl = reg_wen_r;
+    
     decoder u0 (
         .inst_i(inst_ppl),
         .rs1_o(rs1),

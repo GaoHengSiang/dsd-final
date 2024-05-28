@@ -109,7 +109,8 @@ module RISCV_Pipeline(
         .ICACHE_rdata(ICACHE_rdata),
         .ICACHE_wdata(ICACHE_wdata),
         .inst_ppl(IF_ID_inst_ppl), 
-        .pc_ppl(IF_ID_pc_ppl) 
+        .pc_ppl(IF_ID_pc_ppl),
+        .PC(PC)
     );
 
     RISCV_ID ID(
