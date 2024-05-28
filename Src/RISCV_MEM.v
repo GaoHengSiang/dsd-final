@@ -45,13 +45,15 @@ module MEM_STAGE #(
     reg mem2reg_r, mem2reg_w, 
         regwr_r, regwr_w;
 
+    wire stall;
     //Continuous assignments
     //to dcache interface
     assign DCACHE_ren = memrd_in;
     assign DCACHE_wen = memwr_in;
     assign DCACHE_addr = alu_result_in[31: 2];
-    assign DCACHE_wdata = mem_wdata_in;
-
+    // little endian
+    assign DCACHE_wdata = {mem_wdata_in[7:0], mem_wdata_in[15:8], mem_wdata_in[23:16], mem_wdata_in[31:24]};
+    assign stall = DCACHE_stall & (mem2reg_in | memwr_in);
     //to pipeline
     assign alu_result_out = alu_result_r;
     assign mem_dat = mem_dat_r;
@@ -66,12 +68,12 @@ module MEM_STAGE #(
     //Combinational 
     always @(*) begin
         //default
-        alu_result_w    = DCACHE_stall? alu_result_r: alu_result_in;
-        mem_dat_w       = DCACHE_rdata;
-        PC_plus_4_w     = DCACHE_stall? PC_plus_4_r: PC_plus_4_in;
-        rd_w            = DCACHE_stall? rd_r: rd_in;
-        mem2reg_w       = DCACHE_stall? mem2reg_r: mem2reg_in;
-        regwr_w         = DCACHE_stall? regwr_r: regwr_in;
+        alu_result_w    = stall? alu_result_r: alu_result_in;
+        mem_dat_w       = {DCACHE_rdata[7:0], DCACHE_rdata[15:8], DCACHE_rdata[23:16], DCACHE_rdata[31:24]};
+        PC_plus_4_w     = stall? PC_plus_4_r: PC_plus_4_in;
+        rd_w            = stall? rd_r: rd_in;
+        mem2reg_w       = stall? mem2reg_r: mem2reg_in;
+        regwr_w         = stall? regwr_r: regwr_in;
     end
 
     //Sequential

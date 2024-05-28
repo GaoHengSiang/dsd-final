@@ -15,7 +15,9 @@ module RISCV_IF(
     output [31: 0] ICACHE_wdata,
 //-------Pipeline Registers-------
     output [31: 0] inst_ppl,
-    output [31: 0] pc_ppl
+    output [31: 0] pc_ppl,
+//--------IF stage PC------------
+    output [31:0] PC
 );
 
 //-------Pipeline Registers-------
@@ -43,16 +45,17 @@ module RISCV_IF(
     end
 
     assign pc_ppl_w = pc_r;
-    assign inst_ppl_w = ICACHE_rdata;
+    // convert little-endian to normal packing
+    assign inst_ppl_w = {ICACHE_rdata[7:0], ICACHE_rdata[15:8], ICACHE_rdata[23:16], ICACHE_rdata[31:24]};
    
     // output assignment
     assign inst_ppl = inst_ppl_r;
     assign pc_ppl = pc_ppl_r;
-    
+    assign PC = pc_r;
     // icache ctrl signal
     assign ICACHE_ren = 1;
     assign ICACHE_wen = 0;
-    assign ICACHE_addr = pc_r;
+    assign ICACHE_addr = pc_r[31:2];
     assign ICACHE_wdata = 0;
     
 
