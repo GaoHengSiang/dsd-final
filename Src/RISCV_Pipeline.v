@@ -91,8 +91,8 @@ module RISCV_Pipeline(
         .wen(MEM_WB_regwr), //looped back from WB stage
         .wrdata(rd_data),
 
-        .rsdata1(ID_regfile_rs1_data),
-        .rsdata2(ID_regfile_rs2_data)
+        .rddata1(ID_regfile_rs1_data),
+        .rddata2(ID_regfile_rs2_data)
     );
 
     RISCV_IF IF(
@@ -167,7 +167,7 @@ module RISCV_Pipeline(
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
-        .memwr_in(ID_EX_mem_ren_ppl),
+        .memwr_in(ID_EX_mem_wen_ppl),
         .mem2reg_in(ID_EX_mem_to_reg_ppl),
         .regwr_in(ID_EX_reg_wen_ppl),
 
