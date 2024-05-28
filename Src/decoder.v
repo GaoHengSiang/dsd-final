@@ -187,11 +187,13 @@ module decoder(
             end
             OPCODE_JAL: begin 
                 jal = 1;
+                alu_src = 1;
                 reg_wen = 1;
                 imm_select = UJ_IMM;
             end
             OPCODE_JALR: begin
                 jalr = 1;
+                alu_src = 1;
                 reg_wen = 1;
                 imm_select = I_IMM;
             end

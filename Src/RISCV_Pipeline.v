@@ -75,10 +75,12 @@ module RISCV_Pipeline(
     wire [31: 0] EX_PC_result_noblock;
     
     //wire assignment 
+    //FIXME: hazard detection
     assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
     assign ID_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
-    assign IF_flush = ID_branch_taken;
+    assign ID_flush = EX_jump_noblock; // TODO: plus load-use hazard
+    assign IF_flush = ID_branch_taken || EX_jump_noblock;
     assign EX_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
     register_file reg_file(
         .clk(clk),
