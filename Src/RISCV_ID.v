@@ -103,7 +103,7 @@ module RISCV_ID(
     );
 
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             rd_r  <= 0;
             alu_src_r <= 0;
