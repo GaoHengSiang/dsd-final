@@ -14,6 +14,8 @@ module RISCV_ID(
     output [31:0] pc_ppl_out,
     output        jal_ppl,
     output        jalr_ppl,
+    output        branch_ppl,
+    output        bne_ppl,
     output        mem_ren_ppl,
     output        mem_wen_ppl,
     output        mem_to_reg_ppl,
@@ -21,10 +23,7 @@ module RISCV_ID(
 
 //----------register_file interface-------------
     output  [4:0] regfile_rs1, regfile_rs2,
-    input  [31:0] regfile_rs1_data, regfile_rs2_data,
-//----------PC generation-------------------------
-    output        branch_taken,
-    output [31:0] pc_branch
+    input  [31:0] regfile_rs1_data, regfile_rs2_data
 );
     // decoder result
     wire  [4:0] rs1, rs2, rd;
@@ -60,6 +59,8 @@ module RISCV_ID(
     assign alu_op_w = alu_op;
     assign jal_w = jal;
     assign jalr_w = jalr;
+    assign branch_ppl = branch;
+    assign bne = bne;
     assign mem_to_reg_w = mem_to_reg;
     assign mem_wen_w = mem_wen;
     assign mem_ren_w = mem_ren;
@@ -67,9 +68,6 @@ module RISCV_ID(
     assign pc_out_w = pc_ppl;
 
 
-
-    assign branch_taken = ((regfile_rs1_data == regfile_rs2_data) ^ bne) & branch; 
-    assign pc_branch = pc_ppl + imm;
 
     // pipeline reg output
     assign rd_ppl = rd_r;
@@ -105,7 +103,7 @@ module RISCV_ID(
     );
 
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             rd_r  <= 0;
             alu_src_r <= 0;

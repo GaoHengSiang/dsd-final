@@ -8,6 +8,7 @@ module RISCV_IF(
     input  [31:0] pc_j,
 //-------ICACHE interface-------
 	input  ICACHE_stall,
+    input load_use_hazard,
     output ICACHE_ren,
 	output ICACHE_wen,
 	output [29: 0] ICACHE_addr,
@@ -59,13 +60,13 @@ module RISCV_IF(
     assign ICACHE_wdata = 0;
     
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             pc_r <= 0;
             pc_ppl_r <= 0;
             inst_ppl_r <= 0;
         end else begin
-            pc_r <= (stall || ICACHE_stall) ? pc_r : pc_w;
+            pc_r <= (load_use_hazard || stall || ICACHE_stall) ? pc_r : pc_w;
             inst_ppl_r <= (flush || ICACHE_stall) ? NOP : inst_ppl_w;
             pc_ppl_r <= pc_ppl_w;
         end

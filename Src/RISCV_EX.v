@@ -15,6 +15,8 @@ module EX_STAGE #(
     input [3: 0] aluctrl_in,
     input jal_in,
     input jalr_in,
+    input branch_in,
+    input bne_in,
     input stall,
 
     //transparent for this stage
@@ -23,6 +25,13 @@ module EX_STAGE #(
     input memwr_in,
     input mem2reg_in,
     input regwr_in,
+
+    // forwarding
+    input forward_A_flag,
+    input [31: 0] forward_A_dat,
+    input forward_B_flag,
+    input [31: 0] forward_B_dat,
+
 
 
     //PIPELINE OUTPUT TO EX/MEM REGISTER
@@ -40,7 +49,8 @@ module EX_STAGE #(
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
     output jump_noblock, //not blocked by register, signal for IF stage
-    output [31: 0] PC_result_noblock
+    output [31: 0] PC_result_noblock,//for jump and branch
+    output branch_taken //not blocked
 );
     //Reg and Wire declaration
     reg [BIT_W-1: 0] alu_result_r, alu_result_w;
@@ -55,6 +65,11 @@ module EX_STAGE #(
 
     reg [BIT_W-1: 0] alu_opA, alu_opB;
     wire [BIT_W-1: 0] alu_o_wire;
+
+    //forwarded rs1 and rs2
+    wire [31: 0] forwarded_rs1, forwarded_rs2; 
+
+
     //Continuous assignments
     //output assignments
     assign alu_result = alu_result_r;
@@ -67,9 +82,17 @@ module EX_STAGE #(
     assign regwr_out = regwr_r;
     assign jump_out = jump_r;
 
+    //forwarded rs1, rs2
+    assign forwarded_rs1 = (forward_A_flag)? forward_A_dat: rs1_dat_in;
+    assign forwarded_rs2 = (forward_B_flag)? forward_B_dat: rs2_dat_in;
+
+
     //direct output, no blocking!
     assign jump_noblock = jalr_in || jal_in;
     assign PC_result_noblock = alu_o_wire;
+        //branch
+    assign branch_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in) & branch_in; 
+
     
     //module instantiation
     alu alu_inst(
@@ -80,9 +103,10 @@ module EX_STAGE #(
     );
     //Combinational
     always @(*) begin
-        alu_opA = jal_in? PC_in: rs1_dat_in;
-        alu_opB = alusrc_in? imm: rs2_dat_in;
+        alu_opA = (jal_in||branch_in)? PC_in: forwarded_rs1;
+        alu_opB = alusrc_in? imm: forwarded_rs2;
     end
+
     always @(*) begin
         alu_result_w    = stall? alu_result_r: alu_o_wire;
         mem_wdata_w     = stall? mem_wdata_r: rs2_dat_in;
@@ -96,7 +120,7 @@ module EX_STAGE #(
 
     end
     //Sequential
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if(!rst_n) begin
             alu_result_r    <= 0;
             mem_wdata_r     <= 0;

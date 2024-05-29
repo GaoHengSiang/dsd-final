@@ -39,6 +39,7 @@ module decoder(
     localparam SRL       = 6;
     localparam SLL       = 7;
     localparam SLT       = 8;
+    localparam EQ        = 9;
 
     wire [4:0] rs1, rs2, rd;
     wire [6:0] opcode;
@@ -178,7 +179,7 @@ module decoder(
                 imm_select = S_IMM;
             end
             OPCODE_BRANCH: begin
-                alu_op = SUB;
+                alu_op = ADD;
                 branch = 1;
                 imm_select = SB_IMM;
                 if (funct3[0] == 1) begin // BNE: funct3 == 3'b001, BEQ: funct3 == 3'b000
@@ -187,12 +188,14 @@ module decoder(
             end
             OPCODE_JAL: begin 
                 jal = 1;
+                alu_op = ADD;
                 alu_src = 1;
                 reg_wen = 1;
                 imm_select = UJ_IMM;
             end
             OPCODE_JALR: begin
                 jalr = 1;
+                alu_op = ADD;
                 alu_src = 1;
                 reg_wen = 1;
                 imm_select = I_IMM;
