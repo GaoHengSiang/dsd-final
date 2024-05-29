@@ -24,6 +24,12 @@ module EX_STAGE #(
     input mem2reg_in,
     input regwr_in,
 
+    // forwarding
+    input [1:0] ForwardA, ForwardB,
+    input [31:0] rd_data,
+    
+
+
 
     //PIPELINE OUTPUT TO EX/MEM REGISTER
     output [BIT_W-1: 0] alu_result,
@@ -80,9 +86,16 @@ module EX_STAGE #(
     );
     //Combinational
     always @(*) begin
-        alu_opA = jal_in? PC_in: rs1_dat_in;
-        alu_opB = alusrc_in? imm: rs2_dat_in;
+        if (ForwardB==2'b01) alu_opA = rd_data;
+        else if (ForwardB == 2'b10) alu_opA = alu_result;
+        else alu_opA = jal_in? PC_in: rs1_dat_in; 
+
+        if (ForwardB==2'b01) alu_opB = rd_data;
+        else if (ForwardB == 2'b10) alu_opB = alu_result;
+        else alu_opB = alusrc_in? imm: rs2_dat_in; 
+        
     end
+
     always @(*) begin
         alu_result_w    = stall? alu_result_r: alu_o_wire;
         mem_wdata_w     = stall? mem_wdata_r: rs2_dat_in;

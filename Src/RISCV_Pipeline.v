@@ -73,6 +73,13 @@ module RISCV_Pipeline(
     //no_block
     wire EX_jump_noblock;
     wire [31: 0] EX_PC_result_noblock;
+
+
+    // forwarding & hazard detection
+    wire [ 1:0] ForwardA, ForwardB;
+    wire load_use_hazard;
+
+
     
     //wire assignment 
     //FIXME: hazard detection
@@ -82,6 +89,29 @@ module RISCV_Pipeline(
     assign ID_flush = EX_jump_noblock; // TODO: plus load-use hazard
     assign IF_flush = ID_branch_taken || EX_jump_noblock;
     assign EX_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
+
+
+    Forwarding_Unit Forward_Unit(
+        .EX_MEM_RegWrite(EX_MEM_regwr),
+        .MEM_WB_RegWrite(MEM_WB_regwr),
+        .EX_MEM_RegisterRd(EX_MEM_rd),
+        .ID_EX_RegisterRs1(ID_regfile_rs1),
+        .ID_EX_RegisterRs2(ID_regfile_rs2),
+        .MEM_WB_RegisterRd(MEM_WB_rd),
+        .ForwardA(ForwardA),
+        .ForwardB(ForwardA)
+
+    );
+
+    HAZARD_DETECTION hazard_unit(
+        .ID_EX_MemRead(ID_EX_mem_ren_ppl),
+        .IF_ID_RegisterRs1(ID_regfile_rs1),
+        .IF_ID_RegisterRs2(ID_regfile_rs2),
+        .ID_EX_RegisterRd(ID_EX_rd_ppl),
+        .load_use_hazard(load_use_hazard)
+    );
+
+
     register_file reg_file(
         .clk(clk),
         .rst_n(rst_n),
@@ -106,6 +136,7 @@ module RISCV_Pipeline(
         .pc_branch(ID_pc_branch),
         .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .ICACHE_stall(ICACHE_stall),
+        .load_use_hazard(load_use_hazard),
         .ICACHE_ren(ICACHE_ren),
         .ICACHE_wen(ICACHE_wen),
         .ICACHE_addr(ICACHE_addr),
@@ -172,6 +203,13 @@ module RISCV_Pipeline(
         .memwr_in(ID_EX_mem_wen_ppl),
         .mem2reg_in(ID_EX_mem_to_reg_ppl),
         .regwr_in(ID_EX_reg_wen_ppl),
+
+    // forwarding
+    // didn't add PC stall yet
+        .ForwardA(ForwardA),
+        .ForwardB(ForwardB),
+        .rd_data(rd_data),
+        
 
 
     //PIPELINE OUTPUT TO EX/MEM REGISTER
