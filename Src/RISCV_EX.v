@@ -25,9 +25,10 @@ module EX_STAGE #(
     input regwr_in,
 
     // forwarding
-    input [1:0] ForwardA, ForwardB,
-    input [31:0] rd_data,
-    
+    input forward_A_flag,
+    input [31: 0] forward_A_dat,
+    input forward_B_flag,
+    input [31: 0] forward_B_dat,
 
 
 
@@ -86,14 +87,10 @@ module EX_STAGE #(
     );
     //Combinational
     always @(*) begin
-        if (ForwardB==2'b01) alu_opA = rd_data;
-        else if (ForwardB == 2'b10) alu_opA = alu_result;
-        else alu_opA = jal_in? PC_in: rs1_dat_in; 
-
-        if (ForwardB==2'b01) alu_opB = rd_data;
-        else if (ForwardB == 2'b10) alu_opB = alu_result;
-        else alu_opB = alusrc_in? imm: rs2_dat_in; 
-        
+        alu_opA = jal_in? PC_in: 
+        ((forward_A_flag)? forward_A_dat: rs1_dat_in); 
+        alu_opB = alusrc_in? imm:
+        ((forward_B_flag)? forward_B_dat: rs2_dat_in);
     end
 
     always @(*) begin

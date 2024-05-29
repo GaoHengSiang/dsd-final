@@ -76,7 +76,8 @@ module RISCV_Pipeline(
 
 
     // forwarding & hazard detection
-    wire [ 1:0] ForwardA, ForwardB;
+    wire [31: 0] forward_A_dat, forward_B_dat;
+    wire forward_A_flag, forward_B_flag;
     wire load_use_hazard;
 
 
@@ -84,11 +85,11 @@ module RISCV_Pipeline(
     //wire assignment 
     //FIXME: hazard detection
     assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
-    assign IF_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
-    assign ID_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
-    assign ID_flush = EX_jump_noblock; // TODO: plus load-use hazard
+    assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_use_hazard;
     assign IF_flush = ID_branch_taken || EX_jump_noblock;
-    assign EX_stall = DCACHE_stall & (EX_MEM_memwr | EX_MEM_mem2reg);
+    assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
+    assign ID_flush = EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
+    assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
     Forwarding_Unit Forward_Unit(
@@ -98,15 +99,26 @@ module RISCV_Pipeline(
         .ID_EX_RegisterRs1(ID_regfile_rs1),
         .ID_EX_RegisterRs2(ID_regfile_rs2),
         .MEM_WB_RegisterRd(MEM_WB_rd),
-        .ForwardA(ForwardA),
-        .ForwardB(ForwardA)
+
+        //loop backs
+        .rd_data(rd_data),//data source for MEM/WB forwarding
+        //data source(s) for EX/MEM forwarding
+        .EX_MEM_alu_result(EX_MEM_alu_result),
+        .EX_MEM_PC_plus_4(EX_MEM_PC_plus_4),
+        .EX_MEM_jump(EX_MEM_jump),//we need this signal to determine which of the above
+        
+        //forwarding signal and data to EX
+        .forward_A_flag(forward_A_flag),
+        .forward_A_dat(forward_A_dat),
+        .forward_B_flag(forward_B_flag),
+        .forward_B_dat(forward_B_dat)
 
     );
 
     HAZARD_DETECTION hazard_unit(
-        .ID_EX_MemRead(ID_EX_mem_ren_ppl),
         .IF_ID_RegisterRs1(ID_regfile_rs1),
         .IF_ID_RegisterRs2(ID_regfile_rs2),
+        .ID_EX_MemRead(ID_EX_mem_ren_ppl),
         .ID_EX_RegisterRd(ID_EX_rd_ppl),
         .load_use_hazard(load_use_hazard)
     );
@@ -206,9 +218,10 @@ module RISCV_Pipeline(
 
     // forwarding
     // didn't add PC stall yet
-        .ForwardA(ForwardA),
-        .ForwardB(ForwardB),
-        .rd_data(rd_data),
+        .forward_A_flag(forward_A_flag),
+        .forward_A_dat(forward_A_dat),
+        .forward_B_flag(forward_B_flag),
+        .forward_B_dat(forward_B_dat),
         
 
 

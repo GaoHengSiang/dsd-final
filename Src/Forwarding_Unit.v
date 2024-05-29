@@ -1,4 +1,5 @@
 //code by: Yu Siang
+//altered by: Heng Siang
 module Forwarding_Unit(
     input  EX_MEM_RegWrite, MEM_WB_RegWrite,
     input  [4:0]EX_MEM_RegisterRd,ID_EX_RegisterRs1,ID_EX_RegisterRs2,
@@ -39,6 +40,8 @@ always @(*)begin
     2'b10: begin
         if(EX_MEM_jump) begin
             forward_A_dat = EX_MEM_PC_plus_4;
+            //MAYBE THIS IS REDUNDANT BECAUSE ID/EX would've been flushed if EX/MEM has jump
+            //so under no circumstances will this be taken
         end
         else begin
             forward_A_dat = EX_MEM_alu_result;
