@@ -40,8 +40,10 @@ module RISCV_IF(
         end 
         else if(pc_src == 2'b10) begin
             pc_w = pc_branch;
-        end else begin
+        end else if (!(load_use_hazard || stall || ICACHE_stall)) begin
             pc_w = pc_p4;
+        end else begin
+            pc_w = pc_r;
         end
     end
 
@@ -66,7 +68,7 @@ module RISCV_IF(
             pc_ppl_r <= 0;
             inst_ppl_r <= 0;
         end else begin
-            pc_r <= (load_use_hazard || stall || ICACHE_stall) ? pc_r : pc_w;
+            pc_r <= pc_w;
             inst_ppl_r <= (flush || ICACHE_stall) ? NOP : inst_ppl_w;
             pc_ppl_r <= pc_ppl_w;
         end

@@ -14,8 +14,7 @@ current_design $DESIGN
 link
 
 source -echo -verbose CHIP_syn.sdc 
-ungroup CHIP
-compile
+compile_ultra
 
 write_sdf -version 2.1  -context verilog -load_delay cell "Syn/${DESIGN}_syn.sdf"
 write -format verilog -hierarchy -output "Syn/${DESIGN}_syn.v"

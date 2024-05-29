@@ -180,6 +180,7 @@ module decoder(
             end
             OPCODE_BRANCH: begin
                 alu_op = ADD;
+                alu_src = 1;
                 branch = 1;
                 imm_select = SB_IMM;
                 if (funct3[0] == 1) begin // BNE: funct3 == 3'b001, BEQ: funct3 == 3'b000
