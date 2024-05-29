@@ -30,8 +30,6 @@ module RISCV_Pipeline(
     wire         ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
     wire [31:0] ID_regfile_rs1_data, ID_regfile_rs2_data;
-    wire        ID_branch_taken;
-    wire [31:0] ID_pc_branch;
 
     //-------ID/EX pipeline reg------------
     wire        EX_stall;
@@ -43,6 +41,8 @@ module RISCV_Pipeline(
     wire [31:0] ID_EX_pc_ppl_out;
     wire    ID_EX_jal_ppl,
             ID_EX_jalr_ppl,
+            ID_EX_branch_ppl,
+            ID_EX_bne_ppl,
             ID_EX_mem_ren_ppl,
             ID_EX_mem_wen_ppl,
             ID_EX_mem_to_reg_ppl,
@@ -71,7 +71,8 @@ module RISCV_Pipeline(
     //LOOP BACK: reg or wires that go in the reverse direction
     reg [31: 0] rd_data;
     //no_block
-    wire EX_jump_noblock;
+    wire EX_jump_noblock, 
+         EX_branch_taken;
     wire [31: 0] EX_PC_result_noblock;
 
 
@@ -84,11 +85,11 @@ module RISCV_Pipeline(
     
     //wire assignment 
     //FIXME: hazard detection
-    assign IF_pc_src = {ID_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    assign IF_pc_src = {EX_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_use_hazard;
-    assign IF_flush = ID_branch_taken || EX_jump_noblock;
+    assign IF_flush = EX_branch_taken || EX_jump_noblock;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = EX_branch_taken || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
@@ -144,8 +145,8 @@ module RISCV_Pipeline(
         .rst_n(rst_n),
         .stall(IF_stall),
         .flush(IF_flush),
-        .pc_src({ID_branch_taken, EX_jump_noblock}), //TODO fixthis
-        .pc_branch(ID_pc_branch),
+        .pc_src(IF_pc_src), //feedback from EX stage
+        .pc_branch(EX_PC_result_noblock),//feedback from EX stage
         .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .ICACHE_stall(ICACHE_stall),
         .load_use_hazard(load_use_hazard),
@@ -167,6 +168,7 @@ module RISCV_Pipeline(
 
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
+
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
         .rs1_data_ppl(ID_EX_rs1_data_ppl),
@@ -177,6 +179,8 @@ module RISCV_Pipeline(
         .pc_ppl_out(ID_EX_pc_ppl_out),
         .jal_ppl(ID_EX_jal_ppl),
         .jalr_ppl(ID_EX_jalr_ppl),
+        .branch_ppl(ID_EX_branch_ppl),
+        .bne_ppl(ID_EX_bne_ppl),
         .mem_ren_ppl(ID_EX_mem_ren_ppl),
         .mem_wen_ppl(ID_EX_mem_wen_ppl),
         .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
@@ -187,12 +191,7 @@ module RISCV_Pipeline(
         .regfile_rs1(ID_regfile_rs1),
         .regfile_rs2(ID_regfile_rs2),
         .regfile_rs1_data(ID_regfile_rs1_data),
-        .regfile_rs2_data(ID_regfile_rs2_data),
-        //----------PC generation-------------------------
-        .branch_taken(ID_branch_taken),
-        .pc_branch(ID_pc_branch)
-        
-        //SHOULD ALSO STALL IF DCACHE STALL
+        .regfile_rs2_data(ID_regfile_rs2_data)
     );
 
     EX_STAGE EX(
@@ -205,9 +204,11 @@ module RISCV_Pipeline(
         .imm(ID_EX_imm_ppl),
         //various control signals input
         .alusrc_in(ID_EX_alu_src_ppl),
-        .aluctrl_in(ID_EX_alu_ctrl_ppl), //**************************missing control from ID
+        .aluctrl_in(ID_EX_alu_ctrl_ppl),
         .jal_in(ID_EX_jal_ppl),
         .jalr_in(ID_EX_jalr_ppl),
+        .branch_in(ID_EX_branch_ppl),
+        .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
@@ -239,7 +240,8 @@ module RISCV_Pipeline(
         
         //direct output, no register blocking
         .jump_noblock(EX_jump_noblock),//should correct PC immediately
-        .PC_result_noblock(EX_PC_result_noblock)
+        .PC_result_noblock(EX_PC_result_noblock),
+        .branch_taken(EX_branch_taken)
     );
 
 
