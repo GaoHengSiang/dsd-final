@@ -118,8 +118,8 @@ module RISCV_Pipeline(
     );
 
     HAZARD_DETECTION hazard_unit(
-        .IF_ID_RegisterRs1(ID_EX_rs1),
-        .IF_ID_RegisterRs2(ID_EX_rs2),
+        .IF_RegisterRs1(ID_regfile_rs1),
+        .IF_RegisterRs2(ID_regfile_rs2),
         .ID_EX_MemRead(ID_EX_mem_ren_ppl),
         .ID_EX_RegisterRd(ID_EX_rd_ppl),
         .load_use_hazard(load_use_hazard)
