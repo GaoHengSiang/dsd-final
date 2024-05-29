@@ -30,6 +30,7 @@ module RISCV_Pipeline(
     wire         ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
     wire [31:0] ID_regfile_rs1_data, ID_regfile_rs2_data;
+    wire [4:0] ID_EX_rs1, ID_EX_rs2;
 
     //-------ID/EX pipeline reg------------
     wire        EX_stall;
@@ -97,8 +98,8 @@ module RISCV_Pipeline(
         .EX_MEM_RegWrite(EX_MEM_regwr),
         .MEM_WB_RegWrite(MEM_WB_regwr),
         .EX_MEM_RegisterRd(EX_MEM_rd),
-        .ID_EX_RegisterRs1(ID_regfile_rs1),
-        .ID_EX_RegisterRs2(ID_regfile_rs2),
+        .ID_EX_RegisterRs1(ID_EX_rs1),
+        .ID_EX_RegisterRs2(ID_EX_rs2),
         .MEM_WB_RegisterRd(MEM_WB_rd),
 
         //loop backs
@@ -117,8 +118,8 @@ module RISCV_Pipeline(
     );
 
     HAZARD_DETECTION hazard_unit(
-        .IF_ID_RegisterRs1(ID_regfile_rs1),
-        .IF_ID_RegisterRs2(ID_regfile_rs2),
+        .IF_ID_RegisterRs1(ID_EX_rs1),
+        .IF_ID_RegisterRs2(ID_EX_rs2),
         .ID_EX_MemRead(ID_EX_mem_ren_ppl),
         .ID_EX_RegisterRd(ID_EX_rd_ppl),
         .load_use_hazard(load_use_hazard)
@@ -171,6 +172,8 @@ module RISCV_Pipeline(
 
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
+        .rs1_ppl(ID_EX_rs1),
+        .rs2_ppl(ID_EX_rs2),
         .rs1_data_ppl(ID_EX_rs1_data_ppl),
         .rs2_data_ppl(ID_EX_rs2_data_ppl),
         .imm_ppl(ID_EX_imm_ppl),

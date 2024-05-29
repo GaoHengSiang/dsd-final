@@ -185,6 +185,8 @@ module decoder(
                 imm_select = SB_IMM;
                 if (funct3[0] == 1) begin // BNE: funct3 == 3'b001, BEQ: funct3 == 3'b000
                     bne = 1;
+                end else begin
+                    bne = 0;
                 end
             end
             OPCODE_JAL: begin 

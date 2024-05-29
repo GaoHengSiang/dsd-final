@@ -21,8 +21,8 @@ module register_file(
     integer i;
     reg [DATA_WIDTH-1:0]  reg_data_r[0:NR_REG-1], reg_data_w [1:NR_REG-1];
     
-    assign rddata1 = (wen && (rd == rs1))? wrdata : reg_data_r[rs1];
-    assign rddata2 = (wen && (rd == rs2))? wrdata : reg_data_r[rs2];
+    assign rddata1 = (wen && (rd == rs1) && (rd != 0))? wrdata : reg_data_r[rs1];
+    assign rddata2 = (wen && (rd == rs2) && (rd != 0))? wrdata : reg_data_r[rs2];
 
     always @(*) begin
         for (i = 1; i < NR_REG; i = i + 1) reg_data_w[i] = (wen && (i == rd)) ? wrdata : reg_data_r[i];
