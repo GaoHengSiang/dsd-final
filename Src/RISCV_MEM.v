@@ -77,7 +77,7 @@ module MEM_STAGE #(
     end
 
     //Sequential
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if(!rst_n) begin
             alu_result_r    <= 0;
             mem_dat_r       <= 0;

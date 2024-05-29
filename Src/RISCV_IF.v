@@ -60,7 +60,7 @@ module RISCV_IF(
     assign ICACHE_wdata = 0;
     
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             pc_r <= 0;
             pc_ppl_r <= 0;
