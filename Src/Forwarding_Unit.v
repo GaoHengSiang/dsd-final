@@ -19,6 +19,8 @@ module Forwarding_Unit(
 
 );
 
+wire [1:0] ForwardA, ForwardB;
+
 
 assign ForwardA = (EX_MEM_RegWrite && (EX_MEM_RegisterRd != 0) && (EX_MEM_RegisterRd == ID_EX_RegisterRs1)) ? 2'b10 : 
                   ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs1)) ? 2'b01 : 2'b00);
