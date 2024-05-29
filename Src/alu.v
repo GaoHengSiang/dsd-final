@@ -15,6 +15,7 @@ module alu(
     localparam SRL       = 6;
     localparam SLL       = 7;
     localparam SLT       = 8;
+    localparam EQ        = 9;
 
 
     genvar gen_i;
@@ -44,7 +45,7 @@ module alu(
     endgenerate 
 
     // adder
-    assign adder_b_neg = (op == SUB || op == SLT);
+    assign adder_b_neg = (op == SUB || op == SLT || op == EQ);
     assign adder_in_a = {operand_a, 1'b1};
     assign adder_in_b = {operand_b, 1'b0} ^ {33{adder_b_neg}};
     assign adder_result_tmp = $signed(adder_in_a) + $signed(adder_in_b);
@@ -86,6 +87,9 @@ module alu(
             end
             SRA, SRL, SLL: begin
                 alu_out = shift_result;
+            end
+            EQ: begin
+                alu_out = {31'b0, !(|adder_result_tmp)};//if subtraction result = 0 --> equal
             end
         endcase
     end
