@@ -69,8 +69,8 @@ module RISCV_IF(
             inst_ppl_r <= 0;
         end else begin
             pc_r <= pc_w;
-            inst_ppl_r <= (flush || ICACHE_stall) ? NOP : inst_ppl_w;
-            pc_ppl_r <= pc_ppl_w;
+            inst_ppl_r <= stall? inst_ppl_r : (flush || ICACHE_stall) ? NOP : inst_ppl_w;
+            pc_ppl_r <= stall ? pc_ppl_r : pc_ppl_w;
         end
     end
 
