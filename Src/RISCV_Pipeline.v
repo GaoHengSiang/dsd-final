@@ -259,6 +259,7 @@ module RISCV_Pipeline(
         .rd_in(EX_MEM_rd),
         .mem2reg_in(EX_MEM_mem2reg),
         .regwr_in(EX_MEM_regwr),
+        .jump_in(EX_MEM_jump),
         // ********************************************ONE SIGNAL SHOULD INDICATE JUMP
     
     //PIPELINE OUTPUT TO MEM/WB REGISTER
@@ -269,7 +270,7 @@ module RISCV_Pipeline(
         //various control signals output
         .mem2reg_out(MEM_WB_mem2reg),
         .regwr_out(MEM_WB_regwr),
-
+        .jump_out(MEM_WB_jump),
     //D_CACHE_INTERFACE, output not register blocked
         .DCACHE_stall(DCACHE_stall),
         .DCACHE_ren(DCACHE_ren),

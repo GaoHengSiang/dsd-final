@@ -16,7 +16,7 @@ module MEM_STAGE #(
     input [4: 0] rd_in,
     input mem2reg_in,
     input regwr_in,
-
+    input jump_in,
     
     //PIPELINE OUTPUT TO MEM/WB REGISTER
     output [BIT_W-1: 0] alu_result_out,
@@ -26,6 +26,7 @@ module MEM_STAGE #(
     output [4: 0] rd_out,
     output mem2reg_out,
     output regwr_out,
+    output jump_out,
 
     //D_CACHE_INTERFACE, output not register blocked
     input         DCACHE_stall,
@@ -43,7 +44,8 @@ module MEM_STAGE #(
                     mem_dat_r, mem_dat_w;
     reg [4: 0] rd_r, rd_w;
     reg mem2reg_r, mem2reg_w, 
-        regwr_r, regwr_w;
+        regwr_r, regwr_w,
+        jump_r, jump_w;
 
     wire stall;
     //Continuous assignments
@@ -61,7 +63,7 @@ module MEM_STAGE #(
     assign rd_out = rd_r;
     assign mem2reg_out = mem2reg_r;
     assign regwr_out = regwr_r;
-
+    assign jump_out = jump_r;
     //module instantiantion
     //none
 
@@ -74,6 +76,7 @@ module MEM_STAGE #(
         rd_w            = stall? rd_r: rd_in;
         mem2reg_w       = stall? mem2reg_r: mem2reg_in;
         regwr_w         = stall? regwr_r: regwr_in;
+        jump_w          = stall? jump_r: jump_in;
     end
 
     //Sequential
@@ -85,6 +88,7 @@ module MEM_STAGE #(
             rd_r            <= 0;
             mem2reg_r       <= 0;
             regwr_r         <= 0;
+            jump_r          <= 0;
         end
         else begin
             alu_result_r    <= alu_result_w;
@@ -93,6 +97,7 @@ module MEM_STAGE #(
             rd_r            <= rd_w;
             mem2reg_r       <= mem2reg_w;
             regwr_r         <= regwr_w;
+            jump_r          <= jump_w;
         end
     end
 endmodule
