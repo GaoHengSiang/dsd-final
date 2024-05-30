@@ -120,14 +120,14 @@ always @(*) begin:state_logic
             end
         end
         S_WB: begin
-            if (mem_ready_r) begin
+            if (mem_ready) begin
                 state_w = S_FETCH;
             end else begin
                 state_w = S_WB;
             end
         end
         S_FETCH: begin
-            if (mem_ready_r) begin
+            if (mem_ready) begin
                 state_w = S_IDLE;
                 wen = 1;
                 update = 1;
