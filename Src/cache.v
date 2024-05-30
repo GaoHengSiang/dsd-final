@@ -58,6 +58,8 @@ wire [TAG_WIDTH-1:0]    tag;
 reg                     stall;
 reg                     wen; // wen for cache set
 reg                     update;
+wire                    mem_ready_w;//block this with FF (mem takes up half a cycle)
+reg                     mem_ready_r;
 
 set set_0(
     .clk(clk),
@@ -78,6 +80,7 @@ set set_0(
 assign index_i = proc_addr[4:2];
 assign offset_i = proc_addr[1:0];
 assign input_src = (state_r == S_FETCH);
+assign mem_ready_w = mem_ready;
 
 /* memory control signal */
 assign mem_read = (state_r == S_FETCH);
@@ -117,14 +120,14 @@ always @(*) begin:state_logic
             end
         end
         S_WB: begin
-            if (mem_ready) begin
+            if (mem_ready_r) begin
                 state_w = S_FETCH;
             end else begin
                 state_w = S_WB;
             end
         end
         S_FETCH: begin
-            if (mem_ready) begin
+            if (mem_ready_r) begin
                 state_w = S_IDLE;
                 wen = 1;
                 update = 1;
@@ -156,11 +159,13 @@ end
 always @(posedge clk) begin
     if (proc_reset) begin
         state_r <= S_IDLE;
+        mem_ready_r <= 0;
         for (i = 0;i < LINE_NUM; i = i + 1) begin
             lru_lines_r[i] <= 0;
         end
     end else begin
         state_r <= state_w;
+        mem_ready_r <= mem_ready_w;
         for (i = 0;i < LINE_NUM; i = i + 1) begin
             lru_lines_r[i] <= lru_lines_w[i];
         end
