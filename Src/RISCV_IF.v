@@ -3,7 +3,7 @@ module RISCV_IF(
     input         rst_n,
     input         stall,
     input         flush,
-    input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal
+    input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal TODO: compress it to 1 bit
     input  [31:0] pc_branch,
     input  [31:0] pc_j,
 //-------ICACHE interface-------
