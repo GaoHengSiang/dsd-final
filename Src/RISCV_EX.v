@@ -109,7 +109,7 @@ module EX_STAGE #(
 
     always @(*) begin
         alu_result_w    = stall? alu_result_r: alu_o_wire;
-        mem_wdata_w     = stall? mem_wdata_r: rs2_dat_in;
+        mem_wdata_w     = stall? mem_wdata_r: forwarded_rs2;
         rd_w            = stall? rd_r: rd_in;
         PC_plus_4_w     = stall? PC_plus_4_r: PC_in + 4;
         memrd_w         = stall? memrd_r: memrd_in;
