@@ -82,7 +82,7 @@ module RISCV_Pipeline(
     wire forward_A_flag, forward_B_flag;
     wire load_use_hazard;
 
-
+    reg regfile_wen;
     
     //wire assignment 
     //FIXME: hazard detection
@@ -126,7 +126,7 @@ module RISCV_Pipeline(
     );
 
 
-    register_file reg_file(
+    register_file regfile(
         .clk(clk),
         .rst_n(rst_n),
         .rs1(ID_regfile_rs1),
@@ -134,7 +134,7 @@ module RISCV_Pipeline(
 
          //LOOP BACK FROM WB STAGE
         .rd(MEM_WB_rd),
-        .wen(MEM_WB_regwr), //looped back from WB stage
+        .wen(regfile_wen), //looped back from WB stage
         .wrdata(rd_data),
 
         .rddata1(ID_regfile_rs1_data),
@@ -286,7 +286,7 @@ module RISCV_Pipeline(
 
     always @(*) begin
         rd_data = MEM_WB_alu_result;
-
+        regfile_wen = MEM_WB_regwr;
         //****************************maybe we can finally utilize PARALLEL CASE here
         if(MEM_WB_mem2reg) begin
             rd_data = MEM_WB_mem_dat;
