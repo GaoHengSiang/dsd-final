@@ -1,4 +1,4 @@
-module decoder(
+module decoder (
     input  [31:0] inst_i,
     output  [4:0] rs1_o, rs2_o, rd_o,
     output [31:0] imm_o,
@@ -13,15 +13,9 @@ module decoder(
     output        mem_ren_o,
     output        reg_wen_o
 );
+`include "riscv_define.vh";
 
-    // RISC-V related definitions
-    localparam OPCODE_OP     = 7'b01_100_11;
-    localparam OPCODE_OPIMM  = 7'b00_100_11;
-    localparam OPCODE_LOAD   = 7'b00_000_11;
-    localparam OPCODE_STORE  = 7'b01_000_11;
-    localparam OPCODE_BRANCH = 7'b11_000_11;
-    localparam OPCODE_JAL    = 7'b11_011_11;
-    localparam OPCODE_JALR   = 7'b11_001_11;
+
     
     // immgen
     localparam I_IMM = 0;

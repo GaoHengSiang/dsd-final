@@ -101,7 +101,7 @@ assign mem_write = (state_r == S_WB);
 assign mem_addr = (state_r == S_WB) ? {tag_sets[replace_sel], index_i} : proc_addr[29:2];
 assign mem_wdata = (state_r == S_WB) ? rdata_sets[replace_sel] : 0;
 
-assign proc_stall = !(state_r == S_IDLE && hit);
+assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read || proc_write));
 assign proc_rdata = rdata[WORD_WIDTH*offset_i +: WORD_WIDTH];
 always @(*) begin:state_logic
     state_w = state_r;
@@ -175,12 +175,11 @@ endgenerate
 // end
 always @(*) begin: replace
     replace_sel = 0;
-    if (!valid_sets[0]) begin
-        replace_sel = 0;
-    end else if(!valid_sets[1]) begin
-        replace_sel = 1;
-    end else if (hit) begin
-        replace_sel = hit_sets[1];
+    if (state_r == S_IDLE) begin
+        if (hit)
+            replace_sel = hit_sets[1];
+        else
+            replace_sel = lru_lines_r[index_i];
     end else begin
         replace_sel = lru_lines_r[index_i];
     end
