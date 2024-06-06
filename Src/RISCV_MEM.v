@@ -75,7 +75,7 @@ module MEM_STAGE #(
         PC_plus_4_w     = stall? PC_plus_4_r: PC_plus_4_in;
         rd_w            = stall? rd_r: rd_in;
         mem2reg_w       = stall? mem2reg_r: mem2reg_in;
-        regwr_w         = stall? regwr_r: regwr_in;
+        regwr_w         = stall? 0: regwr_in;
         jump_w          = stall? jump_r: jump_in;
     end
 
