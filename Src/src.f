@@ -1,0 +1,14 @@
+CHIP.v 
+cache.v 
+alu.v 
+decoder.v 
+realigner.v
+register_file.v 
+HAZARD_DETECTION.v 
+Forwarding_Unit.v 
+RISCV_Pipeline.v 
+RISCV_IF.v 
+RISCV_ID.v 
+RISCV_EX.v 
+RISCV_MEM.v 
+RISCV_WB.v
