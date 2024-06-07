@@ -27,6 +27,7 @@ module RISCV_Pipeline (
     wire [31:0] IF_ID_inst_ppl;
     wire [31:0] IF_ID_pc_ppl;
     wire        IF_ID_compressed_ppl;
+    wire         IF_ID_branch_taken_ppl;
     //---------ID stage---------
     wire ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
@@ -49,7 +50,8 @@ module RISCV_Pipeline (
                 ID_EX_mem_wen_ppl,
                 ID_EX_mem_to_reg_ppl,
                 ID_EX_reg_wen_ppl,
-                ID_EX_compressed_ppl;
+                ID_EX_compressed_ppl,
+                ID_EX_branch_taken_ppl;
 
     //------EX/MEM pipeline reg------------
     wire [31:0] EX_MEM_alu_result;
@@ -68,8 +70,11 @@ module RISCV_Pipeline (
     //LOOP BACK: reg or wires that go in the reverse direction
     reg [31:0] rd_data;
     //no_block
-    wire EX_jump_noblock, EX_branch_taken;
-    wire [31:0] EX_PC_result_noblock;
+    wire EX_jump_noblock, 
+         EX_prediction_incorrect,
+         EX_feedback_valid;
+    wire make_branch_correction;
+    wire [31: 0] EX_PC_result_noblock, EX_PC_correction;
 
 
     // forwarding & hazard detection
@@ -80,14 +85,15 @@ module RISCV_Pipeline (
     reg  regfile_wen;
     reg mem_wb_valid_r, mem_wb_valid_w;
     //wire assignment 
+    assign make_branch_correction = EX_prediction_incorrect && EX_feedback_valid;
+
     //FIXME: hazard detection
-    assign IF_pc_src = {
-        EX_branch_taken, EX_jump_noblock
-    };  // pc_src[1] = branch pc_src[0] = jalr || jal
-    assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg)) || load_use_hazard;
-    assign IF_flush = EX_branch_taken || EX_jump_noblock;
+    
+    assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_use_hazard;
+    assign IF_flush = make_branch_correction || EX_jump_noblock;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = EX_branch_taken || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = make_branch_correction || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
@@ -141,13 +147,17 @@ module RISCV_Pipeline (
     RISCV_IF IF (
         .clk(clk),
         .rst_n(rst_n),
+        //feedback paths
         .stall(IF_stall),
         .flush(IF_flush),
-        .pc_src(IF_pc_src),  //feedback from EX stage
-        .pc_branch(EX_PC_result_noblock),  //feedback from EX stage
-        .pc_j(EX_PC_result_noblock),  // Feedback from EX stage
-        .ICACHE_stall(ICACHE_stall),
+        .pc_src(IF_pc_src), //feedback from EX stage
+        .pc_branch(EX_PC_correction),//feedback from EX stage
+        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
+        .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
+        .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         .load_use_hazard(load_use_hazard),
+        
+        .ICACHE_stall(ICACHE_stall),
         .ICACHE_ren(ICACHE_ren),
         .ICACHE_wen(ICACHE_wen),
         .ICACHE_addr(ICACHE_addr),
@@ -156,6 +166,7 @@ module RISCV_Pipeline (
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         .compressed_ppl(IF_ID_compressed_ppl),
+        .branch_taken_ppl(IF_ID_branch_taken_ppl),//idicates if the branch was predicted to be taken
         .PC(PC)
     );
 
@@ -167,7 +178,8 @@ module RISCV_Pipeline (
 
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
-        .compressed_ppl(IF_ID_compressed_ppl),
+        .compressed_ppl(IF_ID_compressed_ppl),        .branch_taken_in(IF_ID_branch_taken_ppl),
+
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
         .rs1_ppl(ID_EX_rs1),
@@ -187,6 +199,7 @@ module RISCV_Pipeline (
         .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
         .reg_wen_ppl(ID_EX_reg_wen_ppl),
         .compressed_ppl_out(ID_EX_compressed_ppl),
+        .branch_taken_ppl(ID_EX_branch_taken_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
         //----------register_file interface-------------
@@ -212,7 +225,8 @@ module RISCV_Pipeline (
         .branch_in(ID_EX_branch_ppl),
         .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
-        //transparent for this stage
+        .branch_taken_in(ID_EX_branch_taken_ppl),
+    //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
         .memwr_in(ID_EX_mem_wen_ppl),
@@ -243,7 +257,9 @@ module RISCV_Pipeline (
         //direct output, no register blocking
         .jump_noblock(EX_jump_noblock),  //should correct PC immediately
         .PC_result_noblock(EX_PC_result_noblock),
-        .branch_taken(EX_branch_taken)
+        .PC_correction(EX_PC_correction),
+        .prediction_incorrect(EX_prediction_incorrect),
+        .feedback_valid(EX_feedback_valid)
     );
 
 

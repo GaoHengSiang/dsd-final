@@ -4,6 +4,7 @@ alu.v
 decoder.v 
 decompressor.v
 realigner.v
+saturation_counter.v
 register_file.v 
 HAZARD_DETECTION.v 
 Forwarding_Unit.v 
