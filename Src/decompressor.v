@@ -1,9 +1,10 @@
-module decompressor(
+module decompressor (
     input      [15:0] inst_i,
     output reg [31:0] inst_o
 );
 
-`include "riscv_define.vh"
+    `include "riscv_define.vh"
+    /* verilog_format: off */
 /*
 | C-inst. | Base instuction (Assembly)            |
 |----------|----------------------------------------|
@@ -24,10 +25,12 @@ module decompressor(
 | C.ADD    | add rd, rd, rs2                        |
 | C.NOP    | addi x0, x0, 0                         |
 */
+/* verilog_format: on */
+
 
     always @(*) begin
-        inst_o = 32'h13; // NOP
-        case (inst_i[1:0]) // synopsys full_case parallel_case
+        inst_o = 32'h13;  // NOP
+        case (inst_i[1:0])  // synopsys full_case parallel_case
             OP_C0: begin
                 if (!inst_i[15]) begin  // 010: LW
                     inst_o = {
@@ -43,7 +46,7 @@ module decompressor(
                         inst_i[4:2],
                         OPCODE_LOAD
                     };
-                end else begin // 110: SW
+                end else begin  // 110: SW
                     inst_o = {
                         5'b0,
                         inst_i[5],
@@ -61,7 +64,7 @@ module decompressor(
                 end
             end
             OP_C1: begin
-                case (inst_i[15:13]) // synopsys full_case parallel_case
+                case (inst_i[15:13])  // synopsys full_case parallel_case
                     OP_C1_ADDI: begin
                         inst_o = {
                             {6{inst_i[12]}},
@@ -88,9 +91,9 @@ module decompressor(
                             OPCODE_JAL
                         };
                     end
-                    OP_C1_MISC: begin // SRLI, SRAI, ANDI
+                    OP_C1_MISC: begin  // SRLI, SRAI, ANDI
                         case (inst_i[11:10])
-                            2'b00, 2'b01: begin // SRLI, SRAI
+                            2'b00, 2'b01: begin  // SRLI, SRAI
                                 inst_o = {
                                     1'b0,
                                     inst_i[10],
@@ -105,8 +108,8 @@ module decompressor(
                                     OPCODE_OPIMM
                                 };
                             end
-                            2'b10: begin // ANDI
-                                inst_o = { 
+                            2'b10: begin  // ANDI
+                                inst_o = {
                                     {6{inst_i[12]}},
                                     inst_i[12],
                                     inst_i[6:2],
@@ -120,7 +123,7 @@ module decompressor(
                             end
                         endcase
                     end
-                    OP_C1_J: begin // J
+                    OP_C1_J: begin  // J
                         inst_o = {
                             inst_i[12],
                             inst_i[8],
@@ -155,7 +158,7 @@ module decompressor(
                 endcase
             end
             OP_C2: begin
-                case (inst_i[15:13]) // synopsys full_case parallel_case
+                case (inst_i[15:13])  // synopsys full_case parallel_case
                     OP_C2_SLLI: begin
                         inst_o = {
                             6'b0,
@@ -168,17 +171,19 @@ module decompressor(
                         };
                     end
                     OP_C2_JRMVADD: begin
-                        if (inst_i[12] == 1'b0) begin // JR, MV
-                            if (inst_i[6:2] == 5'b0) begin //JR
+                        if (inst_i[12] == 1'b0) begin  // JR, MV
+                            if (inst_i[6:2] == 5'b0) begin  //JR
                                 inst_o = {12'b0, inst_i[11:7], 3'b0, 5'b0, OPCODE_JALR};
-                            end else begin // MV
+                            end else begin  // MV
                                 inst_o = {7'b0, inst_i[6:2], 5'b0, 3'b0, inst_i[11:7], OPCODE_OP};
                             end
-                        end else begin // JALR, ADD
-                            if (inst_i[6:2] == 5'b0) begin // JALR
+                        end else begin  // JALR, ADD
+                            if (inst_i[6:2] == 5'b0) begin  // JALR
                                 inst_o = {12'b0, inst_i[11:7], 3'b000, 5'b00001, OPCODE_JALR};
-                            end else begin // ADD
-                                inst_o = {7'b0, inst_i[6:2], inst_i[11:7], 3'b0, inst_i[11:7], OPCODE_OP};
+                            end else begin  // ADD
+                                inst_o = {
+                                    7'b0, inst_i[6:2], inst_i[11:7], 3'b0, inst_i[11:7], OPCODE_OP
+                                };
                             end
                         end
                     end

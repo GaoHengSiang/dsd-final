@@ -1,31 +1,33 @@
-module realigner(
-    input         clk,
-    input         rst_n,
-    input [31:0]  pc, // target PC
-    output  reg   ready,
-    output  reg   compressed,
-    output [31:0] inst,
-//-------ICACHE interface-------
-    output        ICACHE_ren,
-    output        ICACHE_wen,
-    output [29: 0] ICACHE_addr,
-    output [31: 0] ICACHE_wdata,
-    input  [31: 0] ICACHE_rdata,
-    input          ICACHE_stall
-);	
-    assign ICACHE_ren = 1;
-    assign ICACHE_wen = 0;
-    assign ICACHE_wdata = 0;
+module realigner (
+    input             clk,
+    input             rst_n,
+    input      [31:0] pc,            // target PC
+    output reg        ready,
+    output reg        compressed,
+    output     [31:0] inst,
+    //-------ICACHE interface-------
+    output            ICACHE_ren,
+    output            ICACHE_wen,
+    output     [29:0] ICACHE_addr,
+    output     [31:0] ICACHE_wdata,
+    input      [31:0] ICACHE_rdata,
+    input             ICACHE_stall
+);
     localparam S_INIT = 0, S_FETCH = 1;
-    reg           state_r, state_w;
-    reg    [31:0] stored_addr_r, stored_addr_w;
-    reg    [15:0] stored_inst_r, stored_inst_w;
-    reg           unaligned;
-    reg           buffered;
-    reg    [31:0] rdata_i;
-    reg    [31:0] fetch_addr;
-    reg           store;
-    reg    [31:0] completed_inst;
+
+    assign ICACHE_ren   = 1;
+    assign ICACHE_wen   = 0;
+    assign ICACHE_wdata = 0;
+
+    reg state_r, state_w;
+    reg [31:0] stored_addr_r, stored_addr_w;
+    reg [15:0] stored_inst_r, stored_inst_w;
+    reg        unaligned;
+    reg        buffered;
+    reg [31:0] rdata_i;
+    reg [31:0] fetch_addr;
+    reg        store;
+    reg [31:0] completed_inst;
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -34,14 +36,14 @@ module realigner(
             state_r <= state_w;
         end
     end
-    
+
     always @(*) begin
         unaligned = (pc[1:0] != 2'b00);
         rdata_i = {ICACHE_rdata[7:0], ICACHE_rdata[15:8], ICACHE_rdata[23:16], ICACHE_rdata[31:24]};
         compressed = (completed_inst[1:0] != 2'b11);
         buffered = (stored_addr_r == pc);
-        stored_addr_w = (ICACHE_stall)? stored_addr_r: fetch_addr + 2;
-        stored_inst_w = (ICACHE_stall)? stored_inst_r: rdata_i[31:16];
+        stored_addr_w = (ICACHE_stall) ? stored_addr_r : fetch_addr + 2;
+        stored_inst_w = (ICACHE_stall) ? stored_inst_r : rdata_i[31:16];
     end
 
     always @(*) begin
@@ -69,18 +71,14 @@ module realigner(
     assign inst = completed_inst;
 
     assign ICACHE_addr = fetch_addr[31:2];
-    always @(*) begin:state_logic
+    always @(*) begin : state_logic
         state_w = state_r;
         if (state_r == S_INIT) begin
-            if (ICACHE_stall) 
-                state_w = S_INIT;
-            else if (unaligned && !buffered)
-                state_w = S_FETCH;
+            if (ICACHE_stall) state_w = S_INIT;
+            else if (unaligned && !buffered) state_w = S_FETCH;
         end else begin
-            if (ICACHE_stall) 
-                state_w = S_FETCH;
-            else
-                state_w = S_INIT;
+            if (ICACHE_stall) state_w = S_FETCH;
+            else state_w = S_INIT;
         end
     end
 
