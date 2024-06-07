@@ -74,7 +74,7 @@ module RISCV_Pipeline (
          EX_prediction_incorrect,
          EX_feedback_valid;
     wire make_branch_correction;
-    wire [31: 0] EX_PC_result_noblock, EX_PC_correction;
+    wire [31: 0] EX_PC_result_noblock;
 
 
     // forwarding & hazard detection
