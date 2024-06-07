@@ -1,6 +1,7 @@
 name: Verible formatter
 on:
   pull_request:
+      branches: [ main ]
 jobs:
   format:
     runs-on: ubuntu-latest
