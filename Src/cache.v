@@ -55,6 +55,7 @@ module cache (
     reg [BLOCK_WIDTH-1:0] wdata;  // data written to cache line
     wire [BLOCK_WIDTH-1:0] rdata;
 
+    reg [29:0] addr_r, addr_w;
     wire [1:0] index_i;
     wire [1:0] offset_i;
 
@@ -78,7 +79,7 @@ module cache (
                 .dirty_i(dirty_next),
                 .input_src_i(input_src),
                 .wdata_i(wdata),
-                .addr_i(proc_addr),
+                .addr_i(state_r == S_IDLE ? proc_addr : addr_r),
                 .dirty_o(dirty_sets[gen_i]),
                 .valid_o(valid_sets[gen_i]),
                 .hit_o(hit_sets[gen_i]),
@@ -90,15 +91,15 @@ module cache (
     endgenerate
     //==== combinational circuit ==============================
     assign hit = |hit_tmp;
-    assign index_i = proc_addr[3:2];
-    assign offset_i = proc_addr[1:0];
+    assign index_i = (state_r == S_IDLE) ? proc_addr[3:2] : addr_r[3:2];
+    assign offset_i = (state_r == S_IDLE) ? proc_addr[1:0] : addr_r[1:0];
     assign dirty = dirty_sets[replace_sel];
     assign input_src = (state_r == S_FETCH);
 
     /* memory control signal */
     assign mem_read = (state_r == S_FETCH);
     assign mem_write = (state_r == S_WB);
-    assign mem_addr = (state_r == S_WB) ? {tag_sets[replace_sel], index_i} : proc_addr[29:2];
+    assign mem_addr = (state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
     assign mem_wdata = (state_r == S_WB) ? rdata_sets[replace_sel] : 0;
 
     assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read || proc_write));
@@ -110,6 +111,7 @@ module cache (
         dirty_next = 0;
         wen = 0;
         wdata = 0;
+        addr_w = addr_r;
         for (i = 0; i < LINE_NUM; i = i + 1) lru_lines_w[i] = lru_lines_r[i];
         case (state_r)
             S_IDLE: begin
@@ -117,6 +119,7 @@ module cache (
                     if (!hit) begin
                         if (dirty) state_w = S_WB;
                         else state_w = S_FETCH;
+                        addr_w = proc_addr;
                     end else begin
                         lru_lines_w[index_i] = ~replace_sel;
                         if (proc_write) begin
@@ -193,11 +196,13 @@ module cache (
             for (i = 0; i < LINE_NUM; i = i + 1) begin
                 lru_lines_r[i] <= 0;
             end
+            addr_r <= 0;
         end else begin
             state_r <= state_w;
             for (i = 0; i < LINE_NUM; i = i + 1) begin
                 lru_lines_r[i] <= lru_lines_w[i];
             end
+            addr_r <= addr_w;
         end
     end
 
