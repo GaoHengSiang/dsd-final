@@ -25,6 +25,7 @@ module EX_STAGE #(
     input memwr_in,
     input mem2reg_in,
     input regwr_in,
+    input compressed_in,
 
     // forwarding
     input forward_A_flag,
@@ -38,7 +39,7 @@ module EX_STAGE #(
     output [BIT_W-1: 0] alu_result,
     output [BIT_W-1: 0] mem_wdata,
     output [4: 0] rd_out,
-    output [BIT_W-1: 0] PC_plus_4,
+    output [BIT_W-1: 0] PC_step,
         //various control signals output
     output memrd_out,
     output memwr_out,
@@ -56,7 +57,7 @@ module EX_STAGE #(
     reg [BIT_W-1: 0] alu_result_r, alu_result_w;
     reg [BIT_W-1: 0] mem_wdata_r, mem_wdata_w;
     reg [4: 0] rd_r, rd_w;
-    reg [BIT_W-1: 0] PC_plus_4_r, PC_plus_4_w;
+    reg [BIT_W-1: 0] PC_step_r, PC_step_w;
     reg memrd_r, memrd_w,
         memwr_r, memwr_w,
         mem2reg_r, mem2reg_w,
@@ -75,7 +76,7 @@ module EX_STAGE #(
     assign alu_result = alu_result_r;
     assign mem_wdata = mem_wdata_r;
     assign rd_out = rd_r;
-    assign PC_plus_4 = PC_plus_4_r;
+    assign PC_step = PC_step_r;
     assign memrd_out = memrd_r;
     assign memwr_out = memwr_r;
     assign mem2reg_out = mem2reg_r;
@@ -111,7 +112,7 @@ module EX_STAGE #(
         alu_result_w    = stall? alu_result_r: alu_o_wire;
         mem_wdata_w     = stall? mem_wdata_r: forwarded_rs2;
         rd_w            = stall? rd_r: rd_in;
-        PC_plus_4_w     = stall? PC_plus_4_r: PC_in + 4;
+        PC_step_w     = stall? PC_step_r: (PC_in + (compressed_in? 2: 4));
         memrd_w         = stall? memrd_r: memrd_in;
         memwr_w         = stall? memwr_r: memwr_in;
         mem2reg_w       = stall? mem2reg_r: mem2reg_in;
@@ -125,7 +126,7 @@ module EX_STAGE #(
             alu_result_r    <= 0;
             mem_wdata_r     <= 0;
             rd_r            <= 0;
-            PC_plus_4_r     <= 0;
+            PC_step_r     <= 0;
             memrd_r         <= 0;
             memwr_r         <= 0;
             mem2reg_r       <= 0;
@@ -136,7 +137,7 @@ module EX_STAGE #(
             alu_result_r    <= alu_result_w;
             mem_wdata_r     <= mem_wdata_w;
             rd_r            <= rd_w;
-            PC_plus_4_r     <= PC_plus_4_w;
+            PC_step_r     <= PC_step_w;
             memrd_r         <= memrd_w;
             memwr_r         <= memwr_w;
             mem2reg_r       <= mem2reg_w;

@@ -16,5 +16,13 @@ tb_rtl:
 	make -C Src/ rtl
 tb_syn:
 	make -C Src/ syn
+tb_baseline:
+	TB_DEFINE=noHazard
+	make -C Src/ rtl > Report/noHazard.log
+	if grep -q CONGRATULATIONS!! Report/noHazard.log; then echo "noHazard pass"; else echo "noHazard fail"; exit 1; fi
+	TB_DEFINE=hasHazard
+	make -C Src/ rtl > Report/hasHazard.log
+	if grep -q CONGRATULATIONS!! Report/hasHazard.log; then echo "hasHazard pass"; else echo "hasHazard fail"; fi
+
 clean:
 	rm -rf Syn/ 

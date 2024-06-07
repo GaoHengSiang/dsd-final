@@ -40,8 +40,8 @@ module realigner(
         rdata_i = {ICACHE_rdata[7:0], ICACHE_rdata[15:8], ICACHE_rdata[23:16], ICACHE_rdata[31:24]};
         compressed = (completed_inst[1:0] != 2'b11);
         buffered = (stored_addr_r == pc);
-        stored_addr_w = fetch_addr + 2;
-        stored_inst_w = rdata_i[31:16];
+        stored_addr_w = (ICACHE_stall)? stored_addr_r: fetch_addr + 2;
+        stored_inst_w = (ICACHE_stall)? stored_inst_r: rdata_i[31:16];
     end
 
     always @(*) begin

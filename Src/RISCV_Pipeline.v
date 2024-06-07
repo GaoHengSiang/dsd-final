@@ -26,6 +26,7 @@ module RISCV_Pipeline(
     wire  [1:0]  IF_pc_src;
     wire  [31:0] IF_ID_inst_ppl;
     wire  [31:0] IF_ID_pc_ppl;
+    wire         IF_ID_compressed_ppl;
     //---------ID stage---------
     wire         ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
@@ -47,13 +48,14 @@ module RISCV_Pipeline(
             ID_EX_mem_ren_ppl,
             ID_EX_mem_wen_ppl,
             ID_EX_mem_to_reg_ppl,
-            ID_EX_reg_wen_ppl;
+            ID_EX_reg_wen_ppl,
+            ID_EX_compressed_ppl;
 
     //------EX/MEM pipeline reg------------
     wire [31: 0] EX_MEM_alu_result;
     wire [31: 0] EX_MEM_mem_wdata;
     wire [4: 0] EX_MEM_rd;
-    wire [31: 0] EX_MEM_PC_plus_4;
+    wire [31: 0] EX_MEM_PC_step;
     wire EX_MEM_memrd, 
         EX_MEM_memwr,
         EX_MEM_mem2reg,
@@ -64,7 +66,7 @@ module RISCV_Pipeline(
     //------MEM/WB pipeline reg------------
     wire [31: 0]    MEM_WB_alu_result,
                     MEM_WB_mem_dat,
-                    MEM_WB_PC_plus_4;
+                    MEM_WB_PC_step;
     wire [4: 0] MEM_WB_rd;
     wire MEM_WB_mem2reg, MEM_WB_regwr, MEM_WB_jump;//********************MEM needs to have jump signal
                                                     //so that PC+4 can be stored into reg
@@ -83,7 +85,7 @@ module RISCV_Pipeline(
     wire load_use_hazard;
 
     reg regfile_wen;
-    
+    reg mem_wb_valid_r, mem_wb_valid_w;
     //wire assignment 
     //FIXME: hazard detection
     assign IF_pc_src = {EX_branch_taken, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
@@ -106,7 +108,7 @@ module RISCV_Pipeline(
         .rd_data(rd_data),//data source for MEM/WB forwarding
         //data source(s) for EX/MEM forwarding
         .EX_MEM_alu_result(EX_MEM_alu_result),
-        .EX_MEM_PC_plus_4(EX_MEM_PC_plus_4),
+        .EX_MEM_PC_step(EX_MEM_PC_step),
         .EX_MEM_jump(EX_MEM_jump),//we need this signal to determine which of the above
         
         //forwarding signal and data to EX
@@ -158,6 +160,7 @@ module RISCV_Pipeline(
         .ICACHE_wdata(ICACHE_wdata),
         .inst_ppl(IF_ID_inst_ppl), 
         .pc_ppl(IF_ID_pc_ppl),
+        .compressed_ppl(IF_ID_compressed_ppl),
         .PC(PC)
     );
 
@@ -169,7 +172,7 @@ module RISCV_Pipeline(
 
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
-
+        .compressed_ppl(IF_ID_compressed_ppl),
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
         .rs1_ppl(ID_EX_rs1),
@@ -188,6 +191,7 @@ module RISCV_Pipeline(
         .mem_wen_ppl(ID_EX_mem_wen_ppl),
         .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
         .reg_wen_ppl(ID_EX_reg_wen_ppl),
+        .compressed_ppl_out(ID_EX_compressed_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
         //----------register_file interface-------------
@@ -219,7 +223,7 @@ module RISCV_Pipeline(
         .memwr_in(ID_EX_mem_wen_ppl),
         .mem2reg_in(ID_EX_mem_to_reg_ppl),
         .regwr_in(ID_EX_reg_wen_ppl),
-
+        .compressed_in(ID_EX_compressed_ppl),
     // forwarding
     // didn't add PC stall yet
         .forward_A_flag(forward_A_flag),
@@ -233,7 +237,7 @@ module RISCV_Pipeline(
         .alu_result(EX_MEM_alu_result),
         .mem_wdata(EX_MEM_mem_wdata),
         .rd_out(EX_MEM_rd),
-        .PC_plus_4(EX_MEM_PC_plus_4),
+        .PC_step(EX_MEM_PC_step),
         //various control signals output
         .memrd_out(EX_MEM_memrd),
         .memwr_out(EX_MEM_memwr),
@@ -258,7 +262,7 @@ module RISCV_Pipeline(
         .memrd_in(EX_MEM_memrd),
         .memwr_in(EX_MEM_memwr),
         //transparent
-        .PC_plus_4_in(EX_MEM_PC_plus_4),
+        .PC_step_in(EX_MEM_PC_step),
         .rd_in(EX_MEM_rd),
         .mem2reg_in(EX_MEM_mem2reg),
         .regwr_in(EX_MEM_regwr),
@@ -268,7 +272,7 @@ module RISCV_Pipeline(
     //PIPELINE OUTPUT TO MEM/WB REGISTER
         .alu_result_out(MEM_WB_alu_result),
         .mem_dat(MEM_WB_mem_dat),
-        .PC_plus_4_out(MEM_WB_PC_plus_4),
+        .PC_step_out(MEM_WB_PC_step),
         .rd_out(MEM_WB_rd),
         //various control signals output
         .mem2reg_out(MEM_WB_mem2reg),
@@ -286,14 +290,22 @@ module RISCV_Pipeline(
 
     always @(*) begin
         rd_data = MEM_WB_alu_result;
-        regfile_wen = MEM_WB_regwr;
+        mem_wb_valid_w = !DCACHE_stall;
+        regfile_wen = mem_wb_valid_r && MEM_WB_regwr;
         //****************************maybe we can finally utilize PARALLEL CASE here
         if(MEM_WB_mem2reg) begin
             rd_data = MEM_WB_mem_dat;
         end
         else if (MEM_WB_jump) begin
-            rd_data = MEM_WB_PC_plus_4;
+            rd_data = MEM_WB_PC_step;
         end
+    end
+
+    always @(posedge clk) begin
+        if (!rst_n) 
+            mem_wb_valid_r <= 1;
+        else
+            mem_wb_valid_r <= mem_wb_valid_w;
     end
 
 endmodule

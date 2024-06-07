@@ -30,6 +30,8 @@ module RISCV_IF(
     reg         compressed_ppl_r;
     wire        compressed_ppl_w;
 //-------Internal Registers-------
+    wire [31:0] inst_aligned;
+    wire [31:0] inst_decompressed;
     wire [31:0] inst_i;
     reg [31:0] pc_r, pc_w;
     wire [31:0] pc_step;
@@ -47,7 +49,7 @@ module RISCV_IF(
         .pc(pc_r),
         .ready(inst_ready),
         .compressed(inst_compressed),
-        .inst(inst_i),
+        .inst(inst_aligned),
         .ICACHE_stall(ICACHE_stall),
         .ICACHE_ren(ICACHE_ren),
         .ICACHE_wen(ICACHE_wen),
@@ -56,6 +58,12 @@ module RISCV_IF(
         .ICACHE_rdata(ICACHE_rdata)
     );
 
+    decompressor u_decompressor (
+        .inst_i    (inst_aligned[15:0]),
+        .inst_o    (inst_decompressed)
+    );
+    
+    assign inst_i = inst_compressed ? inst_decompressed : inst_aligned;
 
     always @(*) begin:next_pc
         //TODO: evaluate between case and if

@@ -6,6 +6,7 @@ module RISCV_ID(
     
     input  [31:0] inst_ppl,
     input  [31:0] pc_ppl,
+    input         compressed_ppl,
     output  [4:0] rd_ppl,
     output [31:0] rs1_data_ppl, rs2_data_ppl,
     output [31:0] imm_ppl,
@@ -22,6 +23,7 @@ module RISCV_ID(
     output  [4:0] rs1_ppl,
     output  [4:0] rs2_ppl,
     output        reg_wen_ppl,
+    output        compressed_ppl_out,
 
 //----------register_file interface-------------
     output  [4:0] regfile_rs1, regfile_rs2,
@@ -43,6 +45,7 @@ module RISCV_ID(
     wire        jal_w, jalr_w, mem_to_reg_w, mem_wen_w, mem_ren_w, reg_wen_w;
     wire [31:0] pc_out_w;
     wire        bne_w, branch_w;
+    wire        compressed_ppl_w;
 
     reg  [31:0] rs1_rdata_r, rs2_rdata_r;
     reg  [31:0] imm_r;
@@ -52,6 +55,7 @@ module RISCV_ID(
     reg         jal_r, jalr_r, mem_to_reg_r, mem_wen_r, mem_ren_r, reg_wen_r;
     reg  [31:0] pc_out_r;
     reg        bne_r, branch_r;
+    reg         compressed_ppl_r;
 
     assign regfile_rs1 = rs1;
     assign regfile_rs2 = rs2;
@@ -72,7 +76,8 @@ module RISCV_ID(
     assign pc_out_w = pc_ppl;
     assign bne_w = bne;
     assign branch_w = branch;
-
+    assign compressed_ppl_w = compressed_ppl;
+    
     // pipeline reg output
     assign rd_ppl = rd_r;
     assign rs1_data_ppl = rs1_rdata_r;
@@ -91,6 +96,7 @@ module RISCV_ID(
     assign rs2_ppl = rs2_r;
     assign branch_ppl = branch_r;
     assign bne_ppl = bne_r;
+    assign compressed_ppl_out = compressed_ppl_r;
 
     decoder u0 (
         .inst_i(inst_ppl),
@@ -135,6 +141,7 @@ module RISCV_ID(
             rs2_rdata_r <= rs2_rdata_w;
             imm_r <= imm_w; // don't need to flush imm and reg data
             pc_out_r <= pc_out_w;
+            compressed_ppl_r <= compressed_ppl_w;
             if (flush) begin
                 rs1_r <= 0;
                 rs2_r <= 0;

@@ -12,7 +12,7 @@ module MEM_STAGE #(
     input memrd_in,
     input memwr_in,
         //transparent
-    input [BIT_W-1: 0] PC_plus_4_in,
+    input [BIT_W-1: 0] PC_step_in,
     input [4: 0] rd_in,
     input mem2reg_in,
     input regwr_in,
@@ -22,7 +22,7 @@ module MEM_STAGE #(
     output [BIT_W-1: 0] alu_result_out,
     output [BIT_W-1: 0] mem_dat,
         //various control signals output
-    output [BIT_W-1: 0] PC_plus_4_out,
+    output [BIT_W-1: 0] PC_step_out,
     output [4: 0] rd_out,
     output mem2reg_out,
     output regwr_out,
@@ -39,7 +39,7 @@ module MEM_STAGE #(
 );
 
     //Reg and Wire declaration
-    reg [BIT_W-1: 0] PC_plus_4_r, PC_plus_4_w,
+    reg [BIT_W-1: 0] PC_step_r, PC_step_w,
                     alu_result_r, alu_result_w,
                     mem_dat_r, mem_dat_w;
     reg [4: 0] rd_r, rd_w;
@@ -59,7 +59,7 @@ module MEM_STAGE #(
     //to pipeline
     assign alu_result_out = alu_result_r;
     assign mem_dat = mem_dat_r;
-    assign PC_plus_4_out = PC_plus_4_r;
+    assign PC_step_out = PC_step_r;
     assign rd_out = rd_r;
     assign mem2reg_out = mem2reg_r;
     assign regwr_out = regwr_r;
@@ -71,11 +71,11 @@ module MEM_STAGE #(
     always @(*) begin
         //default
         alu_result_w    = stall? alu_result_r: alu_result_in;
-        mem_dat_w       = {DCACHE_rdata[7:0], DCACHE_rdata[15:8], DCACHE_rdata[23:16], DCACHE_rdata[31:24]};
-        PC_plus_4_w     = stall? PC_plus_4_r: PC_plus_4_in;
+        mem_dat_w       = stall? mem_dat_r: {DCACHE_rdata[7:0], DCACHE_rdata[15:8], DCACHE_rdata[23:16], DCACHE_rdata[31:24]};
+        PC_step_w       = stall? PC_step_r: PC_step_in;
         rd_w            = stall? rd_r: rd_in;
         mem2reg_w       = stall? mem2reg_r: mem2reg_in;
-        regwr_w         = stall? 0: regwr_in;
+        regwr_w         = stall? regwr_r: regwr_in;
         jump_w          = stall? jump_r: jump_in;
     end
 
@@ -84,7 +84,7 @@ module MEM_STAGE #(
         if(!rst_n) begin
             alu_result_r    <= 0;
             mem_dat_r       <= 0;
-            PC_plus_4_r     <= 0;
+            PC_step_r     <= 0;
             rd_r            <= 0;
             mem2reg_r       <= 0;
             regwr_r         <= 0;
@@ -93,7 +93,7 @@ module MEM_STAGE #(
         else begin
             alu_result_r    <= alu_result_w;
             mem_dat_r       <= mem_dat_w;
-            PC_plus_4_r     <= PC_plus_4_w;
+            PC_step_r     <= PC_step_w;
             rd_r            <= rd_w;
             mem2reg_r       <= mem2reg_w;
             regwr_r         <= regwr_w;

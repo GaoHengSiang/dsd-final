@@ -1,5 +1,3 @@
-`ifndef __RISCV_DEFINE_H
-`define __RISCV_DEFINE_H
 // RISC-V related definitions
 parameter OPCODE_OP     = 7'b01_100_11;
 parameter OPCODE_OPIMM  = 7'b00_100_11;
@@ -22,9 +20,7 @@ parameter OP_C1_JAL = 3'b001;
 parameter OP_C1_MISC = 3'b100; // SRLI, SRAI, ANDI
 parameter OP_C1_J = 3'b101; 
 parameter OP_C1_BEQZ = 3'b110; 
-parameter OP_C1_BNQZ = 3'b111;
+parameter OP_C1_BNEZ = 3'b111;
 
 parameter OP_C2_SLLI = 3'b000;
-parameter OP_C2_JR = 3'b100;
-parameter OP_C2_MV = 3'b100;
-`endif
+parameter OP_C2_JRMVADD = 3'b100;

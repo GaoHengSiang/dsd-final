@@ -1,7 +1,8 @@
-module decompressor (
+module decompressor(
     input      [15:0] inst_i,
     output reg [31:0] inst_o
 );
+
 `include "riscv_define.vh"
 /*
 | C-inst. | Base instuction (Assembly)            |
@@ -23,7 +24,6 @@ module decompressor (
 | C.ADD    | add rd, rd, rs2                        |
 | C.NOP    | addi x0, x0, 0                         |
 */
-
 
     always @(*) begin
         inst_o = 32'h13; // NOP
@@ -74,22 +74,113 @@ module decompressor (
                         };
                     end
                     OP_C1_JAL: begin
-                        instr_o = {
-                            instr_i[12],
-                            instr_i[8],
-                            instr_i[10:9],
-                            instr_i[6],
-                            instr_i[7],
-                            instr_i[2],
-                            instr_i[11],
-                            instr_i[5:3],
-                            {9{instr_i[12]}},
+                        inst_o = {
+                            inst_i[12],
+                            inst_i[8],
+                            inst_i[10:9],
+                            inst_i[6],
+                            inst_i[7],
+                            inst_i[2],
+                            inst_i[11],
+                            inst_i[5:3],
+                            {9{inst_i[12]}},
                             5'b1,
                             OPCODE_JAL
                         };
                     end
                     OP_C1_MISC: begin // SRLI, SRAI, ANDI
-
+                        case (inst_i[11:10])
+                            2'b00, 2'b01: begin // SRLI, SRAI
+                                inst_o = {
+                                    1'b0,
+                                    inst_i[10],
+                                    4'b0,
+                                    inst_i[12],
+                                    inst_i[6:2],
+                                    2'b01,
+                                    inst_i[9:7],
+                                    3'b101,
+                                    2'b01,
+                                    inst_i[9:7],
+                                    OPCODE_OPIMM
+                                };
+                            end
+                            2'b10: begin // ANDI
+                                inst_o = { 
+                                    {6{inst_i[12]}},
+                                    inst_i[12],
+                                    inst_i[6:2],
+                                    2'b01,
+                                    inst_i[9:7],
+                                    3'b111,
+                                    2'b01,
+                                    inst_i[9:7],
+                                    OPCODE_OPIMM
+                                };
+                            end
+                        endcase
+                    end
+                    OP_C1_J: begin // J
+                        inst_o = {
+                            inst_i[12],
+                            inst_i[8],
+                            inst_i[10:9],
+                            inst_i[6],
+                            inst_i[7],
+                            inst_i[2],
+                            inst_i[11],
+                            inst_i[5:3],
+                            {9{inst_i[12]}},
+                            4'b0,
+                            ~inst_i[15],
+                            OPCODE_JAL
+                        };
+                    end
+                    OP_C1_BEQZ, OP_C1_BNEZ: begin
+                        inst_o = {
+                            {4{inst_i[12]}},
+                            inst_i[6:5],
+                            inst_i[2],
+                            5'b0,
+                            2'b01,
+                            inst_i[9:7],
+                            2'b00,
+                            inst_i[13],
+                            inst_i[11:10],
+                            inst_i[4:3],
+                            inst_i[12],
+                            OPCODE_BRANCH
+                        };
+                    end
+                endcase
+            end
+            OP_C2: begin
+                case (inst_i[15:13]) // synopsys full_case parallel_case
+                    OP_C2_SLLI: begin
+                        inst_o = {
+                            6'b0,
+                            inst_i[12],
+                            inst_i[6:2],
+                            inst_i[11:7],
+                            3'b001,
+                            inst_i[11:7],
+                            OPCODE_OPIMM
+                        };
+                    end
+                    OP_C2_JRMVADD: begin
+                        if (inst_i[12] == 1'b0) begin // JR, MV
+                            if (inst_i[6:2] == 5'b0) begin //JR
+                                inst_o = {12'b0, inst_i[11:7], 3'b0, 5'b0, OPCODE_JALR};
+                            end else begin // MV
+                                inst_o = {7'b0, inst_i[6:2], 5'b0, 3'b0, inst_i[11:7], OPCODE_OP};
+                            end
+                        end else begin // JALR, ADD
+                            if (inst_i[6:2] == 5'b0) begin // JALR
+                                inst_o = {12'b0, inst_i[11:7], 3'b000, 5'b00001, OPCODE_JALR};
+                            end else begin // ADD
+                                inst_o = {7'b0, inst_i[6:2], inst_i[11:7], 3'b0, inst_i[11:7], OPCODE_OP};
+                            end
+                        end
                     end
                 endcase
             end
