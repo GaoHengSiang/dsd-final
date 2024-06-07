@@ -13,6 +13,7 @@ set src [list \
     Src/RISCV_ID.v \
     Src/RISCV_EX.v \
     Src/RISCV_MEM.v \
+    Src/realigner.v
 ]
 
 sh mkdir -p Work

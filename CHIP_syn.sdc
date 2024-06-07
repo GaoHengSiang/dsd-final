@@ -26,7 +26,7 @@ set t_out  0.3
 set_input_delay  $t_in  -clock CLK [remove_from_collection [all_inputs] [get_ports clk]]
 set_output_delay $t_out -clock CLK [all_outputs]
 #####################################################
-set_input_delay  1.5  -clock CLK [remove_from_collection [all_inputs] [get_ports clk]]
+set_input_delay  1.5  -clock CLK [get_ports mem_ready_*]
 
 
 

@@ -2,6 +2,7 @@ CHIP.v
 cache.v 
 alu.v 
 decoder.v 
+decompressor.v
 realigner.v
 register_file.v 
 HAZARD_DETECTION.v 

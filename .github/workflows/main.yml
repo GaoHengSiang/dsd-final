@@ -1,0 +1,16 @@
+name: Verible formatter
+on:
+  pull_request:
+      branches: [ main ]
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: chipsalliance/verible-formatter-action@main
+      with:
+        files:
+          ./Src/*.v
+        parameters:
+          --indentation_spaces 4
+        github_token: ${{ secrets.GITHUB_TOKEN }}

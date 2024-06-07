@@ -1,16 +1,18 @@
-module RISCV_ID(
-    input         clk,
-    input         rst_n,
-    input         stall,
-    input         flush,
-    
+module RISCV_ID (
+    input clk,
+    input rst_n,
+    input stall,
+    input flush,
+
     input  [31:0] inst_ppl,
     input  [31:0] pc_ppl,
-    output  [4:0] rd_ppl,
-    output [31:0] rs1_data_ppl, rs2_data_ppl,
+    input         compressed_ppl,
+    output [ 4:0] rd_ppl,
+    output [31:0] rs1_data_ppl,
+    rs2_data_ppl,
     output [31:0] imm_ppl,
     output        alu_src_ppl,
-    output [3: 0] alu_ctrl_ppl,
+    output [ 3:0] alu_ctrl_ppl,
     output [31:0] pc_ppl_out,
     output        jal_ppl,
     output        jalr_ppl,
@@ -19,39 +21,44 @@ module RISCV_ID(
     output        mem_ren_ppl,
     output        mem_wen_ppl,
     output        mem_to_reg_ppl,
-    output  [4:0] rs1_ppl,
-    output  [4:0] rs2_ppl,
+    output [ 4:0] rs1_ppl,
+    output [ 4:0] rs2_ppl,
     output        reg_wen_ppl,
+    output        compressed_ppl_out,
 
-//----------register_file interface-------------
-    output  [4:0] regfile_rs1, regfile_rs2,
-    input  [31:0] regfile_rs1_data, regfile_rs2_data
+    //----------register_file interface-------------
+    output [ 4:0] regfile_rs1,
+    regfile_rs2,
+    input  [31:0] regfile_rs1_data,
+    regfile_rs2_data
 );
     // decoder result
-    wire  [4:0] rs1, rs2, rd;
+    wire [4:0] rs1, rs2, rd;
     wire [31:0] imm;
     wire        alu_src;
-    wire  [3:0] alu_op;
-    wire        jal, jalr, branch, bne, mem_to_reg, mem_wen, mem_ren, reg_wen;
+    wire [ 3:0] alu_op;
+    wire jal, jalr, branch, bne, mem_to_reg, mem_wen, mem_ren, reg_wen;
 
     // wire and reg
     wire [31:0] rs1_rdata_w, rs2_rdata_w;
     wire [31:0] imm_w;
-    wire  [4:0] rd_w, rs1_w, rs2_w;
-    wire        alu_src_w;
-    wire  [3:0] alu_op_w;
-    wire        jal_w, jalr_w, mem_to_reg_w, mem_wen_w, mem_ren_w, reg_wen_w;
+    wire [4:0] rd_w, rs1_w, rs2_w;
+    wire       alu_src_w;
+    wire [3:0] alu_op_w;
+    wire jal_w, jalr_w, mem_to_reg_w, mem_wen_w, mem_ren_w, reg_wen_w;
     wire [31:0] pc_out_w;
-    wire        bne_w, branch_w;
+    wire bne_w, branch_w;
+    wire compressed_ppl_w;
 
-    reg  [31:0] rs1_rdata_r, rs2_rdata_r;
-    reg  [31:0] imm_r;
-    reg   [4:0] rd_r, rs1_r, rs2_r;
-    reg         alu_src_r;
-    reg   [3:0] alu_op_r;
-    reg         jal_r, jalr_r, mem_to_reg_r, mem_wen_r, mem_ren_r, reg_wen_r;
-    reg  [31:0] pc_out_r;
-    reg        bne_r, branch_r;
+    reg [31:0] rs1_rdata_r, rs2_rdata_r;
+    reg [31:0] imm_r;
+    reg [4:0] rd_r, rs1_r, rs2_r;
+    reg       alu_src_r;
+    reg [3:0] alu_op_r;
+    reg jal_r, jalr_r, mem_to_reg_r, mem_wen_r, mem_ren_r, reg_wen_r;
+    reg [31:0] pc_out_r;
+    reg bne_r, branch_r;
+    reg compressed_ppl_r;
 
     assign regfile_rs1 = rs1;
     assign regfile_rs2 = rs2;
@@ -72,6 +79,7 @@ module RISCV_ID(
     assign pc_out_w = pc_ppl;
     assign bne_w = bne;
     assign branch_w = branch;
+    assign compressed_ppl_w = compressed_ppl;
 
     // pipeline reg output
     assign rd_ppl = rd_r;
@@ -91,29 +99,30 @@ module RISCV_ID(
     assign rs2_ppl = rs2_r;
     assign branch_ppl = branch_r;
     assign bne_ppl = bne_r;
+    assign compressed_ppl_out = compressed_ppl_r;
 
     decoder u0 (
-        .inst_i(inst_ppl),
-        .rs1_o(rs1),
-        .rs2_o(rs2),
-        .rd_o(rd),
-        .imm_o(imm),
-        .alusrc_o(alu_src),
-        .aluop_o(alu_op),
-        .jal_o(jal),
-        .jalr_o(jalr),
-        .branch_o(branch),
-        .bne_o(bne),
+        .inst_i      (inst_ppl),
+        .rs1_o       (rs1),
+        .rs2_o       (rs2),
+        .rd_o        (rd),
+        .imm_o       (imm),
+        .alusrc_o    (alu_src),
+        .aluop_o     (alu_op),
+        .jal_o       (jal),
+        .jalr_o      (jalr),
+        .branch_o    (branch),
+        .bne_o       (bne),
         .mem_to_reg_o(mem_to_reg),
-        .mem_wen_o(mem_wen),
-        .mem_ren_o(mem_ren),
-        .reg_wen_o(reg_wen)
+        .mem_wen_o   (mem_wen),
+        .mem_ren_o   (mem_ren),
+        .reg_wen_o   (reg_wen)
     );
 
 
     always @(posedge clk) begin
         if (!rst_n) begin
-            rd_r  <= 0;
+            rd_r <= 0;
             rs1_r <= 0;
             rs2_r <= 0;
             alu_src_r <= 0;
@@ -133,12 +142,13 @@ module RISCV_ID(
         end else if (!stall) begin
             rs1_rdata_r <= rs1_rdata_w;
             rs2_rdata_r <= rs2_rdata_w;
-            imm_r <= imm_w; // don't need to flush imm and reg data
+            imm_r <= imm_w;  // don't need to flush imm and reg data
             pc_out_r <= pc_out_w;
+            compressed_ppl_r <= compressed_ppl_w;
             if (flush) begin
                 rs1_r <= 0;
                 rs2_r <= 0;
-                rd_r  <= 0;
+                rd_r <= 0;
                 alu_src_r <= 0;
                 alu_op_r <= 0;
                 jal_r <= 0;
@@ -152,7 +162,7 @@ module RISCV_ID(
             end else begin
                 rs1_r <= rs1_w;
                 rs2_r <= rs2_w;
-                rd_r  <= rd_w;
+                rd_r <= rd_w;
                 alu_src_r <= alu_src_w;
                 alu_op_r <= alu_op_w;
                 jal_r <= jal_w;

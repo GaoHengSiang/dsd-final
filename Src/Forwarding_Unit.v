@@ -9,7 +9,7 @@ module Forwarding_Unit(
     input [31: 0] rd_data,//data source for MEM/WB forwarding
     //data source(s) for EX/MEM forwarding
     input [31: 0] EX_MEM_alu_result,
-    input [31: 0] EX_MEM_PC_plus_4,
+    input [31: 0] EX_MEM_PC_step,
     input EX_MEM_jump,//we need this signal to determine which of the above
     
     output reg         forward_A_flag,
@@ -41,7 +41,7 @@ always @(*)begin
     end
     2'b10: begin
         if(EX_MEM_jump) begin
-            forward_A_dat = EX_MEM_PC_plus_4;
+            forward_A_dat = EX_MEM_PC_step;
             //MAYBE THIS IS REDUNDANT BECAUSE ID/EX would've been flushed if EX/MEM has jump
             //so under no circumstances will this be taken
         end
@@ -57,7 +57,7 @@ always @(*)begin
     end
     2'b10: begin
         if(EX_MEM_jump) begin
-            forward_B_dat = EX_MEM_PC_plus_4;
+            forward_B_dat = EX_MEM_PC_step;
         end
         else begin
             forward_B_dat = EX_MEM_alu_result;
