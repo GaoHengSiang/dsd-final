@@ -1,36 +1,21 @@
 module cache (
-    clk,
-    proc_reset,
-    proc_read,
-    proc_write,
-    proc_addr,
-    proc_rdata,
-    proc_wdata,
-    proc_stall,
-    mem_read,
-    mem_write,
-    mem_addr,
-    mem_rdata,
-    mem_wdata,
-    mem_ready
-);
-
-    //==== input/output definition ============================
-    input clk;
+    input clk,
     // processor interface
-    input proc_reset;
-    input proc_read, proc_write;
-    input [29:0] proc_addr;
-    input [31:0] proc_wdata;
-    output proc_stall;
-    output [31:0] proc_rdata;
+    input proc_reset,
+    input proc_read,
+    proc_write,
+    input [29:0] proc_addr,
+    input [31:0] proc_wdata,
+    output proc_stall,
+    output [31:0] proc_rdata,
     // memory interface
-    input [127:0] mem_rdata;
-    input mem_ready;
-    output mem_read, mem_write;
-    output [27:0] mem_addr;
-    output [127:0] mem_wdata;
-
+    input [127:0] mem_rdata,
+    input mem_ready,
+    output mem_read,
+    mem_write,
+    output [27:0] mem_addr,
+    output [127:0] mem_wdata
+);
     //==== parameter definition ===============================
     parameter WAYS = 2;
     parameter BLOCK_WIDTH = 128;
@@ -97,8 +82,8 @@ module cache (
     assign input_src = (state_r == S_FETCH);
 
     /* memory control signal */
-    assign mem_read = (state_w == S_FETCH || state_r == S_FETCH);
-    assign mem_write = (state_w == S_WB || state_r == S_WB);
+    assign mem_read = (state_w == S_FETCH);  //|| state_r == S_FETCH);
+    assign mem_write = (state_w == S_WB);  // || state_r == S_WB);
     assign mem_addr = (state_w == S_WB || state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
     assign mem_wdata = (state_w == S_WB || state_r == S_WB) ? rdata_sets[replace_sel] : 0;
 
@@ -304,7 +289,7 @@ module set #(
                     2'b00: wdata = {rdata[127:32], wdata_i[31:0]};
                     2'b01: wdata = {rdata[127:64], wdata_i[31:0], rdata[31:0]};
                     2'b10: wdata = {rdata[127:96], wdata_i[31:0], rdata[63:0]};
-                    2'b11: wdata = {wdata_i, rdata[95:0]};
+                    2'b11: wdata = {wdata_i[31:0], rdata[95:0]};
                 endcase
             end
         end else begin

@@ -1,8 +1,7 @@
 /*
  * include a cache, a write buffer, and a controller, prioritize read miss over write miss
  */
-`define DEBUG_STAT 1//TODO: remove this in production
-module dcache_wrapper (
+module icache_wrapper (
     input          clk,
     input          proc_reset,
     input          proc_read,
@@ -44,7 +43,6 @@ module dcache_wrapper (
         .mem_wdata (mem_wdata),
         .mem_ready (mem_ready)
     );
-
 `ifdef DEBUG_STAT
     cache_pmu u_cache_pmu (
         .clk                 (clk),
