@@ -1,36 +1,21 @@
 module cache (
-    clk,
-    proc_reset,
-    proc_read,
-    proc_write,
-    proc_addr,
-    proc_rdata,
-    proc_wdata,
-    proc_stall,
-    mem_read,
-    mem_write,
-    mem_addr,
-    mem_rdata,
-    mem_wdata,
-    mem_ready
-);
-
-    //==== input/output definition ============================
-    input clk;
+    input clk,
     // processor interface
-    input proc_reset;
-    input proc_read, proc_write;
-    input [29:0] proc_addr;
-    input [31:0] proc_wdata;
-    output proc_stall;
-    output [31:0] proc_rdata;
+    input proc_reset,
+    input proc_read,
+    proc_write,
+    input [29:0] proc_addr,
+    input [31:0] proc_wdata,
+    output proc_stall,
+    output [31:0] proc_rdata,
     // memory interface
-    input [127:0] mem_rdata;
-    input mem_ready;
-    output mem_read, mem_write;
-    output [27:0] mem_addr;
-    output [127:0] mem_wdata;
-
+    input [127:0] mem_rdata,
+    input mem_ready,
+    output mem_read,
+    mem_write,
+    output [27:0] mem_addr,
+    output [127:0] mem_wdata
+);
     //==== parameter definition ===============================
     parameter WAYS = 2;
     parameter BLOCK_WIDTH = 128;
@@ -55,6 +40,7 @@ module cache (
     reg [BLOCK_WIDTH-1:0] wdata;  // data written to cache line
     wire [BLOCK_WIDTH-1:0] rdata;
 
+    reg [29:0] addr_r, addr_w;
     wire [1:0] index_i;
     wire [1:0] offset_i;
 
@@ -78,7 +64,7 @@ module cache (
                 .dirty_i(dirty_next),
                 .input_src_i(input_src),
                 .wdata_i(wdata),
-                .addr_i(proc_addr),
+                .addr_i(state_r == S_IDLE ? proc_addr : addr_r),
                 .dirty_o(dirty_sets[gen_i]),
                 .valid_o(valid_sets[gen_i]),
                 .hit_o(hit_sets[gen_i]),
@@ -90,16 +76,16 @@ module cache (
     endgenerate
     //==== combinational circuit ==============================
     assign hit = |hit_tmp;
-    assign index_i = proc_addr[3:2];
-    assign offset_i = proc_addr[1:0];
+    assign index_i = (state_r == S_IDLE) ? proc_addr[3:2] : addr_r[3:2];
+    assign offset_i = (state_r == S_IDLE) ? proc_addr[1:0] : addr_r[1:0];
     assign dirty = dirty_sets[replace_sel];
     assign input_src = (state_r == S_FETCH);
 
     /* memory control signal */
-    assign mem_read = (state_r == S_FETCH);
-    assign mem_write = (state_r == S_WB);
-    assign mem_addr = (state_r == S_WB) ? {tag_sets[replace_sel], index_i} : proc_addr[29:2];
-    assign mem_wdata = (state_r == S_WB) ? rdata_sets[replace_sel] : 0;
+    assign mem_read = (state_w == S_FETCH);  //|| state_r == S_FETCH);
+    assign mem_write = (state_w == S_WB);  // || state_r == S_WB);
+    assign mem_addr = (state_w == S_WB || state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
+    assign mem_wdata = (state_w == S_WB || state_r == S_WB) ? rdata_sets[replace_sel] : 0;
 
     assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read || proc_write));
     assign proc_rdata = rdata[WORD_WIDTH*offset_i+:WORD_WIDTH];
@@ -110,6 +96,7 @@ module cache (
         dirty_next = 0;
         wen = 0;
         wdata = 0;
+        addr_w = addr_r;
         for (i = 0; i < LINE_NUM; i = i + 1) lru_lines_w[i] = lru_lines_r[i];
         case (state_r)
             S_IDLE: begin
@@ -117,8 +104,9 @@ module cache (
                     if (!hit) begin
                         if (dirty) state_w = S_WB;
                         else state_w = S_FETCH;
+                        addr_w = proc_addr;
                     end else begin
-                        lru_lines_w[index_i] = ~replace_sel;
+                        lru_lines_w[index_i] = ~hit_sets[1];
                         if (proc_write) begin
                             wen = 1;
                             update = 1;
@@ -141,7 +129,7 @@ module cache (
             end
             S_FETCH: begin
                 if (mem_ready) begin
-                    lru_lines_w[index_i] = ~replace_sel;
+                    //lru_lines_w[index_i] = ~replace_sel;
                     state_w = S_IDLE;
                     wen = 1;
                     update = 1;
@@ -193,11 +181,13 @@ module cache (
             for (i = 0; i < LINE_NUM; i = i + 1) begin
                 lru_lines_r[i] <= 0;
             end
+            addr_r <= 0;
         end else begin
             state_r <= state_w;
             for (i = 0; i < LINE_NUM; i = i + 1) begin
                 lru_lines_r[i] <= lru_lines_w[i];
             end
+            addr_r <= addr_w;
         end
     end
 
@@ -299,7 +289,7 @@ module set #(
                     2'b00: wdata = {rdata[127:32], wdata_i[31:0]};
                     2'b01: wdata = {rdata[127:64], wdata_i[31:0], rdata[31:0]};
                     2'b10: wdata = {rdata[127:96], wdata_i[31:0], rdata[63:0]};
-                    2'b11: wdata = {wdata_i, rdata[95:0]};
+                    2'b11: wdata = {wdata_i[31:0], rdata[95:0]};
                 endcase
             end
         end else begin

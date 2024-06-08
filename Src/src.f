@@ -3,7 +3,11 @@ cache.v
 alu.v 
 decoder.v 
 decompressor.v
+dcache_wrapper.v
+icache_wrapper.v
+cache_pmu.v
 realigner.v
+saturation_counter.v
 register_file.v 
 HAZARD_DETECTION.v 
 Forwarding_Unit.v 
