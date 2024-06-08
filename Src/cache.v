@@ -97,10 +97,10 @@ module cache (
     assign input_src = (state_r == S_FETCH);
 
     /* memory control signal */
-    assign mem_read = (state_r == S_FETCH);
-    assign mem_write = (state_r == S_WB);
-    assign mem_addr = (state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
-    assign mem_wdata = (state_r == S_WB) ? rdata_sets[replace_sel] : 0;
+    assign mem_read = (state_w == S_FETCH || state_r == S_FETCH);
+    assign mem_write = (state_w == S_WB || state_r == S_WB);
+    assign mem_addr = (state_w == S_WB || state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
+    assign mem_wdata = (state_w == S_WB || state_r == S_WB) ? rdata_sets[replace_sel] : 0;
 
     assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read || proc_write));
     assign proc_rdata = rdata[WORD_WIDTH*offset_i+:WORD_WIDTH];
@@ -121,7 +121,7 @@ module cache (
                         else state_w = S_FETCH;
                         addr_w = proc_addr;
                     end else begin
-                        lru_lines_w[index_i] = ~replace_sel;
+                        lru_lines_w[index_i] = ~hit_sets[1];
                         if (proc_write) begin
                             wen = 1;
                             update = 1;
@@ -144,7 +144,7 @@ module cache (
             end
             S_FETCH: begin
                 if (mem_ready) begin
-                    lru_lines_w[index_i] = ~replace_sel;
+                    //lru_lines_w[index_i] = ~replace_sel;
                     state_w = S_IDLE;
                     wen = 1;
                     update = 1;
