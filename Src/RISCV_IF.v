@@ -11,7 +11,7 @@ module RISCV_IF(
     input         feedback_valid,//if the instruction in EX is not a branch or stalling...
 //-------ICACHE-interface-------
 	input  ICACHE_stall,
-    input  load_use_hazard,
+    input  load_mul_use_hazard,
     output ICACHE_ren,
 	output ICACHE_wen,
 	output [29: 0] ICACHE_addr,
@@ -94,7 +94,7 @@ module RISCV_IF(
             pc_w = pc_j;
         end else if (pc_src == 2'b10) begin
             pc_w = pc_branch;
-        end else if (!(load_use_hazard || stall || !inst_ready)) begin
+        end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
             pc_w = (take_branch && is_branch)? branch_destination: pc_step; //branch if predicted so
         end else begin
             pc_w = pc_r;

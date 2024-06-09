@@ -5,6 +5,8 @@ module MEM_STAGE #(
 ) (
     input clk,
     input rst_n,
+    //INPUT FROM MUL
+    input [31 : 0] mul_result,
     //PIPELINE INPUT FROM EX/MEM REGISTER
     input [BIT_W-1:0] alu_result_in,
     input [BIT_W-1:0] mem_wdata_in,
@@ -17,6 +19,7 @@ module MEM_STAGE #(
     input mem2reg_in,
     input regwr_in,
     input jump_in,
+    input mul_i,
 
     //PIPELINE OUTPUT TO MEM/WB REGISTER
     output [BIT_W-1:0] alu_result_out,
@@ -68,7 +71,7 @@ module MEM_STAGE #(
     //Combinational 
     always @(*) begin
         //default
-        alu_result_w = stall ? alu_result_r : alu_result_in;
+        alu_result_w = stall ? alu_result_r : (mul_i? mul_result: alu_result_in);
         mem_dat_w       = stall? mem_dat_r: {DCACHE_rdata[7:0], DCACHE_rdata[15:8], DCACHE_rdata[23:16], DCACHE_rdata[31:24]};
         PC_step_w = stall ? PC_step_r : PC_step_in;
         rd_w = stall ? rd_r : rd_in;

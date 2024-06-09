@@ -13,7 +13,8 @@ module decoder (
     output        mem_to_reg_o,
     output        mem_wen_o,
     output        mem_ren_o,
-    output        reg_wen_o
+    output        reg_wen_o,
+    output        mul_o//indicates that this is a MUL instruction, should be handled by multiplier
 );
     `include "riscv_define.vh"
     ;
@@ -100,6 +101,7 @@ module decoder (
         jalr = 0;
         alu_src = 0;
         imm_select = I_IMM;
+        mul = 0;
         case (opcode)  // synopsys full_case parallel_case
             OPCODE_OP: begin
                 reg_wen = 1;
@@ -110,6 +112,8 @@ module decoder (
                             alu_op = ADD;
                         else  // SUB
                             alu_op = SUB;
+                        if(funct7[0]) //MUL
+                            mul = 1;
                     end
                     3'b001: begin  // SLL
                         alu_op = SLL;
