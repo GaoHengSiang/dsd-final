@@ -49,7 +49,7 @@ module icache (
     reg             update;
     generate
         for (gen_i = 0; gen_i < WAYS; gen_i = gen_i + 1) begin : gen_blk1
-            set u0 (
+            iset u0 (
                 .clk(clk),
                 .rst(proc_reset),
                 .write_i(wen_sets[gen_i]),
@@ -166,7 +166,7 @@ module icache (
 
 endmodule
 
-module set #(
+module iset #(
     parameter LINE_NUM = 4,
     parameter TAG_WIDTH = 26,
     parameter BLOCK_WIDTH = 128
@@ -221,7 +221,7 @@ module set #(
     /* instantiate cache lines */
     generate
         for (gen_i = 0; gen_i < LINE_NUM; gen_i = gen_i + 1) begin : gen_blk2
-            line l (
+            iline l (
                 .clk(clk),
                 .rst(rst),
                 .write_i(wen_lines[gen_i]),
@@ -253,7 +253,7 @@ module set #(
 
 endmodule
 
-module line #(
+module iline #(
     parameter TAG_WIDTH   = 26,
     parameter BLOCK_WIDTH = 128,
     parameter WORD_WIDTH  = 32

@@ -33,7 +33,6 @@ module icache_wrapper (
         .proc_read (proc_read),
         .proc_addr (proc_addr),
         .proc_rdata(proc_rdata),
-        .proc_wdata(proc_wdata),
         .proc_stall(proc_stall),
         .mem_read  (mem_read),
         .mem_write (mem_write),
