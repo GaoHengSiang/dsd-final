@@ -1,5 +1,6 @@
 CHIP.v 
-cache.v 
+icache.v 
+dcache.v
 alu.v 
 decoder.v 
 decompressor.v
