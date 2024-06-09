@@ -16,8 +16,7 @@ module decoder (
     output        reg_wen_o,
     output        mul_o//indicates that this is a MUL instruction, should be handled by multiplier
 );
-    `include "riscv_define.vh"
-    ;
+    `include "riscv_define.vh";
 
 
 
@@ -60,7 +59,7 @@ module decoder (
     reg reg_wen, mem_to_reg, mem_wen, mem_ren;
     reg branch, jal, jalr;
     reg bne;  // we do subtraction for BEQ, but if we encounter BNE, we need to negate the result
-
+    reg mul;
 
     reg [31:0] imm_ext;
 
@@ -87,7 +86,8 @@ module decoder (
     assign mem_wen_o = mem_wen;
     assign mem_ren_o = mem_ren;
     assign reg_wen_o = reg_wen;
-
+    assign mul_o = mul;
+    
     // decode logic
     always @(*) begin
         alu_op = ADD;
