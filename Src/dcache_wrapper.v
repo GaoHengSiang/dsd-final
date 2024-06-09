@@ -28,7 +28,7 @@ module dcache_wrapper (
 `endif
 );
 
-    cache u_cache (
+    dcache u_cache (
         .clk       (clk),
         .proc_reset(proc_reset),
         .proc_read (proc_read),
