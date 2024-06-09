@@ -2,7 +2,7 @@ module icache (
     input clk,
     // processor interface
     input proc_reset,
-    input proc_read,
+    input proc_read,//read only
     input [29:0] proc_addr,
     output proc_stall,
     output [31:0] proc_rdata,
@@ -20,7 +20,7 @@ module icache (
     parameter TAG_WIDTH = 26;
     parameter WORD_WIDTH = 32;
     parameter LINE_NUM = 4;
-    localparam S_IDLE = 0, S_WB = 1, S_FETCH = 2;
+    localparam S_IDLE = 0, S_FETCH = 2;
 
     genvar gen_i;
     integer i;
@@ -29,12 +29,9 @@ module icache (
     reg update_sets[0:WAYS-1];  // updated valid signal
     wire valid_sets[0:WAYS-1];
     wire hit_sets[0:WAYS-1];
-    wire dirty_sets[0:WAYS-1];
     wire [TAG_WIDTH-1:0] tag_sets[0:WAYS-1];
     wire [BLOCK_WIDTH-1:0] rdata_sets[0:WAYS-1];  // 128 bit 
     reg valid_next;  // updated valid bit
-    reg dirty_next;  // updated dirty bit
-    wire input_src;  // input source, 0: CPU, 1: memory
     reg [BLOCK_WIDTH-1:0] wdata;  // data written to cache line
     wire [BLOCK_WIDTH-1:0] rdata;
 
@@ -46,8 +43,7 @@ module icache (
     reg lru_lines_r[0:LINE_NUM-1], lru_lines_w[0:LINE_NUM-1];
     reg             replace_sel;
     wire [WAYS-1:0] hit_tmp;
-    wire            hit;  // hit are ORed result from all the hit signal in each way
-    wire            dirty;
+    wire            hit;  // hit is ORed result from all the hit signal in each way
     reg             stall;
     reg             wen;  // wen for cache set
     reg             update;
@@ -59,11 +55,8 @@ module icache (
                 .write_i(wen_sets[gen_i]),
                 .update_i(update_sets[gen_i]),
                 .valid_i(valid_next),
-                .dirty_i(dirty_next),
-                .input_src_i(input_src),
                 .wdata_i(wdata),
                 .addr_i(state_r == S_IDLE ? proc_addr : addr_r),
-                .dirty_o(dirty_sets[gen_i]),
                 .valid_o(valid_sets[gen_i]),
                 .hit_o(hit_sets[gen_i]),
                 .tag_o(tag_sets[gen_i]),
@@ -76,53 +69,36 @@ module icache (
     assign hit = |hit_tmp;
     assign index_i = (state_r == S_IDLE) ? proc_addr[3:2] : addr_r[3:2];
     assign offset_i = (state_r == S_IDLE) ? proc_addr[1:0] : addr_r[1:0];
-    assign dirty = dirty_sets[replace_sel];
-    assign input_src = (state_r == S_FETCH);
 
     /* memory control signal */
     assign mem_read = (state_w == S_FETCH);  //|| state_r == S_FETCH);
-    assign mem_write = (state_w == S_WB);  // || state_r == S_WB);
-    assign mem_addr = (state_w == S_WB || state_r == S_WB) ? {tag_sets[replace_sel], index_i} : addr_r[29:2];
-    assign mem_wdata = (state_w == S_WB || state_r == S_WB) ? rdata_sets[replace_sel] : 0;
+    assign mem_write = 0;  //READ ONLY
+    assign mem_addr = addr_r[29:2];
+    assign mem_wdata = 0;
 
-    assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read || proc_write));
+    assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read));
     assign proc_rdata = rdata[WORD_WIDTH*offset_i+:WORD_WIDTH];
+
     always @(*) begin : state_logic
         state_w = state_r;
         update = 0;
         valid_next = 0;
-        dirty_next = 0;
         wen = 0;
         wdata = 0;
         addr_w = addr_r;
         for (i = 0; i < LINE_NUM; i = i + 1) lru_lines_w[i] = lru_lines_r[i];
         case (state_r)
             S_IDLE: begin
-                if (proc_read || proc_write) begin
+                if (proc_read) begin
                     if (!hit) begin
-                        if (dirty) state_w = S_WB;
-                        else state_w = S_FETCH;
+                        state_w = S_FETCH;
                         addr_w = proc_addr;
                     end else begin
                         lru_lines_w[index_i] = ~hit_sets[1];
-                        if (proc_write) begin
-                            wen = 1;
-                            update = 1;
-                            valid_next = 1;
-                            dirty_next = 1;
-                            wdata = proc_wdata;
-                        end
                         state_w = S_IDLE;
                     end
                 end else begin
                     state_w = S_IDLE;
-                end
-            end
-            S_WB: begin
-                if (mem_ready) begin
-                    state_w = S_FETCH;
-                end else begin
-                    state_w = S_WB;
                 end
             end
             S_FETCH: begin
@@ -133,9 +109,6 @@ module icache (
                     update = 1;
                     valid_next = 1;
                     wdata = mem_rdata;
-                    if (proc_write) begin // here we fetch from memory and perform write operation at the same time
-                        dirty_next = 1;
-                    end
                 end else begin
                     state_w = S_FETCH;
                 end
@@ -203,12 +176,9 @@ module set #(
     input                    write_i,
     input                    update_i,
     input                    valid_i,
-    input                    dirty_i,
-    input                    input_src_i,  // input_src_i = 0: CPU, 1: memory
     input  [BLOCK_WIDTH-1:0] wdata_i,
     input  [           29:0] addr_i,
     output                   valid_o,
-    output                   dirty_o,
     output                   hit_o,
     output [  TAG_WIDTH-1:0] tag_o,
     output [BLOCK_WIDTH-1:0] rdata_o
@@ -216,7 +186,6 @@ module set #(
 
     /* data read from cache line */
     wire valid_lines[0:LINE_NUM-1];
-    wire dirty_lines[0:LINE_NUM-1];
     wire [TAG_WIDTH-1:0] tag_lines[0:LINE_NUM-1];
     wire [BLOCK_WIDTH-1:0] rdata_lines[0:LINE_NUM-1];
 
@@ -227,7 +196,6 @@ module set #(
 
     /* generate signal */
     wire valid;
-    wire dirty;
     wire hit;
     wire [BLOCK_WIDTH-1:0] rdata;
     wire [1:0] offset;
@@ -235,7 +203,6 @@ module set #(
     /* control signal for cache lines */
     reg wen_lines[0:LINE_NUM-1];  // write enable signal for each line
     wire valid_next;  // updated valid signal
-    wire dirty_next;  // updated dirty signal
     reg [BLOCK_WIDTH-1:0] wdata;  // data written to cache line, the source could by CPU or memory
 
     genvar gen_i;
@@ -243,7 +210,6 @@ module set #(
     assign {tag_i, index_i, offset_i} = addr_i;
 
     assign valid = valid_lines[index_i];
-    assign dirty = dirty_lines[index_i];
     assign rdata = rdata_lines[index_i];
     assign hit = (valid && (tag_i == tag_lines[index_i]));
 
@@ -251,7 +217,6 @@ module set #(
     assign valid_o = valid;
     assign hit_o = hit;
     assign rdata_o = rdata;
-    assign dirty_o = dirty;
     assign tag_o = tag_lines[index_i];
     /* instantiate cache lines */
     generate
@@ -261,11 +226,9 @@ module set #(
                 .rst(rst),
                 .write_i(wen_lines[gen_i]),
                 .valid_i(valid_next),
-                .dirty_i(dirty_next),
                 .tag_i(tag_i),
                 .wdata_i(wdata),
                 .valid_o(valid_lines[gen_i]),
-                .dirty_o(dirty_lines[gen_i]),
                 .tag_o(tag_lines[gen_i]),
                 .rdata_o(rdata_lines[gen_i])
             );
@@ -278,18 +241,8 @@ module set #(
             wen_lines[i] = (write_i || update_i) && (index_i == i);
         end
         if (write_i) begin
-            if (input_src_i) begin
-                /* input is from data memory, write 128 bit at once */
-                wdata = wdata_i;
-            end else begin
-                /* input is from CPU, we only write 32 bit data according to offset */
-                case (offset_i)
-                    2'b00: wdata = {rdata[127:32], wdata_i[31:0]};
-                    2'b01: wdata = {rdata[127:64], wdata_i[31:0], rdata[31:0]};
-                    2'b10: wdata = {rdata[127:96], wdata_i[31:0], rdata[63:0]};
-                    2'b11: wdata = {wdata_i[31:0], rdata[95:0]};
-                endcase
-            end
+            /* input can only be from data memory, write 128 bit at once */
+            wdata = wdata_i;
         end else begin
             wdata = rdata;
         end
@@ -297,7 +250,6 @@ module set #(
 
     /* update attributes of cache lines */
     assign valid_next = (update_i) ? valid_i : valid;
-    assign dirty_next = (update_i) ? dirty_i : dirty;
 
 endmodule
 
@@ -310,36 +262,30 @@ module line #(
     input rst,
     input write_i,
     input valid_i,
-    input dirty_i,
     input [TAG_WIDTH-1:0] tag_i,
     input [BLOCK_WIDTH-1:0] wdata_i,
     output valid_o,
-    output dirty_o,
     output [TAG_WIDTH-1:0] tag_o,
     output [BLOCK_WIDTH-1:0] rdata_o
 );
 
     integer i;
     reg valid_r, valid_w;
-    reg dirty_r, dirty_w;
     reg [TAG_WIDTH-1:0] tag_r, tag_w;
     reg [BLOCK_WIDTH-1:0] data_r, data_w;
 
     /* output logic */
     assign valid_o = valid_r;
-    assign dirty_o = dirty_r;
     assign tag_o   = tag_r;
     assign rdata_o = data_r;
 
     always @(*) begin : update_logic
         if (write_i) begin
             valid_w = valid_i;
-            dirty_w = dirty_i;
             tag_w   = tag_i;
             data_w  = wdata_i;
         end else begin
             valid_w = valid_r;
-            dirty_w = dirty_r;
             tag_w   = tag_r;
             data_w  = data_r;
         end
@@ -348,12 +294,10 @@ module line #(
     always @(posedge clk) begin
         if (rst) begin
             valid_r <= 0;
-            dirty_r <= 0;
             tag_r   <= 0;
             data_r  <= 0;
         end else begin
             valid_r <= valid_w;
-            dirty_r <= dirty_w;
             tag_r   <= tag_w;
             data_r  <= data_w;
         end

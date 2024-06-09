@@ -27,11 +27,10 @@ module icache_wrapper (
 `endif
 );
 
-    icache u_cache (
+    cache u_cache (
         .clk       (clk),
         .proc_reset(proc_reset),
         .proc_read (proc_read),
-        .proc_write(proc_write),
         .proc_addr (proc_addr),
         .proc_rdata(proc_rdata),
         .proc_wdata(proc_wdata),
