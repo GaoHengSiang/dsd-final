@@ -138,6 +138,7 @@ module RISCV_Pipeline (
         .ID_RegisterRs1(ID_regfile_rs1),
         .ID_RegisterRs2(ID_regfile_rs2),
         .ID_EX_MemRead(ID_EX_mem_ren_ppl),
+        .ID_EX_mul(ID_EX_mul_ppl),
         .ID_EX_RegisterRd(ID_EX_rd_ppl),
         .load_mul_use_hazard(load_mul_use_hazard)
     );
