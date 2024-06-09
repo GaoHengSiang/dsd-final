@@ -3,9 +3,7 @@ module icache (
     // processor interface
     input proc_reset,
     input proc_read,
-    proc_write,
     input [29:0] proc_addr,
-    input [31:0] proc_wdata,
     output proc_stall,
     output [31:0] proc_rdata,
     // memory interface
