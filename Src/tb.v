@@ -14,6 +14,9 @@ module testbench;
     );
 
     initial begin
+        $fsdbDumpfile("mul.fsdb");
+        $fsdbDumpvars(0, testbench, "+mda");
+        $fsdbDumpvars;
         // Test case 1
         a = 32'h12345678;
         b = 32'h87654321;
@@ -88,6 +91,20 @@ module testbench;
             $display("Test case 6 passed");
         else
             $display("Test case 6 failed");
+        
+        // Test case 7
+        // Test F0F0F0F0
+        a = 32'hF0F0F0F0;
+        b = 32'hF0F0F0F0;   
+        result = a * b;
+        result_l32 = result[31:0];
+        #100;  // Wait for 100 ns for the design to process the input
+        $display("Test case 7: The out of %h and %h is %h", a, b, out);
+        if (out === result_l32)
+            $display("Test case 7 passed");
+        else
+            $display("Test case 7 failed");
+
         // Finish the simulation
         $finish;
     end
