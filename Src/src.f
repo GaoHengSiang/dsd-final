@@ -2,6 +2,7 @@ CHIP.v
 icache.v 
 dcache.v
 alu.v 
+dum_mul.v
 decoder.v 
 decompressor.v
 dcache_wrapper.v
