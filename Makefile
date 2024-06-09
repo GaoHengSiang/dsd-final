@@ -23,6 +23,7 @@ tb_baseline:
 	TB_DEFINE=hasHazard
 	make -C Src/ rtl > Report/hasHazard.log
 	if grep -q CONGRATULATIONS!! Report/hasHazard.log; then echo "hasHazard pass"; else echo "hasHazard fail"; fi
-
+tb_mul:
+	make -C Src/ mul
 clean:
 	rm -rf Syn/ 
