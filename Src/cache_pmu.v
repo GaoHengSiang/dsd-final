@@ -48,9 +48,9 @@ module cache_pmu (
         write_count_w = (state_r == S_IDLE && cache_wen) ? write_count_r + 1 : write_count_r;
         read_miss_w = (state_r == S_IDLE && cache_ren && cache_stall) ? read_miss_r + 1 : read_miss_r;
         write_miss_w = (state_r == S_IDLE && cache_wen && cache_stall) ? write_miss_r + 1 : write_miss_r;
-        read_stalled_cycles_w = ((state_r == S_IDLE && cache_ren) || (state_r == S_STALL && stall_cause_r == 0))? 
+        read_stalled_cycles_w = ((state_r == S_IDLE && cache_ren && cache_stall) || (state_r == S_STALL && stall_cause_r == 0))? 
             read_stalled_cycles_r + 1 : read_stalled_cycles_r;
-        write_stalled_cycles_w = ((state_r == S_IDLE && cache_wen) || (state_r == S_STALL && stall_cause_r == 1))?
+        write_stalled_cycles_w = ((state_r == S_IDLE && cache_wen && cache_stall) || (state_r == S_STALL && stall_cause_r == 1))?
             write_stalled_cycles_r + 1 : write_stalled_cycles_r;
 
     end
