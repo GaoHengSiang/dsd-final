@@ -9,4 +9,6 @@ syn:
 	+define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=$(CYCLE) +neg_tchk
 	# ncverilog $(TB) $(SYN_SRC) -v $(TSMC13) +access+wrc +v2k +define+$(TB_DEFINE) \
 	# +define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=$(CYCLE) +neg_tchk
+mul:
+	vcs tb.v mul_unit.v -full64 -R -debug_access+all +v2k 
 	

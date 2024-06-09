@@ -589,7 +589,7 @@ module wallace_tree_multiplier (
         carry[52],
         carry[62],
         result[14],
-        carry[32]
+        carry[63]
     );
     assign result[15] = carry[53];
 
