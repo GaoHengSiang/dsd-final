@@ -1,4 +1,4 @@
-module cache (
+module icache (
     input clk,
     // processor interface
     input proc_reset,
