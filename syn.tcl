@@ -28,6 +28,14 @@ current_design $DESIGN
 link
 
 source -echo -verbose CHIP_syn.sdc 
+
+# TODO: please check if this works with our chip
+# set_ungroup   [get_designs  mul_unit]  false
+# set_optimize_registers true -design mul_unit
+# set_dont_retime [get_cells c_64_r_reg*]
+# get_attribute [get_cells c_64_r_reg*] dont_retime
+# compile_ultra -retime -scan -timing
+
 compile_ultra
 
 write_sdf -version 2.1  -context verilog -load_delay cell "Syn/${DESIGN}_syn.sdf"
