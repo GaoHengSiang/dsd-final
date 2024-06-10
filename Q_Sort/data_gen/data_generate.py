@@ -2,8 +2,8 @@ from tempfile import tempdir
 import numpy as np
 
 ### modify (base, n) by yourself
-base = 0#32 # 0     # base >=0
-n = 4#224 # 256      # 0< base+n <=256
+base = 32 # 0     # base >=0
+n = 224 # 256      # 0< base+n <=256
 
 print("base ", base, ", n ", n, sep = "")
 
