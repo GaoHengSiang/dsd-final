@@ -2,7 +2,8 @@
 set DESIGN CHIP
 set src [list \
     Src/CHIP.v \
-    Src/cache.v \
+    Src/dcache.v \
+    Src/icache.v \
     Src/decoder.v \
     Src/alu.v \
     Src/Forwarding_Unit.v \
@@ -13,7 +14,12 @@ set src [list \
     Src/RISCV_ID.v \
     Src/RISCV_EX.v \
     Src/RISCV_MEM.v \
-    Src/realigner.v
+    Src/realigner.v \
+    Src/decompressor.v \
+    Src/saturation_counter.v \
+    Src/dcache_wrapper.v \
+    Src/icache_wrapper.v \
+    Src/dum_mul.v 
 ]
 
 sh mkdir -p Work

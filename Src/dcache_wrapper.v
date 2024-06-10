@@ -1,7 +1,6 @@
 /*
  * include a cache, a write buffer, and a controller, prioritize read miss over write miss
  */
-`define DEBUG_STAT 1//TODO: remove this in production
 module dcache_wrapper (
     input          clk,
     input          proc_reset,

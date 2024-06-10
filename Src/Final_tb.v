@@ -79,7 +79,6 @@
 
 // INFO: The golden answer for QSort & mul is stored in D_gold. For other cases, it's written in the TestBed.
 
-`define DEBUG_STAT 1
 
 module Final_tb;
 
@@ -241,7 +240,8 @@ module Final_tb;
     end
 
     always #(`CYCLE * 0.5) clk = ~clk;
-`ifdef END_PC
+`ifdef END_PC 
+`ifdef DEBUG_STAT
     always @(PC >= `END_PC) begin
         if (PC >= `END_PC) begin
             $display("-----------------------------------------------------\n");
@@ -270,6 +270,7 @@ module Final_tb;
             $display("-----------------------------------------------------\n");
         end
     end
+`endif
 `endif
     always @(finish) begin
         if (finish) begin

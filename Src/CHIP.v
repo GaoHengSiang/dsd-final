@@ -1,5 +1,4 @@
 // Top module of your design, you cannot modify this module!!
-`define DEBUG_STAT 1//TODO: remove this in production
 module CHIP (
     clk,
     rst_n,
