@@ -27,6 +27,7 @@ module RISCV_ID (
     output        reg_wen_ppl,
     output        compressed_ppl_out,
     output        branch_taken_ppl,//the prediction
+    output        mul_ppl,
 
     //----------register_file interface-------------
     output [ 4:0] regfile_rs1,
@@ -39,7 +40,7 @@ module RISCV_ID (
     wire [31:0] imm;
     wire        alu_src;
     wire [ 3:0] alu_op;
-    wire jal, jalr, branch, bne, mem_to_reg, mem_wen, mem_ren, reg_wen;
+    wire jal, jalr, branch, bne, mem_to_reg, mem_wen, mem_ren, reg_wen, mul;
 
     // wire and reg
     wire [31:0] rs1_rdata_w, rs2_rdata_w;
@@ -51,6 +52,7 @@ module RISCV_ID (
     wire [31:0] pc_out_w;
     wire bne_w, branch_w, branch_taken_w;
     wire compressed_ppl_w;
+    wire mul_w;
 
     reg [31:0] rs1_rdata_r, rs2_rdata_r;
     reg [31:0] imm_r;
@@ -61,6 +63,7 @@ module RISCV_ID (
     reg [31:0] pc_out_r;
     reg bne_r, branch_r, branch_taken_r;
     reg compressed_ppl_r;
+    reg mul_r;
 
     assign regfile_rs1 = rs1;
     assign regfile_rs2 = rs2;
@@ -82,6 +85,7 @@ module RISCV_ID (
     assign bne_w = bne;
     assign branch_w = branch;
     assign compressed_ppl_w = compressed_ppl;
+    assign mul_w = mul;
     assign branch_taken_w = branch_taken_in;
 
     // pipeline reg output
@@ -103,6 +107,7 @@ module RISCV_ID (
     assign branch_ppl = branch_r;
     assign bne_ppl = bne_r;
     assign compressed_ppl_out = compressed_ppl_r;
+    assign mul_ppl = mul_r;
     assign branch_taken_ppl = branch_taken_r;
 
     decoder u0 (
@@ -120,7 +125,8 @@ module RISCV_ID (
         .mem_to_reg_o(mem_to_reg),
         .mem_wen_o   (mem_wen),
         .mem_ren_o   (mem_ren),
-        .reg_wen_o   (reg_wen)
+        .reg_wen_o   (reg_wen),
+        .mul_o       (mul)
     );
 
 
@@ -144,6 +150,7 @@ module RISCV_ID (
             bne_r <= 0;
             branch_r <= 0;
             branch_taken_r <= 0;
+            mul_r <= 0;
         end else if (!stall) begin
             rs1_rdata_r <= rs1_rdata_w;
             rs2_rdata_r <= rs2_rdata_w;
@@ -165,6 +172,7 @@ module RISCV_ID (
                 bne_r <= 0;
                 branch_r <= 0;
                 branch_taken_r <= 0;
+                mul_r <= 0;
             end else begin
                 rs1_r <= rs1_w;
                 rs2_r <= rs2_w;
@@ -180,6 +188,7 @@ module RISCV_ID (
                 bne_r <= bne_w;
                 branch_r <= branch_w;
                 branch_taken_r <= branch_taken_w;
+                mul_r <= mul_w;
             end
         end
     end

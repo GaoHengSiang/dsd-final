@@ -19,6 +19,7 @@ module EX_STAGE #(
     input bne_in,
     input stall,
     input branch_taken_in, 
+    input mul_ppl_i,
 
     //transparent for this stage
     input [4:0] rd_in,
@@ -47,6 +48,7 @@ module EX_STAGE #(
     output mem2reg_out,
     output regwr_out,
     output jump_out,
+    output mul_ppl_o,
 
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
@@ -61,7 +63,7 @@ module EX_STAGE #(
     reg [BIT_W-1:0] mem_wdata_r, mem_wdata_w;
     reg [4:0] rd_r, rd_w;
     reg [BIT_W-1:0] PC_step_r, PC_step_w;
-    reg memrd_r, memrd_w, memwr_r, memwr_w, mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w;
+    reg memrd_r, memrd_w, memwr_r, memwr_w, mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w, mul_r, mul_w;
 
     reg [BIT_W-1:0] alu_opA, alu_opB;
     wire [BIT_W-1:0] alu_o_wire;
@@ -81,6 +83,7 @@ module EX_STAGE #(
     assign mem2reg_out = mem2reg_r;
     assign regwr_out = regwr_r;
     assign jump_out = jump_r;
+    assign mul_ppl_o = mul_r;
 
     //forwarded rs1, rs2
     assign forwarded_rs1 = (forward_A_flag) ? forward_A_dat : rs1_dat_in;
@@ -118,7 +121,7 @@ module EX_STAGE #(
         mem2reg_w    = stall ? mem2reg_r : mem2reg_in;
         regwr_w      = stall ? regwr_r : regwr_in;
         jump_w       = stall ? jump_r : jalr_in || jal_in;
-
+        mul_w        = stall ? mul_r : mul_ppl_i;
     end
     //Sequential
     always @(posedge clk) begin
@@ -132,6 +135,7 @@ module EX_STAGE #(
             mem2reg_r    <= 0;
             regwr_r      <= 0;
             jump_r       <= 0;
+            mul_r        <= 0;
         end else begin
             alu_result_r <= alu_result_w;
             mem_wdata_r  <= mem_wdata_w;
@@ -142,6 +146,7 @@ module EX_STAGE #(
             mem2reg_r    <= mem2reg_w;
             regwr_r      <= regwr_w;
             jump_r       <= jump_w;
+            mul_r        <= mul_w;
         end
     end
 endmodule

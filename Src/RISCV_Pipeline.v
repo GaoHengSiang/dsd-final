@@ -51,14 +51,15 @@ module RISCV_Pipeline (
                 ID_EX_mem_to_reg_ppl,
                 ID_EX_reg_wen_ppl,
                 ID_EX_compressed_ppl,
-                ID_EX_branch_taken_ppl;
+                ID_EX_branch_taken_ppl,
+                ID_EX_mul_ppl;
 
     //------EX/MEM pipeline reg------------
     wire [31:0] EX_MEM_alu_result;
     wire [31:0] EX_MEM_mem_wdata;
     wire [ 4:0] EX_MEM_rd;
     wire [31:0] EX_MEM_PC_step;
-    wire EX_MEM_memrd, EX_MEM_memwr, EX_MEM_mem2reg, EX_MEM_regwr, EX_MEM_jump;
+    wire EX_MEM_memrd, EX_MEM_memwr, EX_MEM_mem2reg, EX_MEM_regwr, EX_MEM_jump, EX_MEM_mul;
 
 
     //------MEM/WB pipeline reg------------
@@ -80,20 +81,23 @@ module RISCV_Pipeline (
     // forwarding & hazard detection
     wire [31:0] forward_A_dat, forward_B_dat;
     wire forward_A_flag, forward_B_flag;
-    wire load_use_hazard;
+    wire load_mul_use_hazard;
 
     reg  regfile_wen;
     reg mem_wb_valid_r, mem_wb_valid_w;
     //wire assignment 
     assign make_branch_correction = EX_prediction_incorrect && EX_feedback_valid;
 
+    //multiplication unit
+    wire [31: 0] mul_result;
+
     //FIXME: hazard detection
     
     assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
-    assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_use_hazard;
+    assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_mul_use_hazard;
     assign IF_flush = make_branch_correction || EX_jump_noblock;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = make_branch_correction || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = make_branch_correction || EX_jump_noblock || load_mul_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
@@ -120,12 +124,23 @@ module RISCV_Pipeline (
 
     );
 
+    /* replace with real multiplier*/
+    dum_mul mul_inst(
+        .clk(clk),
+        .rst_n(rst_n),
+        .stall(EX_stall),//should support stalling, same behavior as EX?
+        .opA(forward_A_flag? forward_A_dat: ID_EX_rs1_data_ppl),
+        .opB(forward_B_flag? forward_B_dat: ID_EX_rs2_data_ppl),
+        .result(mul_result)//feed into MEM/WB register
+    );
+
     HAZARD_DETECTION hazard_unit (
-        .IF_RegisterRs1(ID_regfile_rs1),
-        .IF_RegisterRs2(ID_regfile_rs2),
+        .ID_RegisterRs1(ID_regfile_rs1),
+        .ID_RegisterRs2(ID_regfile_rs2),
         .ID_EX_MemRead(ID_EX_mem_ren_ppl),
+        .ID_EX_mul(ID_EX_mul_ppl),
         .ID_EX_RegisterRd(ID_EX_rd_ppl),
-        .load_use_hazard(load_use_hazard)
+        .load_mul_use_hazard(load_mul_use_hazard)
     );
 
 
@@ -155,7 +170,7 @@ module RISCV_Pipeline (
         .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
-        .load_use_hazard(load_use_hazard),
+        .load_mul_use_hazard(load_mul_use_hazard),
         
         .ICACHE_stall(ICACHE_stall),
         .ICACHE_ren(ICACHE_ren),
@@ -178,7 +193,8 @@ module RISCV_Pipeline (
 
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
-        .compressed_ppl(IF_ID_compressed_ppl),        .branch_taken_in(IF_ID_branch_taken_ppl),
+        .compressed_ppl(IF_ID_compressed_ppl),        
+        .branch_taken_in(IF_ID_branch_taken_ppl),
 
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
@@ -200,6 +216,7 @@ module RISCV_Pipeline (
         .reg_wen_ppl(ID_EX_reg_wen_ppl),
         .compressed_ppl_out(ID_EX_compressed_ppl),
         .branch_taken_ppl(ID_EX_branch_taken_ppl),
+        .mul_ppl(ID_EX_mul_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
         //----------register_file interface-------------
@@ -226,6 +243,7 @@ module RISCV_Pipeline (
         .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
         .branch_taken_in(ID_EX_branch_taken_ppl),
+        .mul_ppl_i(ID_EX_mul_ppl),
     //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
@@ -253,6 +271,7 @@ module RISCV_Pipeline (
         .mem2reg_out(EX_MEM_mem2reg),
         .regwr_out(EX_MEM_regwr),
         .jump_out(EX_MEM_jump),
+        .mul_ppl_o(EX_MEM_mul),
 
         //direct output, no register blocking
         .jump_noblock(EX_jump_noblock),  //should correct PC immediately
@@ -266,6 +285,8 @@ module RISCV_Pipeline (
     MEM_STAGE MEM (
         .clk(clk),
         .rst_n(rst_n),
+        //INPUT FROM MUL
+        .mul_result(mul_result),
         //PIPELINE INPUT FROM EX/MEM REGISTER
         .alu_result_in(EX_MEM_alu_result),
         .mem_wdata_in(EX_MEM_mem_wdata),
@@ -278,6 +299,7 @@ module RISCV_Pipeline (
         .mem2reg_in(EX_MEM_mem2reg),
         .regwr_in(EX_MEM_regwr),
         .jump_in(EX_MEM_jump),
+        .mul_i(EX_MEM_mul),
         // ********************************************ONE SIGNAL SHOULD INDICATE JUMP
 
         //PIPELINE OUTPUT TO MEM/WB REGISTER
