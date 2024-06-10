@@ -15,8 +15,10 @@ module mul_unit #(
     dadda u0(a, b, z0_w, z1_w);
     reg [2*WIDTH-1:0] c_64_r;
     wire [2*WIDTH-1:0] c_64_w;
+    wire [2*WIDTH-1:0] dummy;
 
-    assign c_64_w = z0_r + z1_r;
+    assign c_64_w = z0_r;
+    assign dummy = a * b;
     // assign c = c_64_r[WIDTH-1:0];
     assign c = c_64_r;
     always @(posedge clk) begin
@@ -25,7 +27,7 @@ module mul_unit #(
             z1_r <= 0;
             c_64_r <= 0;
         end else begin
-            z0_r <= z0_w;
+            z0_r <= dummy;
             z1_r <= z1_w;
             c_64_r <= c_64_w;
         end

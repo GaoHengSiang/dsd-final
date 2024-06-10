@@ -25,5 +25,7 @@ tb_baseline:
 	if grep -q CONGRATULATIONS!! Report/hasHazard.log; then echo "hasHazard pass"; else echo "hasHazard fail"; fi
 tb_mul:
 	make -C Src/ mul
+tb_mul_syn:
+	make -C Src/ mul_syn
 clean:
 	rm -rf Syn/ 

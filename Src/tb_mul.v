@@ -1,4 +1,6 @@
 `timescale 1ns/10ps;
+`define SDFFILE "../Syn/mul_unit_syn.sdf"	
+
 
 // `include "Daddas_MUL.v"
 
@@ -24,6 +26,9 @@ initial begin
     #5 clk = ~clk;
 end
 
+`ifdef SDF
+    initial $sdf_annotate(`SDFFILE, d0);
+`endif
 
 integer i,j,old_j;
 parameter TESTCASE = 100;
@@ -54,7 +59,7 @@ initial begin
         j = mul_in1 * mul_in2;
         @(posedge clk);
         # 1
-         if(mul_result != old_j) begin
+         if(mul_result !== old_j) begin
             $display("ERROR: mul_in1 = %d, mul_in2 = %d, mul_result = %b\n\n", mul_in1, mul_in2, mul_result);
         end
         old_j = j;
