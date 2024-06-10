@@ -25,7 +25,7 @@ initial begin
 end
 
 
-integer i,j,k;
+integer i,j,old_j;
 parameter TESTCASE = 100;
 initial begin
     $fsdbDumpfile("MUL.fsdb");			
@@ -36,20 +36,28 @@ initial begin
     rst_n = 0;
     #10;
     rst_n = 1;
-
-    for(i=0;i<TESTCASE;i=i+1) begin
-        @(posedge clk);
+    @(negedge clk);
         mul_in1 = $random; ;
         mul_in2 = $random; ;
         j = mul_in1 * mul_in2;
-        @(posedge clk);
-        //@(posedge clk);
-        #1;
+    @(posedge clk) old_j = j;
+    for(i=0;i<TESTCASE;i=i+1) begin
+        
+        // @(posedge clk);
+        old_j = j;
+        @(negedge clk);
         $display("================================================\n\n", );
         $display("TEST:  mul_in1 = %d, mul_in2 = %d, mul_result = %b\n", mul_in1, mul_in2, j);
-        if(mul_result != j) begin
+       
+        mul_in1 = $random; 
+        mul_in2 = $random; 
+        j = mul_in1 * mul_in2;
+        @(posedge clk);
+        # 1
+         if(mul_result != old_j) begin
             $display("ERROR: mul_in1 = %d, mul_in2 = %d, mul_result = %b\n\n", mul_in1, mul_in2, mul_result);
         end
+        old_j = j;
     end
     $finish;
 end
