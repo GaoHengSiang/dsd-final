@@ -26,6 +26,7 @@ module icache_wrapper (
     output [ 31:0] write_stalled_cycles
 `endif
 );
+`define I_USE_DM
     reg cache_mem_ready;
     wire cache_mem_read;
     // wire cache_mem_write;
@@ -46,8 +47,10 @@ module icache_wrapper (
     // assign mem_write = mem_write_r;
     assign mem_addr = mem_addr_r;
     // assign mem_wdata = mem_wdata_r;
-
-    icache u_cache (
+`ifdef I_USE_DM
+    icache_dm u_cache (
+`else 
+    icache u_cache(
         .clk       (clk),
         .proc_reset(proc_reset),
         .proc_read (proc_read),
