@@ -94,6 +94,7 @@ module icache (
                 if (proc_read) begin
                     if (!hit) begin
                         state_w = S_FETCH;
+                        mem_read = 1;
                         addr_w  = proc_addr;
                     end else begin
                         lru_lines_w[index_i] = ~hit_sets[1];

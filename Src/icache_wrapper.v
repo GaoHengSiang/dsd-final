@@ -83,7 +83,7 @@ module icache_wrapper (
         mem_ready_w = mem_ready;
         mem_rdata_w = mem_ready? mem_rdata : mem_rdata_r;
         // // output to memory
-        mem_read_w = cache_mem_read;
+        mem_read_w = mem_ready? 0: cache_mem_read;
         // mem_write_w = cache_mem_write;
         mem_addr_w = cache_mem_addr;
         // mem_wdata_w = cache_mem_wdata;
@@ -101,7 +101,7 @@ module icache_wrapper (
             mem_ready_r <= 1'b0;
             mem_read_r <= 1'b0;
             // mem_write_r <= 1'b0;
-            // mem_addr_r <= 28'b0;
+            mem_addr_r <= 28'b0;
             // mem_wdata_r <= 128'b0;
             mem_rdata_r <= 128'b0;
         end else begin
