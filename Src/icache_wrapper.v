@@ -49,8 +49,9 @@ module icache_wrapper (
     // assign mem_wdata = mem_wdata_r;
 `ifdef I_USE_DM
     icache_dm u_cache (
-`else 
+`else
     icache u_cache(
+`endif
         .clk       (clk),
         .proc_reset(proc_reset),
         .proc_read (proc_read),
