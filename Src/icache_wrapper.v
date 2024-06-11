@@ -54,11 +54,13 @@ module icache_wrapper (
         .proc_addr (proc_addr),
         .proc_rdata(proc_rdata),
         .proc_stall(proc_stall),
+        //output
         .mem_read  (cache_mem_read),
-        .mem_write (mem_write),
+        .mem_write (mem_write),//tied to 0
         .mem_addr  (cache_mem_addr),
+        .mem_wdata (mem_wdata),//tied to 0
+        //input
         .mem_rdata (cache_mem_rdata),
-        .mem_wdata (mem_wdata),
         .mem_ready (cache_mem_ready)
     );
 `ifdef DEBUG_STAT
@@ -106,11 +108,8 @@ module icache_wrapper (
             mem_rdata_r <= 128'b0;
         end else begin
             mem_ready_r <= mem_ready_w;
-            // mem_rdata_r <= mem_rdata_w;
             mem_read_r <= mem_read_w;
-            // mem_write_r <= mem_write_w;
             mem_addr_r <= mem_addr_w;
-            // mem_wdata_r <= mem_wdata_w;
             mem_rdata_r <= mem_rdata_w;
         end
     end

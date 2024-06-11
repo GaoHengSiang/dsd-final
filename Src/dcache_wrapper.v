@@ -26,6 +26,27 @@ module dcache_wrapper (
     output [ 31:0] write_stalled_cycles
 `endif
 );
+    //input from mem to cache
+    reg cache_mem_ready;
+    reg [127:0] cache_mem_rdata;
+    reg mem_ready_r, mem_ready_w;
+    reg [127:0] mem_rdata_r, mem_rdata_w;
+    
+    //output from cache to mem
+    wire cache_mem_read;
+    wire cache_mem_write;
+    wire [27:0] cache_mem_addr;
+    wire [127:0] cache_mem_wdata;
+    reg mem_read_r, mem_read_w;
+    reg mem_write_r, mem_write_w;
+    reg [27:0] mem_addr_r, mem_addr_w;
+    reg [127:0] mem_wdata_r, mem_wdata_w;
+
+
+    assign mem_read = mem_read_r;
+    assign mem_write = mem_write_r;
+    assign mem_addr = mem_addr_r;
+    assign mem_wdata = mem_wdata_r;
 
     dcache u_cache (
         .clk       (clk),
@@ -36,12 +57,12 @@ module dcache_wrapper (
         .proc_rdata(proc_rdata),
         .proc_wdata(proc_wdata),
         .proc_stall(proc_stall),
-        .mem_read  (mem_read),
-        .mem_write (mem_write),
-        .mem_addr  (mem_addr),
-        .mem_rdata (mem_rdata),
-        .mem_wdata (mem_wdata),
-        .mem_ready (mem_ready)
+        .mem_read  (cache_mem_read),
+        .mem_write (cache_mem_write),
+        .mem_addr  (cache_mem_addr),
+        .mem_rdata (cache_mem_rdata),
+        .mem_wdata (cache_mem_wdata),
+        .mem_ready (cache_mem_ready)
     );
 
 `ifdef DEBUG_STAT
@@ -60,4 +81,36 @@ module dcache_wrapper (
         .write_stalled_cycles(write_stalled_cycles)
     );
 `endif
+
+    always @(*) begin: memory_signal
+        //input from memory
+        mem_ready_w = mem_ready;
+        mem_rdata_w = mem_ready? mem_rdata : mem_rdata_r;
+        // output to memory
+        mem_read_w = mem_ready? 0 : cache_mem_read;
+        mem_write_w = mem_ready? 0 : cache_mem_write;
+        mem_addr_w = cache_mem_addr;
+        mem_wdata_w =  cache_mem_wdata;
+
+    end
+
+    always @(*) begin: mem2cache
+        cache_mem_ready = mem_ready_r;
+        cache_mem_rdata = mem_rdata_r;
+    end
+
+
+    always @(posedge clk) begin
+        if (proc_reset) begin
+            mem_ready_r <= 1'b0;
+            mem_read_r <= 1'b0;
+            mem_addr_r <= 28'b0;
+            mem_rdata_r <= 128'b0;
+        end else begin
+            mem_ready_r <= mem_ready_w;
+            mem_read_r <= mem_read_w;
+            mem_addr_r <= mem_addr_w;
+            mem_rdata_r <= mem_rdata_w;
+        end
+    end
 endmodule
