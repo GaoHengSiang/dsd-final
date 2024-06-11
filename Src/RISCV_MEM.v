@@ -6,7 +6,7 @@ module MEM_STAGE #(
     input clk,
     input rst_n,
     //INPUT FROM MUL
-    input [31 : 0] mul_result,
+    //moved to external
     //PIPELINE INPUT FROM EX/MEM REGISTER
     input [BIT_W-1:0] alu_result_in,
     input [BIT_W-1:0] mem_wdata_in,
@@ -30,6 +30,7 @@ module MEM_STAGE #(
     output mem2reg_out,
     output regwr_out,
     output jump_out,
+    output mul_o,
 
     //D_CACHE_INTERFACE, output not register blocked
     input         DCACHE_stall,
@@ -44,7 +45,7 @@ module MEM_STAGE #(
     //Reg and Wire declaration
     reg [BIT_W-1:0] PC_step_r, PC_step_w, alu_result_r, alu_result_w, mem_dat_r, mem_dat_w;
     reg [4:0] rd_r, rd_w;
-    reg mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w;
+    reg mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w, mul_r, mul_w;
 
     wire stall;
     //Continuous assignments
@@ -65,19 +66,21 @@ module MEM_STAGE #(
     assign mem2reg_out = mem2reg_r;
     assign regwr_out = regwr_r;
     assign jump_out = jump_r;
+    assign mul_o = mul_r;
     //module instantiantion
     //none
 
     //Combinational 
     always @(*) begin
         //default
-        alu_result_w = stall ? alu_result_r : (mul_i? mul_result: alu_result_in);
+        alu_result_w = stall ? alu_result_r : alu_result_in;
         mem_dat_w       = stall? mem_dat_r: {DCACHE_rdata[7:0], DCACHE_rdata[15:8], DCACHE_rdata[23:16], DCACHE_rdata[31:24]};
         PC_step_w = stall ? PC_step_r : PC_step_in;
         rd_w = stall ? rd_r : rd_in;
         mem2reg_w = stall ? mem2reg_r : mem2reg_in;
         regwr_w = stall ? regwr_r : regwr_in;
         jump_w = stall ? jump_r : jump_in;
+        mul_w = stall ? mul_r : mul_i;
     end
 
     //Sequential
@@ -90,6 +93,7 @@ module MEM_STAGE #(
             mem2reg_r    <= 0;
             regwr_r      <= 0;
             jump_r       <= 0;
+            mul_r        <= 0;
         end else begin
             alu_result_r <= alu_result_w;
             mem_dat_r    <= mem_dat_w;
@@ -98,6 +102,7 @@ module MEM_STAGE #(
             mem2reg_r    <= mem2reg_w;
             regwr_r      <= regwr_w;
             jump_r       <= jump_w;
+            mul_r        <= mul_w;
         end
     end
 endmodule
