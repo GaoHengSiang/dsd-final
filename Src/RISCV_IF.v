@@ -38,14 +38,14 @@ module RISCV_IF(
     wire        branch_taken_ppl_w;
     //-------Internal Registers-------
     wire [31:0] inst_aligned;
-    wire [31:0] inst_decompressed;
+    // wire [31:0] inst_decompressed;
     wire [31:0] inst_i;
     reg [31:0]  pc_r, pc_w;
     wire [31:0] pc_step;
     wire        take_branch;
     wire [31:0] branch_destination;
     wire [31:0] sbtype_imm;
-
+    wire        is_branch;
     wire       inst_ready;
     wire       inst_compressed;
     
@@ -53,9 +53,12 @@ module RISCV_IF(
     localparam OPCODE_BRANCH = 7'b11_000_11;
     localparam NOP = 32'h00000013;
     assign pc_step = pc_r + (inst_compressed ? 2 : 4);
-    
-    assign sbtype_imm = {{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
-    assign is_branch = inst_i[6: 0] == OPCODE_BRANCH;
+    assign sbtype_imm = inst_compressed ? {{24{inst_i[12]}}, inst_i[6:5], inst_i[2], inst_i[11:10], inst_i[4:3], 1'b0} :
+    {{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    assign is_branch = inst_compressed? 
+                        ((inst_i[15:13] == 3'b110 | (inst_i[15:13] == 3'b111))
+                        & (inst_i[1:0] == 2'b01)) :
+                        (inst_i[6: 0] == OPCODE_BRANCH);
     assign branch_destination = pc_r + sbtype_imm;
 
     realigner u0 (
@@ -73,12 +76,12 @@ module RISCV_IF(
         .ICACHE_rdata(ICACHE_rdata)
     );
 
-    decompressor u_decompressor (
-        .inst_i(inst_aligned[15:0]),
-        .inst_o(inst_decompressed)
-    );
+    // decompressor u_decompressor (
+    //     .inst_i(inst_aligned[15:0]),
+    //     .inst_o(inst_decompressed)
+    // );
 
-    assign inst_i = inst_compressed ? inst_decompressed : inst_aligned;
+    assign inst_i = inst_aligned;
     branch_predictor u_branch_predictor(
         .clk(clk),
         .rst_n(rst_n),

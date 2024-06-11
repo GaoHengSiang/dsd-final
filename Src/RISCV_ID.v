@@ -53,6 +53,8 @@ module RISCV_ID (
     wire bne_w, branch_w, branch_taken_w;
     wire compressed_ppl_w;
     wire mul_w;
+    wire [31:0] inst_decompressed;
+    wire [31:0] inst_decode_in;
 
     reg [31:0] rs1_rdata_r, rs2_rdata_r;
     reg [31:0] imm_r;
@@ -110,8 +112,14 @@ module RISCV_ID (
     assign mul_ppl = mul_r;
     assign branch_taken_ppl = branch_taken_r;
 
+    decompressor u_decompressor (
+        .inst_i    (inst_ppl[15:0]),
+        .inst_o    (inst_decompressed)
+    );
+
+    assign inst_decode_in = compressed_ppl ? inst_decompressed : inst_ppl;
     decoder u0 (
-        .inst_i      (inst_ppl),
+        .inst_i      (inst_decode_in),
         .rs1_o       (rs1),
         .rs2_o       (rs2),
         .rd_o        (rd),
