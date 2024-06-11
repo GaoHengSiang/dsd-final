@@ -70,7 +70,7 @@ module RISCV_Pipeline (
     //------MEM/WB pipeline reg------------
     wire [31:0] MEM_WB_alu_result, MEM_WB_mem_dat, MEM_WB_PC_step;
     wire [4:0] MEM_WB_rd;
-    wire MEM_WB_mem2reg, MEM_WB_regwr, MEM_WB_jump;//********************MEM needs to have jump signal
+    wire MEM_WB_mem2reg, MEM_WB_regwr, MEM_WB_jump, MEM_WB_mul;
                                                    //so that PC+4 can be stored into reg
 
     //LOOP BACK: reg or wires that go in the reverse direction
@@ -136,7 +136,7 @@ module RISCV_Pipeline (
         .stall(EX_stall),//should support stalling, same behavior as EX?
         .opA(forward_A_flag? forward_A_dat: ID_EX_rs1_data_ppl),
         .opB(forward_B_flag? forward_B_dat: ID_EX_rs2_data_ppl),
-        .result(mul_result)//feed into MEM/WB register
+        .result(mul_result)////register blocked
     );
 
     HAZARD_DETECTION hazard_unit (
@@ -291,7 +291,7 @@ module RISCV_Pipeline (
         .clk(clk),
         .rst_n(rst_n),
         //INPUT FROM MUL
-        .mul_result(mul_result),
+        //moved to external
         //PIPELINE INPUT FROM EX/MEM REGISTER
         .alu_result_in(EX_MEM_alu_result),
         .mem_wdata_in(EX_MEM_mem_wdata),
@@ -316,6 +316,7 @@ module RISCV_Pipeline (
         .mem2reg_out(MEM_WB_mem2reg),
         .regwr_out(MEM_WB_regwr),
         .jump_out(MEM_WB_jump),
+        .mul_o(MEM_WB_mul),
         //D_CACHE_INTERFACE, output not register blocked
         .DCACHE_stall(DCACHE_stall),
         .DCACHE_ren(DCACHE_ren),
@@ -338,7 +339,7 @@ module RISCV_Pipeline (
     `endif
 
     always @(*) begin
-        rd_data = MEM_WB_alu_result;
+        rd_data = (MEM_WB_mul) ? mul_result: MEM_WB_alu_result;
         mem_wb_valid_w = !DCACHE_stall;
         regfile_wen = mem_wb_valid_r && MEM_WB_regwr;
         //****************************maybe we can finally utilize PARALLEL CASE here
