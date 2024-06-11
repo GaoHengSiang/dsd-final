@@ -17,6 +17,7 @@ set src [list \
     Src/realigner.v \
     Src/decompressor.v \
     Src/saturation_counter.v \
+    Src/branch_predictor.v \
     Src/dcache_wrapper.v \
     Src/icache_wrapper.v \
     Src/dum_mul.v 

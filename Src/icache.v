@@ -9,8 +9,8 @@ module icache (
     // memory interface
     input [127:0] mem_rdata,
     input mem_ready,
-    output mem_read,
-    mem_write,
+    output  reg mem_read,
+    output mem_write,
     output [27:0] mem_addr,
     output [127:0] mem_wdata
 );
@@ -36,6 +36,8 @@ module icache (
     wire [BLOCK_WIDTH-1:0] rdata;
 
     reg [29:0] addr_r, addr_w;
+
+    // memory control signals
     wire [1:0] index_i;
     wire [1:0] offset_i;
 
@@ -71,15 +73,15 @@ module icache (
     assign offset_i = (state_r == S_IDLE) ? proc_addr[1:0] : addr_r[1:0];
 
     /* memory control signal */
-    assign mem_read = (state_w == S_FETCH);  //|| state_r == S_FETCH);
     assign mem_write = 0;  //READ ONLY
-    assign mem_addr = addr_r[29:2];
+    assign mem_addr = (state_r == S_IDLE) ? proc_addr[29:2] : addr_r[29:2];
     assign mem_wdata = 0;
 
     assign proc_stall = (!(state_r == S_IDLE && hit) && (proc_read));
     assign proc_rdata = rdata[WORD_WIDTH*offset_i+:WORD_WIDTH];
 
     always @(*) begin : state_logic
+        mem_read = 0;
         state_w = state_r;
         update = 0;
         valid_next = 0;
@@ -110,6 +112,7 @@ module icache (
                     valid_next = 1;
                     wdata = mem_rdata;
                 end else begin
+                    mem_read = 1;
                     state_w = S_FETCH;
                 end
             end

@@ -283,6 +283,7 @@ module Final_tb;
 `endif
     always @(finish) begin
         if (finish) begin
+            `ifndef END_PC
                 $display("-----------------------------------------------------\n");
                 $display("CACHE Informations: \n");
                 if (dcache_read_count != 0)
@@ -314,6 +315,7 @@ module Final_tb;
                 $display("Prediction Correct Rate: %f%%\n",
                         (1.0 * (prediction_cnt - prediction_wrong_cnt)) / (1.0 * prediction_cnt) * 100);
                 $display("-----------------------------------------------------\n");
+                `endif
             #(`CYCLE) $finish;
         end
     end
