@@ -64,7 +64,7 @@ module EX_STAGE #(
     reg [4:0] rd_r, rd_w;
     reg [BIT_W-1:0] PC_step_r, PC_step_w;
     reg memrd_r, memrd_w, memwr_r, memwr_w, mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w, mul_r, mul_w;
-
+    reg disable_feedback_r, disable_feedback_w;
     reg [BIT_W-1:0] alu_opA, alu_opB;
     wire [BIT_W-1:0] alu_o_wire;
 
@@ -122,6 +122,7 @@ module EX_STAGE #(
         regwr_w      = stall ? regwr_r : regwr_in;
         jump_w       = stall ? jump_r : jalr_in || jal_in;
         mul_w        = stall ? mul_r : mul_ppl_i;
+        disable_feedback_w = stall;
     end
     //Sequential
     always @(posedge clk) begin
@@ -136,6 +137,7 @@ module EX_STAGE #(
             regwr_r      <= 0;
             jump_r       <= 0;
             mul_r        <= 0;
+            disable_feedback_r <= 0;
         end else begin
             alu_result_r <= alu_result_w;
             mem_wdata_r  <= mem_wdata_w;
@@ -147,6 +149,7 @@ module EX_STAGE #(
             regwr_r      <= regwr_w;
             jump_r       <= jump_w;
             mul_r        <= mul_w;
+            disable_feedback_r <= disable_feedback_w;
         end
     end
 endmodule

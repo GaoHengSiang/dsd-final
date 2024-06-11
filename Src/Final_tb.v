@@ -120,6 +120,8 @@ module Final_tb;
     wire [31:0] icache_write_miss;
     wire [31:0] icache_read_stalled_cycles;
     wire [31:0] icache_write_stalled_cycles;
+    wire [31:0] prediction_cnt;
+    wire [31:0] prediction_wrong_cnt;
 
     // Note the design is connected at testbench, include:
     // 1. CHIP (RISCV + D_cache + I_chache)
@@ -160,7 +162,9 @@ module Final_tb;
         icache_read_miss,
         icache_write_miss,
         icache_read_stalled_cycles,
-        icache_write_stalled_cycles
+        icache_write_stalled_cycles,
+        prediction_cnt,
+        prediction_wrong_cnt
 `endif
     );
 
@@ -241,11 +245,10 @@ module Final_tb;
 
     always #(`CYCLE * 0.5) clk = ~clk;
 `ifdef END_PC 
-`ifdef DEBUG_STAT
     always @(PC >= `END_PC) begin
         if (PC >= `END_PC) begin
             $display("-----------------------------------------------------\n");
-            $display("DEBUG Informations: \n");
+            $display("CACHE Informations: \n");
             if (dcache_read_count != 0)
                 $display(
                     "DCache Read Miss Rate: %f%%\n",
@@ -268,12 +271,49 @@ module Final_tb;
             $display("ICache Stalled Cycles: read %d, write %d\n", icache_read_stalled_cycles,
                      icache_write_stalled_cycles);
             $display("-----------------------------------------------------\n");
+            $display("Branch Prediction Informations: \n");
+            $display("Total prediction: %d\n", prediction_cnt);
+            $display("Prediction Correct: %d\n", prediction_cnt - prediction_wrong_cnt);
+            $display("Prediction Wrong: %d\n", prediction_wrong_cnt);
+            $display("Prediction Correct Rate: %f%%\n",
+                     (1.0 * (prediction_cnt - prediction_wrong_cnt)) / (1.0 * prediction_cnt) * 100);
+            $display("-----------------------------------------------------\n");
         end
     end
 `endif
-`endif
     always @(finish) begin
         if (finish) begin
+                $display("-----------------------------------------------------\n");
+                $display("CACHE Informations: \n");
+                if (dcache_read_count != 0)
+                    $display(
+                        "DCache Read Miss Rate: %f%%\n",
+                        (1.0 * dcache_read_miss) / (1.0 * dcache_read_count) * 100
+                    );
+                if (dcache_write_count != 0)
+                    $display(
+                        "DCache Write Miss Rate: %f%%\n",
+                        (1.0 * dcache_write_miss) / (1.0 * dcache_write_count) * 100
+                    );
+                if ((dcache_read_count + dcache_write_count) != 0)
+                    $display(
+                        "DCache Total Miss Rate: %f%%\n",
+                        (1.0 * (dcache_read_miss + dcache_write_miss)) / (1.0 * (dcache_read_count + dcache_write_count)) * 100
+                    );
+                $display("DCache Stalled Cycles: read %d, write %d\n", dcache_read_stalled_cycles,
+                        dcache_write_stalled_cycles);
+                $display("ICache Read Miss Rate: %f%%\n",
+                        (1.0 * icache_read_miss) / (1.0 * icache_read_count) * 100);
+                $display("ICache Stalled Cycles: read %d, write %d\n", icache_read_stalled_cycles,
+                        icache_write_stalled_cycles);
+                $display("-----------------------------------------------------\n");
+                $display("Branch Prediction Informations: \n");
+                $display("Total prediction: %d\n", prediction_cnt);
+                $display("Prediction Correct: %d\n", prediction_cnt - prediction_wrong_cnt);
+                $display("Prediction Wrong: %d\n", prediction_wrong_cnt);
+                $display("Prediction Correct Rate: %f%%\n",
+                        (1.0 * (prediction_cnt - prediction_wrong_cnt)) / (1.0 * prediction_cnt) * 100);
+                $display("-----------------------------------------------------\n");
             #(`CYCLE) $finish;
         end
     end

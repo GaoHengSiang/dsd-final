@@ -17,6 +17,11 @@ module RISCV_Pipeline (
     output [31:0] DCACHE_wdata,
     //--------------PC-----------------
     output [31:0] PC             //what is this one for?
+    `ifdef DEBUG_STAT
+    ,
+    output [31:0] prediction_cnt,
+    output [31:0] prediction_wrong_cnt
+    `endif
 );
 
 
@@ -320,6 +325,17 @@ module RISCV_Pipeline (
         .DCACHE_wdata(DCACHE_wdata)
 
     );
+
+    `ifdef DEBUG_STAT
+        pred_pmu u_pred_pmu (
+        .clk                        (clk),
+        .rst_n                      (rst_n),
+        .EX_feedback_valid          (EX_feedback_valid),
+        .EX_prediction_incorrect    (EX_prediction_incorrect),
+        .prediction_cnt             (prediction_cnt),
+        .prediction_wrong_cnt       (prediction_wrong_cnt)
+    );
+    `endif
 
     always @(*) begin
         rd_data = MEM_WB_alu_result;

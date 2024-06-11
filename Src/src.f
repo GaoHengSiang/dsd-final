@@ -8,6 +8,8 @@ decompressor.v
 dcache_wrapper.v
 icache_wrapper.v
 cache_pmu.v
+pred_pmu.v
+branch_predictor.v
 realigner.v
 saturation_counter.v
 register_file.v 

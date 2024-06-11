@@ -79,7 +79,7 @@ module RISCV_IF(
     );
 
     assign inst_i = inst_compressed ? inst_decompressed : inst_aligned;
-    saturation_counter sat_cnt_inst(
+    branch_predictor u_branch_predictor(
         .clk(clk),
         .rst_n(rst_n),
         .prediction_correct(prediction_correct),
