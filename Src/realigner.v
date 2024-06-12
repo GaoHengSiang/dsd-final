@@ -2,6 +2,7 @@ module realigner (
     input             clk,
     input             rst_n,
     input      [31:0] pc,            // target PC
+    input             step,
     output reg        ready,
     output reg        compressed,
     output     [31:0] inst,
@@ -20,15 +21,16 @@ module realigner (
     assign ICACHE_wdata = 0;
 
     reg state_r, state_w;
-    reg [31:0] stored_addr_r, stored_addr_w;
+    reg [29:0] stored_addr_r, stored_addr_w;
     reg [15:0] stored_inst_r, stored_inst_w;
     reg        unaligned;
     reg        buffered;
     reg [31:0] rdata_i;
-    reg [31:0] fetch_addr;
+    reg [29:0] fetch_word_addr;
+    reg [29:0] pc_word_addr;
     reg        store;
     reg [31:0] completed_inst;
-
+    reg [29:0] fetch_next_addr;
     always @(posedge clk) begin
         if (!rst_n) begin
             state_r <= S_INIT;
@@ -36,51 +38,39 @@ module realigner (
             state_r <= state_w;
         end
     end
-
+    
     always @(*) begin
+        pc_word_addr = pc[31:2];
+        fetch_next_addr = pc_word_addr + 1;
         unaligned = (pc[1:0] != 2'b00);
         rdata_i = {ICACHE_rdata[7:0], ICACHE_rdata[15:8], ICACHE_rdata[23:16], ICACHE_rdata[31:24]};
         compressed = (completed_inst[1:0] != 2'b11);
-        buffered = (stored_addr_r == pc);
-        stored_addr_w = (ICACHE_stall) ? stored_addr_r : fetch_addr + 2;
+        buffered = (stored_addr_r == pc_word_addr);
+        stored_addr_w = (ICACHE_stall) ? stored_addr_r : fetch_word_addr;
         stored_inst_w = (ICACHE_stall) ? stored_inst_r : rdata_i[31:16];
     end
 
     always @(*) begin
-        fetch_addr = 0;
+        fetch_word_addr = 0;
         completed_inst = rdata_i;
         ready = !ICACHE_stall;
-        if (state_r == S_INIT) begin
-            if (unaligned) begin
-                completed_inst = {rdata_i[15:0], stored_inst_r[15:0]};
-                if (buffered) begin
-                    fetch_addr = pc + 2;
-                end else begin
-                    fetch_addr = pc - 2;
-                    ready = 0;
-                end
+        if (unaligned) begin
+            completed_inst = {rdata_i[15:0], stored_inst_r[15:0]};
+            if (buffered) begin
+                fetch_word_addr = fetch_next_addr;
             end else begin
-                fetch_addr = pc;
+                fetch_word_addr = pc_word_addr;
+                ready = 0;
             end
         end else begin
-            completed_inst = {rdata_i[15:0], stored_inst_r[15:0]};
-            fetch_addr = pc + 2;
+            fetch_word_addr = pc_word_addr;
         end
+        
     end
 
     assign inst = completed_inst;
 
-    assign ICACHE_addr = fetch_addr[31:2];
-    always @(*) begin : state_logic
-        state_w = state_r;
-        if (state_r == S_INIT) begin
-            if (ICACHE_stall) state_w = S_INIT;
-            else if (unaligned && !buffered) state_w = S_FETCH;
-        end else begin
-            if (ICACHE_stall) state_w = S_FETCH;
-            else state_w = S_INIT;
-        end
-    end
+    assign ICACHE_addr = fetch_word_addr;
 
     always @(posedge clk) begin
         if (!rst_n) begin

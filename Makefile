@@ -41,7 +41,7 @@ tb_rtl_all:
 		fi; \
 	done; \
 	echo -e "$$summary" | tee Report/rtl_all.report; \
-	echo -e "Total simulation time:    $(COLOR_GREEN)$$total_time ps$(COLOR_GREEN)"
+	echo -e "Total simulation time:    $(COLOR_GREEN)$$total_time ps$(COLOR_RESET)"
 tb_syn_all:
 	@summary=""; \
 	total_time=0; \
@@ -60,7 +60,7 @@ tb_syn_all:
 		fi; \
 	done; \
 	echo -e "$$summary" | tee Report/syn_all.report; \
-	echo -e "Total simulation time:    $(COLOR_GREEN)$$total_time ps$(COLOR_GREEN)"
+	echo -e "Total simulation time:    $(COLOR_GREEN)$$total_time ps$(COLOR_RESET)"
 
 	
 tb_baseline:
