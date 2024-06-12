@@ -28,6 +28,7 @@ module RISCV_Pipeline (
     //---------IF stage---------
     wire        IF_stall;
     wire        IF_flush;
+    wire        IF_make_correction;
     wire [ 1:0] IF_pc_src;
     wire [31:0] IF_ID_inst_ppl;
     wire [31:0] IF_ID_pc_ppl;
@@ -79,7 +80,8 @@ module RISCV_Pipeline (
     wire EX_jump_noblock, 
          EX_prediction_incorrect,
          EX_feedback_valid;
-    wire make_branch_correction;
+    //wire make_branch_correction;
+    wire EX_make_correction; // J-type and Branch
     wire [31: 0] EX_PC_result_noblock, EX_PC_correction;
 
 
@@ -91,18 +93,18 @@ module RISCV_Pipeline (
     reg  regfile_wen;
     reg mem_wb_valid_r, mem_wb_valid_w;
     //wire assignment 
-    assign make_branch_correction = EX_prediction_incorrect && EX_feedback_valid;
+    assign IF_make_correction = EX_make_correction && EX_feedback_valid;
 
     //multiplication unit
     wire [31: 0] mul_result;
 
     //FIXME: hazard detection
     
-    assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    //assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_mul_use_hazard;
-    assign IF_flush = make_branch_correction || EX_jump_noblock;
+    assign IF_flush = IF_make_correction || EX_jump_noblock;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = make_branch_correction || EX_jump_noblock || load_mul_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = IF_make_correction || EX_jump_noblock || load_mul_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
@@ -170,9 +172,9 @@ module RISCV_Pipeline (
         //feedback paths
         .stall(IF_stall),
         .flush(IF_flush),
-        .pc_src(IF_pc_src), //feedback from EX stage
-        .pc_branch(EX_PC_correction),//feedback from EX stage
-        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
+        .make_correction(IF_make_correction), //feedback from EX stage
+        .pc_correction(EX_PC_correction),//feedback from EX stage
+        // .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         .load_mul_use_hazard(load_mul_use_hazard),
@@ -282,8 +284,9 @@ module RISCV_Pipeline (
         .jump_noblock(EX_jump_noblock),  //should correct PC immediately
         .PC_result_noblock(EX_PC_result_noblock),
         .PC_correction(EX_PC_correction),
-        .prediction_incorrect(EX_prediction_incorrect),
-        .feedback_valid(EX_feedback_valid)
+        // .prediction_incorrect(EX_prediction_incorrect),
+        .feedback_valid(EX_feedback_valid),
+        .make_correction(EX_make_correction)
     );
 
 

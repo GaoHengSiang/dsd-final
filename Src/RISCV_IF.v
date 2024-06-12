@@ -4,9 +4,10 @@ module RISCV_IF(
     //feedback paths
     input         stall,
     input         flush,
-    input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal TODO: compress it to 1 bit
-    input  [31:0] pc_branch,
-    input  [31:0] pc_j,
+    //input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal TODO: compress it to 1 bit
+    input         make_correction,
+    // input  [31:0] pc_branch,
+    input  [31:0] pc_correction,
     input         prediction_correct,//tells the saturation counter if its prediction is correct
     input         feedback_valid,//if the instruction in EX is not a branch or stalling...
 //-------ICACHE-interface-------
@@ -93,10 +94,8 @@ module RISCV_IF(
 
     always @(*) begin : next_pc
         //TODO: evaluate between case and if
-        if (pc_src == 2'b01) begin  //jal || jalr
-            pc_w = pc_j;
-        end else if (pc_src == 2'b10) begin
-            pc_w = pc_branch;
+        if (make_correction) begin
+            pc_w = pc_correction;
         end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
             pc_w = (take_branch && is_branch)? branch_destination: pc_step; //branch if predicted so
         end else begin

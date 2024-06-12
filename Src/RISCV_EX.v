@@ -55,7 +55,7 @@ module EX_STAGE #(
     output jump_noblock, //not blocked by register, signal for IF stage
     output [31: 0] PC_result_noblock,//for jump only
     output [31: 0] PC_correction,
-    output prediction_incorrect, //not blocked
+    output make_correction, //not blocked
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
 );
     //Reg and Wire declaration
@@ -70,8 +70,9 @@ module EX_STAGE #(
 
     //forwarded rs1 and rs2
     wire [31:0] forwarded_rs1, forwarded_rs2;
-
-
+    wire jump_in;  // indicate current instruction is j-type
+    wire perform_correction; // a unified signal for both j-type and b-type inst.
+    wire branch_actual_taken;
     //Continuous assignments
     //output assignments
     assign alu_result = alu_result_r;
@@ -88,16 +89,21 @@ module EX_STAGE #(
     //forwarded rs1, rs2
     assign forwarded_rs1 = (forward_A_flag) ? forward_A_dat : rs1_dat_in;
     assign forwarded_rs2 = (forward_B_flag) ? forward_B_dat : rs2_dat_in;
+    assign jump_in = jalr_in || jal_in;
 
-
-    //direct output, no blocking!
-    assign jump_noblock = jalr_in || jal_in;
-    assign PC_result_noblock = alu_o_wire;
-    assign PC_correction = (prediction_incorrect ^ branch_taken_in)? alu_o_wire: PC_step_w;
-        //branch
-    assign prediction_incorrect = ((forwarded_rs1 == forwarded_rs2) ^ bne_in) ^ branch_taken_in; 
-    assign feedback_valid = !stall && branch_in;
+    //branch
+    assign feedback_valid = !stall && (branch_in || jump_in);
+    assign branch_actual_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in);
+    assign prediction_incorrect = branch_actual_taken ^ branch_taken_in; 
+    assign perform_correction = jump_in || prediction_incorrect; 
     
+    //direct output, no blocking!
+    assign jump_noblock = jump_in;
+    // assign PC_result_noblock = alu_o_wire; // this shouldn't be used
+    assign PC_correction = (branch_actual_taken || jump_in)? alu_o_wire: PC_step_w;
+    assign make_correction = perform_correction;
+    assign feedback_valid = !stall && (branch_in || jump_in);
+
     //module instantiation
     alu alu_inst (
         .op(aluctrl_in),
