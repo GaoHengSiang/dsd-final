@@ -33,7 +33,7 @@ module RISCV_Pipeline (
     wire [31:0] IF_ID_inst_ppl;
     wire [31:0] IF_ID_pc_ppl;
     wire        IF_ID_compressed_ppl;
-    wire         IF_ID_branch_taken_ppl;
+    wire [31:0] IF_ID_pred_dest_ppl;
     //---------ID stage---------
     wire ID_stall, ID_flush;
     wire [4:0] ID_regfile_rs1, ID_regfile_rs2;
@@ -47,7 +47,8 @@ module RISCV_Pipeline (
     wire [31:0] ID_EX_imm_ppl;
     wire        ID_EX_alu_src_ppl;
     wire [ 3:0] ID_EX_alu_ctrl_ppl;
-    wire [31:0] ID_EX_pc_ppl_out;
+    wire [31:0] ID_EX_pc_ppl_out,
+                ID_EX_pred_dest_ppl;
     wire        ID_EX_jal_ppl,
                 ID_EX_jalr_ppl,
                 ID_EX_branch_ppl,
@@ -57,7 +58,6 @@ module RISCV_Pipeline (
                 ID_EX_mem_to_reg_ppl,
                 ID_EX_reg_wen_ppl,
                 ID_EX_compressed_ppl,
-                ID_EX_branch_taken_ppl,
                 ID_EX_mul_ppl;
 
     //------EX/MEM pipeline reg------------
@@ -77,13 +77,15 @@ module RISCV_Pipeline (
     //LOOP BACK: reg or wires that go in the reverse direction
     reg [31:0] rd_data;
     //no_block
-    wire EX_jump_noblock, 
-         EX_prediction_incorrect,
-         EX_feedback_valid;
-    //wire make_branch_correction;
-    wire EX_make_correction; // J-type and Branch
-    wire [31: 0] EX_PC_result_noblock, EX_PC_correction;
+    wire EX_jump_noblock,//deprecated
+         EX_prediction_incorrect,//deprecated
+         EX_feedback_valid,
+         EX_set_taken,
+         EX_make_correction;
 
+    wire [31: 0] EX_PC_result_noblock,//deprecated
+                 EX_PC_correction,
+                 EX_set_target;
 
     // forwarding & hazard detection
     wire [31:0] forward_A_dat, forward_B_dat;
@@ -174,9 +176,13 @@ module RISCV_Pipeline (
         .flush(IF_flush),
         .make_correction(IF_make_correction), //feedback from EX stage !make_correction = prediction correct
         .pc_correction(EX_PC_correction),//feedback from EX stage
-        // .pc_j(EX_PC_result_noblock), // Feedback from EX stage
-        // .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
+        //for BTB
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
+        .ID_stall(ID_stall),//to prevent multiple updates in saturation counter
+        .set_pc_i(ID_EX_pc_ppl_out),
+        .set_target_i(EX_set_target),
+        .set_taken_i(EX_set_taken),
+        
         .load_mul_use_hazard(load_mul_use_hazard),
         
         .ICACHE_stall(ICACHE_stall),
@@ -188,7 +194,7 @@ module RISCV_Pipeline (
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         .compressed_ppl(IF_ID_compressed_ppl),
-        .branch_taken_ppl(IF_ID_branch_taken_ppl),//idicates if the branch was predicted to be taken
+        .pred_dest_ppl(IF_ID_pred_dest_ppl),
         .PC(PC)
     );
 
@@ -201,7 +207,7 @@ module RISCV_Pipeline (
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         .compressed_ppl(IF_ID_compressed_ppl),        
-        .branch_taken_in(IF_ID_branch_taken_ppl),
+        .pred_dest_in(IF_ID_pred_dest_ppl),
 
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
@@ -222,7 +228,7 @@ module RISCV_Pipeline (
         .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
         .reg_wen_ppl(ID_EX_reg_wen_ppl),
         .compressed_ppl_out(ID_EX_compressed_ppl),
-        .branch_taken_ppl(ID_EX_branch_taken_ppl),
+        .pred_dest_ppl(ID_EX_pred_dest_ppl),
         .mul_ppl(ID_EX_mul_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
@@ -249,9 +255,9 @@ module RISCV_Pipeline (
         .branch_in(ID_EX_branch_ppl),
         .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
-        .branch_taken_in(ID_EX_branch_taken_ppl),
+        .pred_dest_i(ID_EX_pred_dest_ppl),
         .mul_ppl_i(ID_EX_mul_ppl),
-    //transparent for this stage
+        //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
         .memrd_in(ID_EX_mem_ren_ppl),
         .memwr_in(ID_EX_mem_wen_ppl),
@@ -282,10 +288,12 @@ module RISCV_Pipeline (
 
         //direct output, no register blocking
         .jump_noblock(EX_jump_noblock),  //should correct PC immediately
-        .PC_result_noblock(EX_PC_result_noblock),
+        //.PC_result_noblock(EX_PC_result_noblock),
         .PC_correction(EX_PC_correction),
         // .prediction_incorrect(EX_prediction_incorrect),
         .feedback_valid(EX_feedback_valid),
+        .set_taken_o(EX_set_taken),
+        .set_target_o(EX_set_target),
         .make_correction(EX_make_correction)
     );
 

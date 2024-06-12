@@ -7,7 +7,9 @@ module RISCV_ID (
     input  [31:0] inst_ppl,
     input  [31:0] pc_ppl,
     input         compressed_ppl,
-    input         branch_taken_in, //the prediction
+//    input         branch_taken_in, //the prediction
+    input [31: 0] pred_dest_in,
+
     output [ 4:0] rd_ppl,
     output [31:0] rs1_data_ppl,
     rs2_data_ppl,
@@ -26,7 +28,8 @@ module RISCV_ID (
     output [ 4:0] rs2_ppl,
     output        reg_wen_ppl,
     output        compressed_ppl_out,
-    output        branch_taken_ppl,//the prediction
+//    output        branch_taken_ppl,//the prediction
+    output [31:0] pred_dest_ppl,
     output        mul_ppl,
 
     //----------register_file interface-------------
@@ -50,7 +53,8 @@ module RISCV_ID (
     wire [3:0] alu_op_w;
     wire jal_w, jalr_w, mem_to_reg_w, mem_wen_w, mem_ren_w, reg_wen_w;
     wire [31:0] pc_out_w;
-    wire bne_w, branch_w, branch_taken_w;
+    wire bne_w, branch_w; //branch_taken_w;
+    wire [31: 0] pred_dest_w;
     wire compressed_ppl_w;
     wire mul_w;
     wire [31:0] inst_decompressed;
@@ -63,7 +67,8 @@ module RISCV_ID (
     reg [3:0] alu_op_r;
     reg jal_r, jalr_r, mem_to_reg_r, mem_wen_r, mem_ren_r, reg_wen_r;
     reg [31:0] pc_out_r;
-    reg bne_r, branch_r, branch_taken_r;
+    reg bne_r, branch_r;// branch_taken_r;
+    reg [31: 0] pred_dest_r;
     reg compressed_ppl_r;
     reg mul_r;
 
@@ -88,7 +93,8 @@ module RISCV_ID (
     assign branch_w = branch;
     assign compressed_ppl_w = compressed_ppl;
     assign mul_w = mul;
-    assign branch_taken_w = branch_taken_in;
+    //assign branch_taken_w = branch_taken_in;
+    assign pred_dest_w = pred_dest_in;
 
     // pipeline reg output
     assign rd_ppl = rd_r;
@@ -110,7 +116,8 @@ module RISCV_ID (
     assign bne_ppl = bne_r;
     assign compressed_ppl_out = compressed_ppl_r;
     assign mul_ppl = mul_r;
-    assign branch_taken_ppl = branch_taken_r;
+    //assign branch_taken_ppl = branch_taken_r;
+    assign pred_dest_ppl = pred_dest_r;
 
     decompressor u_decompressor (
         .inst_i    (inst_ppl[15:0]),
@@ -155,9 +162,11 @@ module RISCV_ID (
             rs2_rdata_r <= 0;
             imm_r <= 0;
             pc_out_r <= 0;
+            compressed_ppl_r <= 0;
             bne_r <= 0;
             branch_r <= 0;
-            branch_taken_r <= 0;
+            //branch_taken_r <= 0;
+            pred_dest_r <= 0;
             mul_r <= 0;
         end else if (!stall) begin
             rs1_rdata_r <= rs1_rdata_w;
@@ -179,7 +188,8 @@ module RISCV_ID (
                 reg_wen_r <= 0;
                 bne_r <= 0;
                 branch_r <= 0;
-                branch_taken_r <= 0;
+                //branch_taken_r <= 0;
+                pred_dest_r <= 0;
                 mul_r <= 0;
             end else begin
                 rs1_r <= rs1_w;
@@ -195,7 +205,8 @@ module RISCV_ID (
                 reg_wen_r <= reg_wen_w;
                 bne_r <= bne_w;
                 branch_r <= branch_w;
-                branch_taken_r <= branch_taken_w;
+                //branch_taken_r <= branch_taken_w;
+                pred_dest_r <= pred_dest_w;
                 mul_r <= mul_w;
             end
         end

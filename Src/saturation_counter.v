@@ -3,7 +3,7 @@
 module saturation_counter(
     input clk,
     input rst_n,
-    input prediction_correct,
+    input set_taken,
     input feedback_valid,
     output take_branch
 );
@@ -17,10 +17,10 @@ module saturation_counter(
         //default 
         satcnt_w = 0;
         case(satcnt_r)
-        2'b00: satcnt_w = (prediction_correct)? 2'b00: 2'b01;
-        2'b01: satcnt_w = (prediction_correct)? 2'b00: 2'b10;
-        2'b10: satcnt_w = (prediction_correct)? 2'b11: 2'b01;
-        2'b11: satcnt_w = (prediction_correct)? 2'b11: 2'b10;
+        2'b00: satcnt_w = (set_taken)? 2'b01: 2'b00;
+        2'b01: satcnt_w = (set_taken)? 2'b10: 2'b00;
+        2'b10: satcnt_w = (set_taken)? 2'b11: 2'b01;
+        2'b11: satcnt_w = (set_taken)? 2'b11: 2'b10;
         endcase
         if(!feedback_valid) satcnt_w = satcnt_r;
     end

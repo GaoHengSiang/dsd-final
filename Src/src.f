@@ -13,6 +13,7 @@ pred_pmu.v
 branch_predictor.v
 realigner.v
 saturation_counter.v
+BTB_BHT.v
 register_file.v 
 HAZARD_DETECTION.v 
 Forwarding_Unit.v 

@@ -5,8 +5,8 @@ CYCLE := 10
 TB = Final_tb.v slow_memory.v
 SRCLIST = src.f
 SYN_SRC = ../Syn/CHIP_syn.v 
-#TSMC13=/home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/Verilog/tsmc13.v
-TSMC13=/usr/cad/designkit/digital/T13/CBDK_IC_Contest_v2.5/Verilog/tsmc13_neg.v
+TSMC13=/home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/Verilog/tsmc13.v
+#TSMC13=/usr/cad/designkit/digital/T13/CBDK_IC_Contest_v2.5/Verilog/tsmc13_neg.v
 export 
 
 
