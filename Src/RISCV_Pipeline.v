@@ -172,10 +172,10 @@ module RISCV_Pipeline (
         //feedback paths
         .stall(IF_stall),
         .flush(IF_flush),
-        .make_correction(IF_make_correction), //feedback from EX stage
+        .make_correction(IF_make_correction), //feedback from EX stage !make_correction = prediction correct
         .pc_correction(EX_PC_correction),//feedback from EX stage
         // .pc_j(EX_PC_result_noblock), // Feedback from EX stage
-        .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
+        // .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         .load_mul_use_hazard(load_mul_use_hazard),
         

@@ -8,7 +8,6 @@ module RISCV_IF(
     input         make_correction,
     // input  [31:0] pc_branch,
     input  [31:0] pc_correction,
-    input         prediction_correct,//tells the saturation counter if its prediction is correct
     input         feedback_valid,//if the instruction in EX is not a branch or stalling...
 //-------ICACHE-interface-------
 	input  ICACHE_stall,
@@ -86,7 +85,7 @@ module RISCV_IF(
     branch_predictor u_branch_predictor(
         .clk(clk),
         .rst_n(rst_n),
-        .prediction_correct(prediction_correct),
+        .prediction_correct(!make_correction),
         .feedback_valid(feedback_valid),//if the instruction in EX is not a branch, or if it is stalling, 
         //the saturation counter should not take this feedback
         .take_branch(take_branch)
