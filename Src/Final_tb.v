@@ -2,8 +2,9 @@
 // the processor output is not verified
 
 `timescale 1 ns / 10 ps
-
+`ifndef CYCLE
 `define CYCLE 10 // You can modify your clock frequency
+`endif
 `define MAX_CYCLES 1000000 // Max cycle count to stop the simulaiton. You can modify it
 
 `define SDFFILE "../Syn/CHIP_syn.sdf"	// Modify your SDF file name
@@ -212,6 +213,7 @@ module Final_tb;
 
         $display("-----------------------------------------------------\n");
         $display("START!!! Simulation Start .....\n");
+        $display("CYCLE TIME is %d ns\n", `CYCLE);
         $display("-----------------------------------------------------\n");
 
         // waveform dump
@@ -220,7 +222,6 @@ module Final_tb;
         $fsdbDumpfile("Final.fsdb");
         $fsdbDumpvars(0, Final_tb, "+mda");
         $fsdbDumpvars;
-
         clk   = 0;
         rst_n = 1'b1;
         #(`CYCLE * 0.6) rst_n = 1'b0;

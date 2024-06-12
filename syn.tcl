@@ -45,7 +45,7 @@ source -echo -verbose CHIP_syn.sdc
 
 set_critical_range  0.3  [current_design]
 
-compile_ultra -retime
+compile_ultra
 
 write_sdf -version 2.1  -context verilog -load_delay cell "Syn/${DESIGN}_syn.sdf"
 write -format verilog -hierarchy -output "Syn/${DESIGN}_syn.v"

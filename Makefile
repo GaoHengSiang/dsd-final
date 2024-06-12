@@ -48,9 +48,9 @@ tb_syn_all:
 	for testcase in $(TESTCASES); do \
 		echo -e "[-] running $$testcase"; \
 		TB_DEFINE=$$testcase; \
-		make -C Src/ syn > Report/$$testcase_syn.log; \
-		if grep -q CONGRATULATIONS!! Report/$$testcase_syn.log; then \
-			time_ps=$$(grep -Eo 'Time: *[0-9]+' Report/$$testcase_syn.log | head -n 1 | grep -Eo '[0-9]+'); \
+		make -C Src/ syn > Report/$$testcase.syn.log; \
+		if grep -q CONGRATULATIONS!! Report/$$testcase.syn.log; then \
+			time_ps=$$(grep -Eo 'Time: *[0-9]+' Report/$$testcase.syn.log | head -n 1 | grep -Eo '[0-9]+'); \
 			total_time=$$(($$total_time + $$time_ps)); \
 			echo -e "$(COLOR_GREEN)$$testcase: pass$(COLOR_RESET)"; \
 			summary="$$summary\n$$testcase:    $(COLOR_GREEN)$$time_ps ps$(COLOR_GREEN)"; \
