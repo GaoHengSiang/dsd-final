@@ -13,7 +13,7 @@ module branch_predictor(
     output take_branch,
     output [31: 0] predicted_destination
 );
-
+`define USE_BTB
 `ifndef USE_BTB
     saturation_counter u_saturation_counter (
         .clk                   (clk),
