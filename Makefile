@@ -24,12 +24,44 @@ tb_rtl:
 tb_syn:
 	make -C Src/ syn
 tb_rtl_all:
-	@for testcase in $(TESTCASES); do \
+		@summary=""; \
+	total_time=0; \
+	for testcase in $(TESTCASES); do \
 		echo -e "[-] running $$testcase"; \
 		TB_DEFINE=$$testcase; \
-		make -C Src/ rtl > Report/$$testcase.log; \
-		if grep -q CONGRATULATIONS!! Report/$$testcase.log; then echo -e "$(COLOR_GREEN)$$testcase: pass$(COLOR_RESET)"; else echo -e "$(COLOR_RED)$$testcase: fail$(COLOR_RESET)"; exit 1; fi; \
-	done
+		make -C Src/ syn > Report/$$testcase.log; \
+		if grep -q CONGRATULATIONS!! Report/$$testcase.log; then \
+			time_ps=$$(grep -Eo 'Time: *[0-9]+' Report/$$testcase.log | head -n 1 | grep -Eo '[0-9]+'); \
+			total_time=$$(($$total_time + $$time_ps)); \
+			echo -e "$(COLOR_GREEN)$$testcase: pass$(COLOR_RESET)"; \
+			summary="$$summary\n$$testcase: pass (Time: $$time_ps ps)"; \
+		else \
+			echo -e "$(COLOR_RED)$$testcase: fail$(COLOR_RESET)"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo -e "$$summary" | tee Report/rtl_all.report; \
+	echo -e "Total simulation time: $$total_time ps"
+tb_syn_all:
+	@summary=""; \
+	total_time=0; \
+	for testcase in $(TESTCASES); do \
+		echo -e "[-] running $$testcase"; \
+		TB_DEFINE=$$testcase; \
+		make -C Src/ syn > Report/$$testcase_syn.log; \
+		if grep -q CONGRATULATIONS!! Report/$$testcase_syn.log; then \
+			time_ps=$$(grep -Eo 'Time: *[0-9]+' Report/$$testcase_syn.log | head -n 1 | grep -Eo '[0-9]+'); \
+			total_time=$$(($$total_time + $$time_ps)); \
+			echo -e "$(COLOR_GREEN)$$testcase: pass$(COLOR_RESET)"; \
+			summary="$$summary\n$$testcase: pass (Time: $$time_ps ps)"; \
+		else \
+			echo -e "$(COLOR_RED)$$testcase: fail$(COLOR_RESET)"; \
+			exit 1; \
+		fi; \
+	done; \
+	echo -e "$$summary" | tee Report/syn_all.report; \
+	echo -e "Total simulation time: $$total_time ps"
+
 	
 tb_baseline:
 	@echo -e "[-] running baseline"
