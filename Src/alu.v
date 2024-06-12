@@ -67,14 +67,14 @@ module alu (
     always @(*) begin
         //default 
         alu_out = adder_result;
-        case (op)
+        case (op) // synopsys full_case parallel_case
             ADD, SUB: begin
                 alu_out = adder_result;
             end
             SLT: begin
                 //FIXME: if SLT doesn't need to care about overflow, we can use 
                 //       adder_result[31], it will shorten the critical path
-                alu_out = {31'b0, adder_result_tmp[33]};
+                alu_out = {31'b0, adder_result[31]};
             end
             AND: begin
                 alu_out = operand_a & operand_b;

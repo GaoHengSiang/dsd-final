@@ -35,7 +35,7 @@ always @(*)begin
     forward_A_dat = rd_data;
     forward_B_dat = rd_data;
     
-    case(ForwardA)
+    case(ForwardA) // synopsys full_case parallel_case
     2'b01: begin
         forward_A_dat = rd_data;
     end
@@ -51,7 +51,7 @@ always @(*)begin
     end
     endcase
 
-        case(ForwardB)
+    case(ForwardB) // synopsys full_case parallel_case
     2'b01: begin
         forward_B_dat = rd_data;
     end

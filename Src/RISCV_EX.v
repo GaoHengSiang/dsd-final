@@ -84,7 +84,7 @@ module EX_STAGE #(
     reg disable_feedback_r, disable_feedback_w;
     reg [BIT_W-1:0] alu_opA, alu_opB;
     wire [BIT_W-1:0] alu_o_wire;
-
+    wire [31:0] PC_p2, PC_p4;
     //forwarded rs1 and rs2
     wire [31:0] forwarded_rs1, forwarded_rs2;
     wire jump_in;  // indicate current instruction is j-type
@@ -104,7 +104,7 @@ module EX_STAGE #(
     assign regwr_out = regwr_r;
     assign jump_out = jump_r;
     assign mul_ppl_o = mul_r;
-
+    
     //forwarded rs1, rs2
     assign forwarded_rs1 = (forward_A_flag) ? forward_A_dat : rs1_dat_in;
     assign forwarded_rs2 = (forward_B_flag) ? forward_B_dat : rs2_dat_in;
@@ -117,14 +117,19 @@ module EX_STAGE #(
     assign dest_mismatch = pred_dest_i != PC_correction;
     assign perform_correction = dest_mismatch;
 
+
+    assign PC_p2 = PC_in + 2;
+    assign PC_p4 = PC_in + 4;
+    
     //direct output, no blocking!
     assign jump_noblock = jump_in;
     // assign PC_result_noblock = alu_o_wire; // this shouldn't be used
-    assign PC_correction = (branch_actual_taken || jump_in) ? alu_o_wire : PC_step_w;
+    assign PC_correction = (branch_actual_taken || jump_in) ? alu_o_wire : compressed_in ? PC_p2 : PC_p4;
     assign make_correction = perform_correction;
     assign set_taken_o = branch_actual_taken;
     assign set_target_o = alu_o_wire;
 
+    
     //module instantiation
     alu alu_inst (
         .op(aluctrl_in),
