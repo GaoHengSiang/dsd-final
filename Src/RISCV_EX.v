@@ -105,7 +105,7 @@ module EX_STAGE #(
     assign jump_in = jalr_in || jal_in;
 
     //branch
-    assign feedback_valid = !stall && (branch_in || jump_in);
+    assign feedback_valid = (branch_in || jump_in);
     assign branch_actual_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in);
     assign prediction_incorrect = branch_actual_taken ^ branch_taken_in;
     assign perform_correction = jump_in || prediction_incorrect;

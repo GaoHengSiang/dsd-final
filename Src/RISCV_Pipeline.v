@@ -102,9 +102,9 @@ module RISCV_Pipeline (
     
     //assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_mul_use_hazard;
-    assign IF_flush = IF_make_correction || EX_jump_noblock;
+    assign IF_flush = IF_make_correction;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = IF_make_correction || EX_jump_noblock || load_mul_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = IF_make_correction || load_mul_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 

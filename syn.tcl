@@ -3,7 +3,7 @@ set DESIGN CHIP
 set src [list \
     Src/CHIP.v \
     Src/dcache.v \
-    Src/icache.v \
+    Src/icache_dm.v \
     Src/decoder.v \
     Src/alu.v \
     Src/Forwarding_Unit.v \
