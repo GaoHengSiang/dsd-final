@@ -18,7 +18,7 @@ module EX_STAGE #(
     input branch_in,
     input bne_in,
     input stall,
-    input branch_taken_in, 
+    input branch_taken_in,
     input mul_ppl_i,
 
     //transparent for this stage
@@ -52,10 +52,10 @@ module EX_STAGE #(
 
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
-    output jump_noblock, //not blocked by register, signal for IF stage
-    output [31: 0] PC_result_noblock,//for jump only
-    output [31: 0] PC_correction,
-    output make_correction, //not blocked
+    output jump_noblock,  //not blocked by register, signal for IF stage
+    output [31:0] PC_result_noblock,  //for jump only
+    output [31:0] PC_correction,
+    output make_correction,  //not blocked
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
 );
     //Reg and Wire declaration
@@ -63,7 +63,19 @@ module EX_STAGE #(
     reg [BIT_W-1:0] mem_wdata_r, mem_wdata_w;
     reg [4:0] rd_r, rd_w;
     reg [BIT_W-1:0] PC_step_r, PC_step_w;
-    reg memrd_r, memrd_w, memwr_r, memwr_w, mem2reg_r, mem2reg_w, regwr_r, regwr_w, jump_r, jump_w, mul_r, mul_w;
+    reg
+        memrd_r,
+        memrd_w,
+        memwr_r,
+        memwr_w,
+        mem2reg_r,
+        mem2reg_w,
+        regwr_r,
+        regwr_w,
+        jump_r,
+        jump_w,
+        mul_r,
+        mul_w;
     reg disable_feedback_r, disable_feedback_w;
     reg [BIT_W-1:0] alu_opA, alu_opB;
     wire [BIT_W-1:0] alu_o_wire;
@@ -71,8 +83,9 @@ module EX_STAGE #(
     //forwarded rs1 and rs2
     wire [31:0] forwarded_rs1, forwarded_rs2;
     wire jump_in;  // indicate current instruction is j-type
-    wire perform_correction; // a unified signal for both j-type and b-type inst.
+    wire perform_correction;  // a unified signal for both j-type and b-type inst.
     wire branch_actual_taken;
+    wire prediction_incorrect;
     //Continuous assignments
     //output assignments
     assign alu_result = alu_result_r;
@@ -94,15 +107,14 @@ module EX_STAGE #(
     //branch
     assign feedback_valid = !stall && (branch_in || jump_in);
     assign branch_actual_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in);
-    assign prediction_incorrect = branch_actual_taken ^ branch_taken_in; 
-    assign perform_correction = jump_in || prediction_incorrect; 
-    
+    assign prediction_incorrect = branch_actual_taken ^ branch_taken_in;
+    assign perform_correction = jump_in || prediction_incorrect;
+
     //direct output, no blocking!
     assign jump_noblock = jump_in;
     // assign PC_result_noblock = alu_o_wire; // this shouldn't be used
-    assign PC_correction = (branch_actual_taken || jump_in)? alu_o_wire: PC_step_w;
+    assign PC_correction = (branch_actual_taken || jump_in) ? alu_o_wire : PC_step_w;
     assign make_correction = perform_correction;
-    assign feedback_valid = !stall && (branch_in || jump_in);
 
     //module instantiation
     alu alu_inst (
@@ -118,43 +130,43 @@ module EX_STAGE #(
     end
 
     always @(*) begin
-        alu_result_w = stall ? alu_result_r : alu_o_wire;
-        mem_wdata_w  = stall ? mem_wdata_r : forwarded_rs2;
-        rd_w         = stall ? rd_r : rd_in;
-        PC_step_w    = stall ? PC_step_r : (PC_in + (compressed_in ? 2 : 4));
-        memrd_w      = stall ? memrd_r : memrd_in;
-        memwr_w      = stall ? memwr_r : memwr_in;
-        mem2reg_w    = stall ? mem2reg_r : mem2reg_in;
-        regwr_w      = stall ? regwr_r : regwr_in;
-        jump_w       = stall ? jump_r : jalr_in || jal_in;
-        mul_w        = stall ? mul_r : mul_ppl_i;
+        alu_result_w       = stall ? alu_result_r : alu_o_wire;
+        mem_wdata_w        = stall ? mem_wdata_r : forwarded_rs2;
+        rd_w               = stall ? rd_r : rd_in;
+        PC_step_w          = stall ? PC_step_r : (PC_in + (compressed_in ? 2 : 4));
+        memrd_w            = stall ? memrd_r : memrd_in;
+        memwr_w            = stall ? memwr_r : memwr_in;
+        mem2reg_w          = stall ? mem2reg_r : mem2reg_in;
+        regwr_w            = stall ? regwr_r : regwr_in;
+        jump_w             = stall ? jump_r : jalr_in || jal_in;
+        mul_w              = stall ? mul_r : mul_ppl_i;
         disable_feedback_w = stall;
     end
     //Sequential
     always @(posedge clk) begin
         if (!rst_n) begin
-            alu_result_r <= 0;
-            mem_wdata_r  <= 0;
-            rd_r         <= 0;
-            PC_step_r    <= 0;
-            memrd_r      <= 0;
-            memwr_r      <= 0;
-            mem2reg_r    <= 0;
-            regwr_r      <= 0;
-            jump_r       <= 0;
-            mul_r        <= 0;
+            alu_result_r       <= 0;
+            mem_wdata_r        <= 0;
+            rd_r               <= 0;
+            PC_step_r          <= 0;
+            memrd_r            <= 0;
+            memwr_r            <= 0;
+            mem2reg_r          <= 0;
+            regwr_r            <= 0;
+            jump_r             <= 0;
+            mul_r              <= 0;
             disable_feedback_r <= 0;
         end else begin
-            alu_result_r <= alu_result_w;
-            mem_wdata_r  <= mem_wdata_w;
-            rd_r         <= rd_w;
-            PC_step_r    <= PC_step_w;
-            memrd_r      <= memrd_w;
-            memwr_r      <= memwr_w;
-            mem2reg_r    <= mem2reg_w;
-            regwr_r      <= regwr_w;
-            jump_r       <= jump_w;
-            mul_r        <= mul_w;
+            alu_result_r       <= alu_result_w;
+            mem_wdata_r        <= mem_wdata_w;
+            rd_r               <= rd_w;
+            PC_step_r          <= PC_step_w;
+            memrd_r            <= memrd_w;
+            memwr_r            <= memwr_w;
+            mem2reg_r          <= mem2reg_w;
+            regwr_r            <= regwr_w;
+            jump_r             <= jump_w;
+            mul_r              <= mul_w;
             disable_feedback_r <= disable_feedback_w;
         end
     end
