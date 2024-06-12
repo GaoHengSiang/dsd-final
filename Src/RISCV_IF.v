@@ -134,7 +134,7 @@ module RISCV_IF(
             pc_w = pc_correction;
         end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
             //branch if predicted so, always jump
-            pc_w = ((take_branch && is_branch)||is_jump)? btb_dest: pc_step; 
+            pc_w = pc_step;//((take_branch && is_branch)||is_jump)? btb_dest: pc_step; 
         end else begin
             pc_w = pc_r;
         end
