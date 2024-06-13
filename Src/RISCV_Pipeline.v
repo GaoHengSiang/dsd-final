@@ -342,7 +342,7 @@ module RISCV_Pipeline (
         pred_pmu u_pred_pmu (
         .clk                        (clk),
         .rst_n                      (rst_n),
-        .ID_EX_branch               (ID_EX_branch_ppl),
+        .ID_EX_branch               (ID_EX_branch_ppl || ID_EX_jal_ppl || ID_EX_jalr_ppl),//count the predicted jumps
         .EX_feedback_valid          (EX_feedback_valid),
         .EX_prediction_incorrect    (EX_make_correction),
         .prediction_cnt             (prediction_cnt),

@@ -1,7 +1,7 @@
 #You may modified the clock constraints 
 #or add more constraints for your design
 ####################################################
-set cycle  3
+set cycle  3.3
 ####################################################
 
 
@@ -26,7 +26,7 @@ set t_out  0.1
 set_input_delay  $t_in  -clock CLK [remove_from_collection [all_inputs] [get_ports clk]]
 set_output_delay $t_out -clock CLK [all_outputs]
 #####################################################
-set_input_delay  [expr $cycle / 2.0]  -clock CLK [remove_from_collection [all_inputs] [get_ports clk]]
+set_input_delay  0.1  -clock CLK [remove_from_collection [all_inputs] [get_ports clk]]
 
 
 
