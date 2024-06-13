@@ -8,7 +8,7 @@ module RISCV_IF(
     input         make_correction,
     input  [31:0] pc_correction,
     //for BTB
-    input         feedback_valid,//if the instruction in EX is not a branch or stalling...
+    //input         feedback_valid,//if the instruction in EX is not a branch or stalling...
     //input         ID_stall,
     //input [31: 0] set_pc_i,
     //input         set_taken_i,
@@ -57,8 +57,8 @@ module RISCV_IF(
     //wire [31:0] branch_destination;//deprecated
     //wire [31:0] sbtype_imm;
     //wire        is_branch;
-    wire        rvc_jalr_jr, rvc_jal_j;
-    wire        is_jump;
+    //wire        rvc_jalr_jr, rvc_jal_j;
+    //wire        is_jump;
     wire       inst_ready;
     wire       inst_compressed;
     //wire [31: 0] btb_dest; //btb_dest is different from pred_dest
@@ -130,9 +130,10 @@ module RISCV_IF(
         .set_destination        (set_target_i)
     );
     */
+    
     always @(*) begin : next_pc
         //TODO: evaluate between case and if
-        if (make_correction && feedback_valid) begin
+        if (make_correction) begin
             pc_w = pc_correction;
         end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
             //branch if predicted so, always jump
@@ -153,7 +154,7 @@ module RISCV_IF(
     assign inst_ppl = inst_ppl_r;
     assign pc_ppl = pc_ppl_r;
     assign compressed_ppl = compressed_ppl_r;
-    assign PC = pc_r;
+    assign PC = pc_r;             
     //assign branch_taken_ppl = branch_taken_ppl_r;
     //assign pred_dest_ppl = pred_dest_ppl_r;
 

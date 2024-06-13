@@ -10,10 +10,10 @@ dcache_wrapper.v
 icache_wrapper.v
 cache_pmu.v
 pred_pmu.v
-branch_predictor.v
+#branch_predictor.v
 realigner.v
-saturation_counter.v
-BTB_BHT.v
+#saturation_counter.v
+#BTB_BHT.v
 register_file.v 
 HAZARD_DETECTION.v 
 Forwarding_Unit.v 

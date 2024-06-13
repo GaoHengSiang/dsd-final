@@ -177,7 +177,7 @@ module RISCV_Pipeline (
         .make_correction(IF_make_correction), //feedback from EX stage !make_correction = prediction correct
         .pc_correction(EX_PC_correction),//feedback from EX stage
         //for BTB
-        .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
+        //.feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         //.ID_stall(ID_stall),//to prevent multiple updates in saturation counter
         //.set_pc_i(ID_EX_pc_ppl_out),
         //.set_target_i(EX_set_target),
