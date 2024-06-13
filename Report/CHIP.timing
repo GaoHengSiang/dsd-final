@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : CHIP
 Version: U-2022.12
-Date   : Thu May 30 14:02:46 2024
+Date   : Fri Jun 14 00:53:22 2024
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,9 +14,9 @@ Date   : Thu May 30 14:02:46 2024
 Operating Conditions: slow   Library: slow
 Wire Load Model Mode: top
 
-  Startpoint: i_RISCV/ID/pc_out_r_reg[2]
+  Startpoint: i_RISCV/IF/u0/stored_addr_r_reg[0]
               (rising edge-triggered flip-flop clocked by CLK)
-  Endpoint: i_RISCV/EX/PC_plus_4_r_reg[31]
+  Endpoint: i_RISCV/IF/inst_ppl_r_reg[30]
             (rising edge-triggered flip-flop clocked by CLK)
   Path Group: CLK
   Path Type: max
@@ -29,36 +29,46 @@ Wire Load Model Mode: top
   --------------------------------------------------------------------------
   clock CLK (rise edge)                                   0.00       0.00
   clock network delay (ideal)                             0.50       0.50
-  i_RISCV/ID/pc_out_r_reg[2]/CK (DFFQX2)                  0.00 #     0.50 r
-  i_RISCV/ID/pc_out_r_reg[2]/Q (DFFQX2)                   0.27       0.77 r
-  U16120/Y (NAND2X1)                                      0.13       0.91 f
-  U16121/Y (NOR2X1)                                       0.24       1.15 r
-  U16939/Y (NAND2X1)                                      0.15       1.30 f
-  U16940/Y (NOR2X1)                                       0.25       1.55 r
-  U10555/Y (NAND2X1)                                      0.16       1.71 f
-  U17175/Y (NOR2X2)                                       0.16       1.88 r
-  U17176/Y (NAND2X1)                                      0.15       2.03 f
-  U17177/Y (NOR2X2)                                       0.17       2.20 r
-  U11305/Y (NAND2X2)                                      0.10       2.30 f
-  U19104/Y (NOR2X2)                                       0.15       2.45 r
-  U19424/Y (NAND2X1)                                      0.15       2.60 f
-  U20750/Y (NOR2X2)                                       0.16       2.76 r
-  U20751/Y (NAND2X1)                                      0.10       2.86 f
-  U20752/Y (XOR2X1)                                       0.13       2.99 f
-  U20753/Y (NAND2X1)                                      0.11       3.10 r
-  U9878/Y (OAI21XL)                                       0.11       3.22 f
-  i_RISCV/EX/PC_plus_4_r_reg[31]/D (DFFQX2)               0.00       3.22 f
-  data arrival time                                                  3.22
+  i_RISCV/IF/u0/stored_addr_r_reg[0]/CK (DFFQX4)          0.00 #     0.50 r
+  i_RISCV/IF/u0/stored_addr_r_reg[0]/Q (DFFQX4)           0.18       0.68 r
+  U18910/Y (XNOR2X4)                                      0.11       0.79 f
+  U14497/Y (AND3X6)                                       0.12       0.91 f
+  U17359/Y (NAND3X8)                                      0.06       0.97 r
+  U17355/Y (NOR2X8)                                       0.05       1.02 f
+  U15848/Y (NAND2X8)                                      0.09       1.11 r
+  U15846/Y (MXI2X4)                                       0.13       1.24 f
+  U19656/Y (NAND2X6)                                      0.07       1.32 r
+  U19657/Y (NAND2X8)                                      0.09       1.40 f
+  U16660/Y (NAND2X8)                                      0.09       1.49 r
+  U16917/Y (NOR2X8)                                       0.05       1.54 f
+  U16221/Y (INVX16)                                       0.09       1.63 r
+  U16916/Y (BUFX20)                                       0.10       1.73 r
+  U12647/Y (INVX4)                                        0.04       1.77 f
+  U16426/Y (AOI2BB2X4)                                    0.09       1.86 r
+  U17424/Y (NAND4X4)                                      0.08       1.94 f
+  U17095/Y (XOR2X4)                                       0.09       2.03 r
+  U16019/Y (NAND4X6)                                      0.09       2.12 f
+  U16241/Y (NOR2X8)                                       0.08       2.20 r
+  U16024/Y (NAND3X8)                                      0.05       2.25 f
+  U13953/Y (INVX12)                                       0.05       2.30 r
+  U17784/Y (NAND3X8)                                      0.08       2.38 f
+  U19979/Y (INVX20)                                       0.07       2.45 r
+  U18189/Y (NAND3X8)                                      0.06       2.51 f
+  U18188/Y (BUFX20)                                       0.12       2.63 f
+  U20000/Y (OR2X4)                                        0.12       2.76 f
+  U16039/Y (NAND3X2)                                      0.06       2.82 r
+  i_RISCV/IF/inst_ppl_r_reg[30]/D (DFFHQX4)               0.00       2.82 r
+  data arrival time                                                  2.82
 
-  clock CLK (rise edge)                                   3.00       3.00
-  clock network delay (ideal)                             0.50       3.50
-  clock uncertainty                                      -0.10       3.40
-  i_RISCV/EX/PC_plus_4_r_reg[31]/CK (DFFQX2)              0.00       3.40 r
-  library setup time                                     -0.18       3.22
-  data required time                                                 3.22
+  clock CLK (rise edge)                                   2.50       2.50
+  clock network delay (ideal)                             0.50       3.00
+  clock uncertainty                                      -0.10       2.90
+  i_RISCV/IF/inst_ppl_r_reg[30]/CK (DFFHQX4)              0.00       2.90 r
+  library setup time                                     -0.08       2.82
+  data required time                                                 2.82
   --------------------------------------------------------------------------
-  data required time                                                 3.22
-  data arrival time                                                 -3.22
+  data required time                                                 2.82
+  data arrival time                                                 -2.82
   --------------------------------------------------------------------------
   slack (MET)                                                        0.00
 

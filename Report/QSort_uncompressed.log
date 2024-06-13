@@ -1,0 +1,159 @@
+make[1]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'
+vcs Final_tb.v slow_memory.v -f src.f -full64 -R -debug_access+all +v2k +define+QSort_uncompressed +define+DEBUG_STAT +define+USE_BTB +define+CYCLE=10 #+vcs+fsdbon
+*** Using c compiler gcc instead of cc ...
+                         Chronologic VCS (TM)
+         Version T-2022.06_Full64 -- Thu Jun 13 22:34:15 2024
+
+                    Copyright (c) 1991 - 2022 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+Parsing design file 'Final_tb.v'
+Parsing included file '../Q_Sort/data_gen/TestBed_QSort.v'.
+Back to file 'Final_tb.v'.
+Parsing design file 'slow_memory.v'
+Parsing design file 'CHIP.v'
+Parsing design file 'icache_dm.v'
+Parsing design file 'dcache.v'
+Parsing design file 'alu.v'
+Parsing design file 'dum_mul.v'
+Parsing design file 'decoder.v'
+Parsing included file 'riscv_define.vh'.
+Back to file 'decoder.v'.
+Parsing design file 'decompressor.v'
+Parsing included file 'riscv_define.vh'.
+Back to file 'decompressor.v'.
+Parsing design file 'dcache_wrapper.v'
+Parsing design file 'icache_wrapper.v'
+Parsing design file 'cache_pmu.v'
+Parsing design file 'pred_pmu.v'
+Parsing design file 'realigner.v'
+Parsing design file 'register_file.v'
+Parsing design file 'HAZARD_DETECTION.v'
+Parsing design file 'Forwarding_Unit.v'
+Parsing design file 'RISCV_Pipeline.v'
+Parsing design file 'RISCV_IF.v'
+Parsing design file 'RISCV_ID.v'
+Parsing design file 'RISCV_EX.v'
+Parsing design file 'RISCV_MEM.v'
+Parsing design file 'RISCV_WB.v'
+Top Level Modules:
+       Final_tb
+TimeScale is 1 ns / 10 ps
+
+Warning-[TFIPC] Too few instance port connections
+RISCV_IF.v, 95
+RISCV_IF, "realigner u0( .clk (clk),  .rst_n (rst_n),  .pc (pc_r),  .ready (inst_ready),  .compressed (inst_compressed),  .inst (inst_aligned),  .ICACHE_stall (ICACHE_stall),  .ICACHE_ren (ICACHE_ren),  .ICACHE_wen (ICACHE_wen),  .ICACHE_addr (ICACHE_addr),  .ICACHE_wdata (ICACHE_wdata),  .ICACHE_rdata (ICACHE_rdata));"
+  The above instance has fewer port connections than the module definition.
+  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
+  ports.
+
+
+Warning-[TFIPC] Too few instance port connections
+icache_dm.v, 54
+icache_dm, "iset iset_0( .clk (clk),  .rst (proc_reset),  .write_i (wen),  .update_i (update),  .valid_i (valid_next),  .wdata_i (wdata),  .addr_i (((state_r == S_IDLE) ? proc_addr : addr_r)),  .hit_o (hit),  .tag_o (tag),  .rdata_o (rdata));"
+  The above instance has fewer port connections than the module definition.
+  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
+  ports.
+
+Starting vcs inline pass...
+
+9 modules and 0 UDP read.
+recompiling module TestBed
+recompiling module Final_tb
+Both modules done.
+	However, due to incremental compilation, only 2 modules need to be compiled. 
+make[2]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
+make[2]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
+make[2]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
+make[2]: Warning: File `filelist.cu' has modification time 173 s in the future
+make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+make[3]: warning:  Clock skew detected.  Your build may be incomplete.
+make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+ld -shared  -Bsymbolic   -o .//../simv.daidir//_cuarc0.so objs/amcQw_d.o 
+rm -f _cuarc0.so
+make[3]: warning:  Clock skew detected.  Your build may be incomplete.
+if [ -x ../simv ]; then chmod a-x ../simv; fi
+g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/2022.06/linux64/lib -L/usr/cad/synopsys/vcs/2022.06/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1     _26498_archive_1.so _prev_archive_1.so _cuarc0.so  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/2022.06//share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
+../simv up to date
+make[2]: warning:  Clock skew detected.  Your build may be incomplete.
+make[2]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
+Chronologic VCS simulator copyright 1991-2022
+Contains Synopsys proprietary information.
+Compiler version T-2022.06_Full64; Runtime version T-2022.06_Full64;  Jun 13 22:34 2024
+-----------------------------------------------------
+
+START!!! Simulation Start .....
+
+CYCLE TIME is          10 ns
+
+-----------------------------------------------------
+
+*Verdi* Loading libsscore_vcs202206.so
+FSDB Dumper for VCS, Release Verdi_T-2022.06, Linux x86_64/64bit, 05/29/2022
+(C) 1996 - 2022 by Synopsys, Inc.
+*Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
+*Verdi* : Create FSDB file 'Final.fsdb'
+*Verdi* : Begin traversing the scope (Final_tb), layer (0).
+*Verdi* : Enable +mda dumping.
+*Verdi* : End of traversing.
+*Verdi* : Begin traversing the scopes, layer (0).
+*Verdi* : End of traversing.
+-----------------------------------------------------
+
+CACHE Informations: 
+
+DCache Read Miss Rate: 10.097720%
+
+DCache Write Miss Rate: 3.393381%
+
+DCache Total Miss Rate: 8.403895%
+
+DCache Stalled Cycles: read      11101, write       1458
+
+ICache Read Miss Rate: 4.553959%
+
+ICache Stalled Cycles: read      38655, write          0
+
+-----------------------------------------------------
+
+Branch Prediction Informations: 
+
+Total prediction:      12311
+
+Prediction Correct:       5327
+
+Prediction Wrong:       6984
+
+Prediction Correct Rate: 43.270246%
+
+-----------------------------------------------------
+
+--------------------------- Simulation FINISH !!---------------------------
+============================================================================
+
+ \(^o^)/ CONGRATULATIONS!!  The simulation result is PASS!!!
+
+============================================================================
+$finish called from file "Final_tb.v", line 320.
+$finish at simulation time            112384500
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 1123845000 ps
+CPU Time:     86.850 seconds;       Data structure size:   0.3Mb
+Thu Jun 13 22:35:09 2024
+CPU time: 1.022 seconds to compile + .606 seconds to elab + .452 seconds to link + 86.889 seconds in simulation
+# ncverilog Final_tb.v slow_memory.v  +access+wrc +v2k +define+QSort_uncompressed +define+CYCLE=10
+make[1]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'

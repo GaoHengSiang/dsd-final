@@ -1,0 +1,11 @@
+
+noHazard:    [1;32m1835000 ps[1;32m
+hasHazard:    [1;32m20725000 ps[1;32m
+BrPred:    [1;32m4115000 ps[1;32m
+compression:    [1;32m4955000 ps[1;32m
+compression_uncompressed:    [1;32m5915000 ps[1;32m
+Mul:    [1;32m3555000 ps[1;32m
+QSort:    [1;32m1046865000 ps[1;32m
+QSort_uncompressed:    [1;32m1123865000 ps[1;32m
+Conv:    [1;32m144355000 ps[1;32m
+Conv_uncompressed:    [1;32m180025000 ps[1;32m
