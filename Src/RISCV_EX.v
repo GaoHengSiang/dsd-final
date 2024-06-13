@@ -19,7 +19,7 @@ module EX_STAGE #(
     input bne_in,
     input stall,
 //    input branch_taken_in,
-    input [31: 0] pred_dest_i,
+    //input [31: 0] pred_dest_i,
     input mul_ppl_i,
 
     //transparent for this stage
@@ -59,8 +59,8 @@ module EX_STAGE #(
     output make_correction,
     output [31: 0] PC_correction,
     //feedback for BTB
-    output set_taken_o,
-    output [31: 0] set_target_o,//feed into BTB, whether it predicted correctly or not
+    //output set_taken_o,
+    //output [31: 0] set_target_o,//feed into BTB, whether it predicted correctly or not
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
 );
     //Reg and Wire declaration
@@ -114,8 +114,8 @@ module EX_STAGE #(
     assign feedback_valid = (branch_in || jump_in);
     assign branch_actual_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in);
     //assign prediction_incorrect = branch_actual_taken ^ branch_taken_in;
-    assign dest_mismatch = pred_dest_i != PC_correction;
-    assign perform_correction = dest_mismatch;
+    //assign dest_mismatch = pred_dest_i != PC_correction;
+    assign perform_correction = branch_actual_taken || jump_in;
 
 
     assign PC_p2 = PC_in + 2;
@@ -124,10 +124,10 @@ module EX_STAGE #(
     //direct output, no blocking!
     assign jump_noblock = jump_in;
     // assign PC_result_noblock = alu_o_wire; // this shouldn't be used
-    assign PC_correction = (branch_actual_taken || jump_in) ? alu_o_wire : compressed_in ? PC_p2 : PC_p4;
+    assign PC_correction = alu_o_wire;//(branch_actual_taken || jump_in) ? alu_o_wire : compressed_in ? PC_p2 : PC_p4;
     assign make_correction = perform_correction;
-    assign set_taken_o = branch_actual_taken;
-    assign set_target_o = alu_o_wire;
+    //assign set_taken_o = branch_actual_taken;
+    //assign set_target_o = alu_o_wire;
 
     
     //module instantiation

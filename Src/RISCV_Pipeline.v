@@ -178,10 +178,10 @@ module RISCV_Pipeline (
         .pc_correction(EX_PC_correction),//feedback from EX stage
         //for BTB
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
-        .ID_stall(ID_stall),//to prevent multiple updates in saturation counter
-        .set_pc_i(ID_EX_pc_ppl_out),
-        .set_target_i(EX_set_target),
-        .set_taken_i(EX_set_taken),
+        //.ID_stall(ID_stall),//to prevent multiple updates in saturation counter
+        //.set_pc_i(ID_EX_pc_ppl_out),
+        //.set_target_i(EX_set_target),
+        //.set_taken_i(EX_set_taken),
         
         .load_mul_use_hazard(load_mul_use_hazard),
         
@@ -194,7 +194,7 @@ module RISCV_Pipeline (
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         .compressed_ppl(IF_ID_compressed_ppl),
-        .pred_dest_ppl(IF_ID_pred_dest_ppl),
+        //.pred_dest_ppl(IF_ID_pred_dest_ppl),
         .PC(PC)
     );
 
@@ -207,7 +207,7 @@ module RISCV_Pipeline (
         .inst_ppl(IF_ID_inst_ppl),
         .pc_ppl(IF_ID_pc_ppl),
         .compressed_ppl(IF_ID_compressed_ppl),        
-        .pred_dest_in(IF_ID_pred_dest_ppl),
+        //.pred_dest_in(IF_ID_pred_dest_ppl),
 
         //ID/EX pipeline
         .rd_ppl(ID_EX_rd_ppl),
@@ -228,7 +228,7 @@ module RISCV_Pipeline (
         .mem_to_reg_ppl(ID_EX_mem_to_reg_ppl),
         .reg_wen_ppl(ID_EX_reg_wen_ppl),
         .compressed_ppl_out(ID_EX_compressed_ppl),
-        .pred_dest_ppl(ID_EX_pred_dest_ppl),
+        //.pred_dest_ppl(ID_EX_pred_dest_ppl),
         .mul_ppl(ID_EX_mul_ppl),
         //**********************************************OTHER CONTROLS FOR EX
 
@@ -255,7 +255,7 @@ module RISCV_Pipeline (
         .branch_in(ID_EX_branch_ppl),
         .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
-        .pred_dest_i(ID_EX_pred_dest_ppl),
+        //.pred_dest_i(ID_EX_pred_dest_ppl),
         .mul_ppl_i(ID_EX_mul_ppl),
         //transparent for this stage
         .rd_in(ID_EX_rd_ppl),
@@ -292,8 +292,8 @@ module RISCV_Pipeline (
         .PC_correction(EX_PC_correction),
         // .prediction_incorrect(EX_prediction_incorrect),
         .feedback_valid(EX_feedback_valid),
-        .set_taken_o(EX_set_taken),
-        .set_target_o(EX_set_target),
+        //.set_taken_o(EX_set_taken),
+        //.set_target_o(EX_set_target),
         .make_correction(EX_make_correction)
     );
 
