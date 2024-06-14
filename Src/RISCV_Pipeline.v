@@ -91,6 +91,8 @@ module RISCV_Pipeline (
     wire [31:0] forward_A_dat, forward_B_dat;
     wire forward_A_flag, forward_B_flag;
     wire load_mul_use_hazard;
+    wire mul_forward_A_flag, mul_forward_B_flag;
+    wire [31:0] mul_forward_A_dat, mul_forward_B_dat;
 
     reg  regfile_wen;
     reg mem_wb_valid_r, mem_wb_valid_w;
@@ -129,7 +131,12 @@ module RISCV_Pipeline (
         .forward_A_flag(forward_A_flag),
         .forward_A_dat (forward_A_dat),
         .forward_B_flag(forward_B_flag),
-        .forward_B_dat (forward_B_dat)
+        .forward_B_dat (forward_B_dat),
+
+        .mul_forward_A_flag(mul_forward_A_flag),
+        .mul_forward_A_dat(mul_forward_A_dat),
+        .mul_forward_B_flag(mul_forward_B_flag),
+        .mul_forward_B_dat(mul_forward_B_dat)
 
     );
 
@@ -138,8 +145,8 @@ module RISCV_Pipeline (
         .clk(clk),
         .rst_n(rst_n),
         .stall(EX_stall),//should support stalling, same behavior as EX?
-        .opA(forward_A_flag? forward_A_dat: ID_EX_rs1_data_ppl),
-        .opB(forward_B_flag? forward_B_dat: ID_EX_rs2_data_ppl),
+        .opA(mul_forward_A_flag? mul_forward_A_dat: ID_EX_rs1_data_ppl),
+        .opB(mul_forward_B_flag? mul_forward_B_dat: ID_EX_rs2_data_ppl),
         .result(mul_result)////register blocked
     );
 
