@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : CHIP
 Version: U-2022.12
-Date   : Fri Jun 14 00:53:22 2024
+Date   : Fri Jun 14 20:07:33 2024
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,9 +14,8 @@ Date   : Fri Jun 14 00:53:22 2024
 Operating Conditions: slow   Library: slow
 Wire Load Model Mode: top
 
-  Startpoint: i_RISCV/IF/u0/stored_addr_r_reg[0]
-              (rising edge-triggered flip-flop clocked by CLK)
-  Endpoint: i_RISCV/IF/inst_ppl_r_reg[30]
+  Startpoint: rst_n (input port clocked by CLK)
+  Endpoint: i_RISCV/regfile/reg_data_r_reg[28][5]
             (rising edge-triggered flip-flop clocked by CLK)
   Path Group: CLK
   Path Type: max
@@ -29,46 +28,28 @@ Wire Load Model Mode: top
   --------------------------------------------------------------------------
   clock CLK (rise edge)                                   0.00       0.00
   clock network delay (ideal)                             0.50       0.50
-  i_RISCV/IF/u0/stored_addr_r_reg[0]/CK (DFFQX4)          0.00 #     0.50 r
-  i_RISCV/IF/u0/stored_addr_r_reg[0]/Q (DFFQX4)           0.18       0.68 r
-  U18910/Y (XNOR2X4)                                      0.11       0.79 f
-  U14497/Y (AND3X6)                                       0.12       0.91 f
-  U17359/Y (NAND3X8)                                      0.06       0.97 r
-  U17355/Y (NOR2X8)                                       0.05       1.02 f
-  U15848/Y (NAND2X8)                                      0.09       1.11 r
-  U15846/Y (MXI2X4)                                       0.13       1.24 f
-  U19656/Y (NAND2X6)                                      0.07       1.32 r
-  U19657/Y (NAND2X8)                                      0.09       1.40 f
-  U16660/Y (NAND2X8)                                      0.09       1.49 r
-  U16917/Y (NOR2X8)                                       0.05       1.54 f
-  U16221/Y (INVX16)                                       0.09       1.63 r
-  U16916/Y (BUFX20)                                       0.10       1.73 r
-  U12647/Y (INVX4)                                        0.04       1.77 f
-  U16426/Y (AOI2BB2X4)                                    0.09       1.86 r
-  U17424/Y (NAND4X4)                                      0.08       1.94 f
-  U17095/Y (XOR2X4)                                       0.09       2.03 r
-  U16019/Y (NAND4X6)                                      0.09       2.12 f
-  U16241/Y (NOR2X8)                                       0.08       2.20 r
-  U16024/Y (NAND3X8)                                      0.05       2.25 f
-  U13953/Y (INVX12)                                       0.05       2.30 r
-  U17784/Y (NAND3X8)                                      0.08       2.38 f
-  U19979/Y (INVX20)                                       0.07       2.45 r
-  U18189/Y (NAND3X8)                                      0.06       2.51 f
-  U18188/Y (BUFX20)                                       0.12       2.63 f
-  U20000/Y (OR2X4)                                        0.12       2.76 f
-  U16039/Y (NAND3X2)                                      0.06       2.82 r
-  i_RISCV/IF/inst_ppl_r_reg[30]/D (DFFHQX4)               0.00       2.82 r
-  data arrival time                                                  2.82
+  input external delay                                    1.25       1.75 r
+  rst_n (in)                                              0.06       1.81 r
+  U20757/Y (BUFX20)                                       0.11       1.93 r
+  i_RISCV/regfile/rst_n (register_file)                   0.00       1.93 r
+  i_RISCV/regfile/U2537/Y (BUFX20)                        0.15       2.08 r
+  i_RISCV/regfile/U614/Y (AND2X8)                         0.10       2.18 r
+  i_RISCV/regfile/U2879/Y (OR2X8)                         0.10       2.28 r
+  i_RISCV/regfile/U1809/Y (OR2X8)                         0.11       2.40 r
+  i_RISCV/regfile/U75/Y (BUFX12)                          0.22       2.62 r
+  i_RISCV/regfile/U884/Y (OAI21X1)                        0.11       2.73 f
+  i_RISCV/regfile/reg_data_r_reg[28][5]/D (DFFQX2)        0.00       2.73 f
+  data arrival time                                                  2.73
 
   clock CLK (rise edge)                                   2.50       2.50
   clock network delay (ideal)                             0.50       3.00
   clock uncertainty                                      -0.10       2.90
-  i_RISCV/IF/inst_ppl_r_reg[30]/CK (DFFHQX4)              0.00       2.90 r
-  library setup time                                     -0.08       2.82
-  data required time                                                 2.82
+  i_RISCV/regfile/reg_data_r_reg[28][5]/CK (DFFQX2)       0.00       2.90 r
+  library setup time                                     -0.17       2.73
+  data required time                                                 2.73
   --------------------------------------------------------------------------
-  data required time                                                 2.82
-  data arrival time                                                 -2.82
+  data required time                                                 2.73
+  data arrival time                                                 -2.73
   --------------------------------------------------------------------------
   slack (MET)                                                        0.00
 

@@ -3,30 +3,30 @@
 Report : area
 Design : CHIP
 Version: U-2022.12
-Date   : Fri Jun 14 00:53:22 2024
+Date   : Fri Jun 14 20:07:33 2024
 ****************************************
 
 Library(s) Used:
 
     typical (File: /home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/SynopsysDC/db/typical.db)
 
-Number of ports:                          785
-Number of nets:                         25540
-Number of cells:                        24519
-Number of combinational cells:          19792
-Number of sequential cells:              4594
+Number of ports:                          884
+Number of nets:                         26702
+Number of cells:                        25894
+Number of combinational cells:          21177
+Number of sequential cells:              4583
 Number of macros/black boxes:               0
-Number of buf/inv:                       4791
-Number of references:                     166
+Number of buf/inv:                       5630
+Number of references:                     158
 
-Combinational area:             215593.563154
-Buf/Inv area:                    37354.682071
-Noncombinational area:          132241.037668
+Combinational area:             217386.016918
+Buf/Inv area:                    41090.659388
+Noncombinational area:          129730.583084
 Macro/Black Box area:                0.000000
-Net Interconnect area:         2755820.733856
+Net Interconnect area:         2837021.127655
 
-Total cell area:                347834.600822
-Total area:                    3103655.334678
+Total cell area:                347116.600003
+Total area:                    3184137.727658
 
 Hierarchical area distribution
 ------------------------------
@@ -36,9 +36,10 @@ Hierarchical area distribution
 Hierarchical cell                 Absolute     Percent  Combi-       Noncombi-    Black-
                                   Total        Total    national     national     boxes   Design
 --------------------------------  -----------  -------  -----------  -----------  ------  -------------
-CHIP                              347834.6008    100.0  179272.5978  105257.4703  0.0000  CHIP
-i_RISCV/regfile                    63304.5327     18.2   36320.9653   26983.5674  0.0000  register_file
+CHIP                              347116.6000    100.0  143771.4762   98114.8110  0.0000  CHIP
+i_RISCV/mul_inst                   39922.8480     11.5   35258.3927    4664.4553  0.0000  dum_mul
+i_RISCV/regfile                    65307.4648     18.8   38356.1481   26951.3168  0.0000  register_file
 --------------------------------  -----------  -------  -----------  -----------  ------  -------------
-Total                                                   215593.5632  132241.0377  0.0000
+Total                                                   217386.0169  129730.5831  0.0000
 
 1

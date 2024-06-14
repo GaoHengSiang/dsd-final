@@ -2,7 +2,7 @@ make[1]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'
 vcs Final_tb.v slow_memory.v -f src.f -full64 -R -debug_access+all +v2k +define+noHazard +define+DEBUG_STAT +define+USE_BTB +define+CYCLE=10 #+vcs+fsdbon
 *** Using c compiler gcc instead of cc ...
                          Chronologic VCS (TM)
-         Version T-2022.06_Full64 -- Thu Jun 13 22:32:35 2024
+         Version T-2022.06_Full64 -- Fri Jun 14 19:48:43 2024
 
                     Copyright (c) 1991 - 2022 Synopsys, Inc.
    This software and the associated documentation are proprietary to Synopsys,
@@ -54,14 +54,6 @@ Top Level Modules:
 TimeScale is 1 ns / 10 ps
 
 Warning-[TFIPC] Too few instance port connections
-RISCV_IF.v, 95
-RISCV_IF, "realigner u0( .clk (clk),  .rst_n (rst_n),  .pc (pc_r),  .ready (inst_ready),  .compressed (inst_compressed),  .inst (inst_aligned),  .ICACHE_stall (ICACHE_stall),  .ICACHE_ren (ICACHE_ren),  .ICACHE_wen (ICACHE_wen),  .ICACHE_addr (ICACHE_addr),  .ICACHE_wdata (ICACHE_wdata),  .ICACHE_rdata (ICACHE_rdata));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
 icache_dm.v, 54
 icache_dm, "iset iset_0( .clk (clk),  .rst (proc_reset),  .write_i (wen),  .update_i (update),  .valid_i (valid_next),  .wdata_i (wdata),  .addr_i (((state_r == S_IDLE) ? proc_addr : addr_r)),  .hit_o (hit),  .tag_o (tag),  .rdata_o (rdata));"
   The above instance has fewer port connections than the module definition.
@@ -94,20 +86,20 @@ All of 9 modules done
 make[2]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
 make[2]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
 make[2]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
-make[2]: Warning: File `filelist.cu' has modification time 173 s in the future
-make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+make[2]: Warning: File `filelist.cu' has modification time 175 s in the future
+make[3]: Warning: File `filelist.cu' has modification time 175 s in the future
 rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
 make[3]: warning:  Clock skew detected.  Your build may be incomplete.
-make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+make[3]: Warning: File `filelist.cu' has modification time 175 s in the future
 make[3]: warning:  Clock skew detected.  Your build may be incomplete.
 if [ -x ../simv ]; then chmod a-x ../simv; fi
-g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/2022.06/linux64/lib -L/usr/cad/synopsys/vcs/2022.06/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _17636_archive_1.so  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/2022.06//share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
+g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/2022.06/linux64/lib -L/usr/cad/synopsys/vcs/2022.06/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _2109_archive_1.so  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/2022.06//share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
 ../simv up to date
 make[2]: warning:  Clock skew detected.  Your build may be incomplete.
 make[2]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
 Chronologic VCS simulator copyright 1991-2022
 Contains Synopsys proprietary information.
-Compiler version T-2022.06_Full64; Runtime version T-2022.06_Full64;  Jun 13 22:32 2024
+Compiler version T-2022.06_Full64; Runtime version T-2022.06_Full64;  Jun 14 19:48 2024
 -----------------------------------------------------
 
 START!!! Simulation Start .....
@@ -165,8 +157,8 @@ $finish called from file "Final_tb.v", line 320.
 $finish at simulation time               182500
            V C S   S i m u l a t i o n   R e p o r t 
 Time: 1825000 ps
-CPU Time:      0.910 seconds;       Data structure size:   0.3Mb
-Thu Jun 13 22:32:41 2024
-CPU time: 1.244 seconds to compile + .630 seconds to elab + .438 seconds to link + .956 seconds in simulation
+CPU Time:      0.940 seconds;       Data structure size:   0.3Mb
+Fri Jun 14 19:48:51 2024
+CPU time: 1.403 seconds to compile + .676 seconds to elab + .500 seconds to link + .985 seconds in simulation
 # ncverilog Final_tb.v slow_memory.v  +access+wrc +v2k +define+noHazard +define+CYCLE=10
 make[1]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'
