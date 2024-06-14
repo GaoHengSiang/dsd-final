@@ -2,7 +2,6 @@ module realigner (
     input             clk,
     input             rst_n,
     input      [31:0] pc,            // target PC
-    input      [31:0] pc_w,
     input             stall,
     input             step,
     output reg        ready,
@@ -16,13 +15,11 @@ module realigner (
     input      [31:0] ICACHE_rdata,
     input             ICACHE_stall
 );
-    localparam S_INIT = 0, S_FETCH = 1;
 
     assign ICACHE_ren   = 1;
     assign ICACHE_wen   = 0;
     assign ICACHE_wdata = 0;
 
-    reg state_r, state_w;
     reg [29:0] stored_addr_r, stored_addr_w;
     reg [15:0] stored_inst_r, stored_inst_w;
     reg        unaligned;
@@ -31,17 +28,9 @@ module realigner (
     reg [31:0] rdata_i;
     reg [29:0] fetch_word_addr;
     reg [29:0] pc_word_addr;
-    reg        store;
     reg [31:0] completed_inst;
     reg [29:0] fetch_next_addr;
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            state_r <= S_INIT;
-        end else begin
-            state_r <= state_w;
-        end
-    end
-    
+    reg        shit;
     always @(*) begin
         pc_word_addr = pc[31:2];
         fetch_next_addr = pc_word_addr + 1;
@@ -57,19 +46,23 @@ module realigner (
         fetch_word_addr = 0;
         completed_inst = rdata_i;
         ready = !ICACHE_stall;
+        b_w = !ICACHE_stall && !stall;
         if (unaligned) begin
             completed_inst = {rdata_i[15:0], stored_inst_r[15:0]};
             if (b_r) begin
                 fetch_word_addr = fetch_next_addr;
+                b_w = !ICACHE_stall && step;
             end else begin
                 fetch_word_addr = pc_word_addr;
+                b_w = !ICACHE_stall && !stall;
                 ready = 0;
             end
         end else begin
+            b_w = !ICACHE_stall && !stall && (step && compressed);
             fetch_word_addr = pc_word_addr;
         end
-        // b_w = (ICACHE_stall || stall)? b_r: step;
-        b_w = (pc_w[31:2] == stored_addr_w);
+        shit = ready && (b_r != buffered);
+        // b_w = (pc_w[31:2] == stored_addr_w);
         
     end
 
