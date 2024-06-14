@@ -25,7 +25,7 @@ module RISCV_IF(
     output [31: 0] inst_ppl,
     output [31: 0] pc_ppl,
     output         compressed_ppl,
-    //output         branch_taken_ppl,//idicates if the branch was predicted to be taken
+    // output         branch_taken_ppl,//idicates if the branch was predicted to be taken
     //will compare the predicted pc and the correct pc in EX stage, so no need 
     //output [31: 0] pred_dest_ppl,
 //--------IF stage PC------------
@@ -64,7 +64,7 @@ module RISCV_IF(
     //wire [31: 0] btb_dest; //btb_dest is different from pred_dest
     //for example: if the prediction is to not take --> pred_dest = pc_step
     //btb_dest is simply what btb stores in anticipation of a branch/jump
-    //wire [31: 0] next_pc_w;
+wire [31: 0] next_pc_w;
     
 
     localparam OPCODE_BRANCH = 7'b11_000_11;
@@ -96,6 +96,10 @@ module RISCV_IF(
         .clk(clk),
         .rst_n(rst_n),
         .pc(pc_r),
+        .pc_w(pc_w),
+        .stall(stall),
+        .step(inst_compressed && step),
+        //.flush(stall),
         .ready(inst_ready),
         .compressed(inst_compressed),
         .inst(inst_aligned),
@@ -135,7 +139,7 @@ module RISCV_IF(
         //TODO: evaluate between case and if
         if (make_correction) begin
             pc_w = pc_correction;
-        end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
+        end else if (!( stall || !inst_ready)) begin
             //branch if predicted so, always jump
             pc_w = pc_step;//next_pc_w; 
         end else begin
