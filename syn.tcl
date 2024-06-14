@@ -16,12 +16,9 @@ set src [list \
     Src/RISCV_MEM.v \
     Src/realigner.v \
     Src/decompressor.v \
-    Src/saturation_counter.v \
-    Src/branch_predictor.v \
     Src/dcache_wrapper.v \
     Src/icache_wrapper.v \
     Src/dum_mul.v \
-    Src/BTB_BHT.v
 ]
 
 sh mkdir -p Work
