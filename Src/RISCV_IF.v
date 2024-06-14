@@ -100,7 +100,7 @@ module RISCV_IF(
         .pc(pc_r),
         .pc_w(pc_w),
         .stall(stall),
-        .step(inst_compressed && step),
+        .step(step),
         //.flush(stall),
         .ready(inst_ready),
         .compressed(inst_compressed),
