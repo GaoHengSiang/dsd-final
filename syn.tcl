@@ -40,6 +40,11 @@ source -echo -verbose CHIP_syn.sdc
 # set_dont_retime [get_cells c_64_r_reg*]
 # get_attribute [get_cells c_64_r_reg*] dont_retime
 
+set_ungroup   [get_designs  dum_mul]  false
+set_optimize_registers true -design dum_mul
+set_dont_retime [get_cells i_RISCV/mul_inst/result_r_reg*]
+get_attribute [get_cells i_RISCV/mul_inst/result_r_reg*] dont_retime
+
 set_critical_range  0.3  [current_design]
 
 compile_ultra

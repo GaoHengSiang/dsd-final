@@ -1,6 +1,7 @@
 .PHONY: all clean
 
 rtl:
+
 	vcs $(TB) -f $(SRCLIST) -full64 -R -debug_access+all +v2k +define+$(TB_DEFINE) +define+DEBUG_STAT +define+USE_BTB +define+CYCLE=$(CYCLE) #+vcs+fsdbon
 	
 	# ncverilog $(TB) $(SRC) +access+wrc +v2k +define+$(TB_DEFINE) +define+CYCLE=$(CYCLE)
