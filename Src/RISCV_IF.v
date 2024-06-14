@@ -53,6 +53,7 @@ module RISCV_IF(
     wire [31:0] inst_i;
     reg [31:0]  pc_r, pc_w;
     wire [31:0] pc_step;
+    wire step;
     //wire        take_branch;
     //wire [31:0] branch_destination;//deprecated
     //wire [31:0] sbtype_imm;
@@ -64,7 +65,7 @@ module RISCV_IF(
     //wire [31: 0] btb_dest; //btb_dest is different from pred_dest
     //for example: if the prediction is to not take --> pred_dest = pc_step
     //btb_dest is simply what btb stores in anticipation of a branch/jump
-wire [31: 0] next_pc_w;
+    //wire [31: 0] next_pc_w;
     
 
     localparam OPCODE_BRANCH = 7'b11_000_11;
@@ -92,11 +93,12 @@ wire [31: 0] next_pc_w;
 
     //assign branch_destination = pc_r + sbtype_imm; //doing this in IF is too slow, do in EX
 
+    assign step = !make_correction;
     realigner u0 (
         .clk(clk),
         .rst_n(rst_n),
         .pc(pc_r),
-        .pc_w(pc_w),
+        //.pc_w(pc_w),
         .stall(stall),
         .step(step),
         //.flush(stall),
