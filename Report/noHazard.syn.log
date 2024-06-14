@@ -1,9 +1,9 @@
 make[1]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'
 vcs Final_tb.v slow_memory.v ../Syn/CHIP_syn.v  -v /home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/Verilog/tsmc13.v -full64 -R -debug_access+all +v2k +define+noHazard \
-+define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=10 +neg_tchk 
++define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=3 +neg_tchk 
 *** Using c compiler gcc instead of cc ...
                          Chronologic VCS (TM)
-         Version T-2022.06_Full64 -- Fri Jun 14 22:25:35 2024
+         Version T-2022.06_Full64 -- Sat Jun 15 01:20:22 2024
 
                     Copyright (c) 1991 - 2022 Synopsys, Inc.
    This software and the associated documentation are proprietary to Synopsys,
@@ -31,1718 +31,6 @@ Top Level Modules:
        Final_tb
 TimeScale is 1 ns / 1 ps
 
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1360
-register_file, "DFFX1 \reg_data_r_reg[28][17] ( .D (n2625),  .CK (clk),  .Q (\reg_data_r[28][17] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1362
-register_file, "DFFX1 \reg_data_r_reg[28][9] ( .D (n2617),  .CK (clk),  .Q (\reg_data_r[28][9] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1364
-register_file, "DFFX1 \reg_data_r_reg[28][15] ( .D (n2623),  .CK (clk),  .Q (\reg_data_r[28][15] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1366
-register_file, "DFFX1 \reg_data_r_reg[28][6] ( .D (n2614),  .CK (clk),  .Q (\reg_data_r[28][6] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1368
-register_file, "DFFX1 \reg_data_r_reg[28][5] ( .D (n2613),  .CK (clk),  .Q (\reg_data_r[28][5] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1370
-register_file, "DFFX1 \reg_data_r_reg[28][4] ( .D (n2612),  .CK (clk),  .Q (\reg_data_r[28][4] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1372
-register_file, "DFFX1 \reg_data_r_reg[28][23] ( .D (n2631),  .CK (clk),  .Q (\reg_data_r[28][23] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1374
-register_file, "DFFX1 \reg_data_r_reg[28][22] ( .D (n2630),  .CK (clk),  .Q (\reg_data_r[28][22] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1376
-register_file, "DFFX1 \reg_data_r_reg[28][20] ( .D (n2628),  .CK (clk),  .Q (\reg_data_r[28][20] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1378
-register_file, "DFFX1 \reg_data_r_reg[28][19] ( .D (n2627),  .CK (clk),  .Q (\reg_data_r[28][19] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1380
-register_file, "DFFX1 \reg_data_r_reg[28][18] ( .D (n2626),  .CK (clk),  .Q (\reg_data_r[28][18] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1382
-register_file, "DFFX1 \reg_data_r_reg[28][16] ( .D (n2624),  .CK (clk),  .Q (\reg_data_r[28][16] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1384
-register_file, "DFFX1 \reg_data_r_reg[28][12] ( .D (n2620),  .CK (clk),  .Q (\reg_data_r[28][12] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1386
-register_file, "DFFX1 \reg_data_r_reg[28][7] ( .D (n2615),  .CK (clk),  .Q (\reg_data_r[28][7] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1388
-register_file, "DFFX1 \reg_data_r_reg[28][8] ( .D (n2616),  .CK (clk),  .Q (\reg_data_r[28][8] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1404
-register_file, "DFFX1 \reg_data_r_reg[20][16] ( .D (n2880),  .CK (clk),  .Q (\reg_data_r[20][16] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1406
-register_file, "DFFX1 \reg_data_r_reg[20][14] ( .D (n2878),  .CK (clk),  .Q (\reg_data_r[20][14] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1408
-register_file, "DFFX1 \reg_data_r_reg[20][13] ( .D (n2877),  .CK (clk),  .Q (\reg_data_r[20][13] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1410
-register_file, "DFFX1 \reg_data_r_reg[20][12] ( .D (n2876),  .CK (clk),  .Q (\reg_data_r[20][12] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1412
-register_file, "DFFX1 \reg_data_r_reg[20][11] ( .D (n2875),  .CK (clk),  .Q (\reg_data_r[20][11] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1414
-register_file, "DFFX1 \reg_data_r_reg[20][10] ( .D (n2874),  .CK (clk),  .Q (\reg_data_r[20][10] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1416
-register_file, "DFFX1 \reg_data_r_reg[20][9] ( .D (n2873),  .CK (clk),  .Q (\reg_data_r[20][9] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1436
-register_file, "DFFX1 \reg_data_r_reg[20][7] ( .D (n2871),  .CK (clk),  .Q (\reg_data_r[20][7] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1438
-register_file, "DFFX1 \reg_data_r_reg[20][5] ( .D (n2869),  .CK (clk),  .Q (\reg_data_r[20][5] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1440
-register_file, "DFFX1 \reg_data_r_reg[20][4] ( .D (n2868),  .CK (clk),  .Q (\reg_data_r[20][4] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1448
-register_file, "DFFX1 \reg_data_r_reg[20][18] ( .D (n2882),  .CK (clk),  .Q (\reg_data_r[20][18] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1450
-register_file, "DFFX1 \reg_data_r_reg[20][17] ( .D (n2881),  .CK (clk),  .Q (\reg_data_r[20][17] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1452
-register_file, "DFFX1 \reg_data_r_reg[20][15] ( .D (n2879),  .CK (clk),  .Q (\reg_data_r[20][15] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1454
-register_file, "DFFX1 \reg_data_r_reg[20][6] ( .D (n2870),  .CK (clk),  .Q (\reg_data_r[20][6] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1468
-register_file, "DFFX1 \reg_data_r_reg[20][25] ( .D (n2889),  .CK (clk),  .Q (\reg_data_r[20][25] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1470
-register_file, "DFFX1 \reg_data_r_reg[20][23] ( .D (n2887),  .CK (clk),  .Q (\reg_data_r[20][23] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1472
-register_file, "DFFX1 \reg_data_r_reg[20][22] ( .D (n2886),  .CK (clk),  .Q (\reg_data_r[20][22] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1474
-register_file, "DFFX1 \reg_data_r_reg[20][21] ( .D (n2885),  .CK (clk),  .Q (\reg_data_r[20][21] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1476
-register_file, "DFFX1 \reg_data_r_reg[20][20] ( .D (n2884),  .CK (clk),  .Q (\reg_data_r[20][20] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1478
-register_file, "DFFX1 \reg_data_r_reg[20][19] ( .D (n2883),  .CK (clk),  .Q (\reg_data_r[20][19] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1508
-register_file, "DFFX1 \reg_data_r_reg[20][8] ( .D (n2872),  .CK (clk),  .Q (\reg_data_r[20][8] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1512
-register_file, "DFFX1 \reg_data_r_reg[28][13] ( .D (n2621),  .CK (clk),  .Q (\reg_data_r[28][13] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1514
-register_file, "DFFX1 \reg_data_r_reg[28][11] ( .D (n2619),  .CK (clk),  .Q (\reg_data_r[28][11] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1516
-register_file, "DFFX1 \reg_data_r_reg[28][14] ( .D (n2622),  .CK (clk),  .Q (\reg_data_r[28][14] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1518
-register_file, "DFFX1 \reg_data_r_reg[28][10] ( .D (n2618),  .CK (clk),  .Q (\reg_data_r[28][10] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1520
-register_file, "DFFX1 \reg_data_r_reg[28][3] ( .D (n2611),  .CK (clk),  .Q (\reg_data_r[28][3] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1522
-register_file, "DFFX1 \reg_data_r_reg[28][1] ( .D (n2609),  .CK (clk),  .Q (\reg_data_r[28][1] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1524
-register_file, "DFFX1 \reg_data_r_reg[28][2] ( .D (n2610),  .CK (clk),  .Q (\reg_data_r[28][2] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1532
-register_file, "DFFX1 \reg_data_r_reg[29][18] ( .D (n2594),  .CK (clk),  .Q (\reg_data_r[29][18] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1534
-register_file, "DFFX1 \reg_data_r_reg[29][17] ( .D (n2593),  .CK (clk),  .Q (\reg_data_r[29][17] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1536
-register_file, "DFFX1 \reg_data_r_reg[29][15] ( .D (n2591),  .CK (clk),  .Q (\reg_data_r[29][15] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1538
-register_file, "DFFX1 \reg_data_r_reg[29][25] ( .D (n2601),  .CK (clk),  .Q (\reg_data_r[29][25] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1540
-register_file, "DFFX1 \reg_data_r_reg[29][23] ( .D (n2599),  .CK (clk),  .Q (\reg_data_r[29][23] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1542
-register_file, "DFFX1 \reg_data_r_reg[29][22] ( .D (n2598),  .CK (clk),  .Q (\reg_data_r[29][22] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1544
-register_file, "DFFX1 \reg_data_r_reg[29][21] ( .D (n2597),  .CK (clk),  .Q (\reg_data_r[29][21] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1546
-register_file, "DFFX1 \reg_data_r_reg[29][20] ( .D (n2596),  .CK (clk),  .Q (\reg_data_r[29][20] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1548
-register_file, "DFFX1 \reg_data_r_reg[29][19] ( .D (n2595),  .CK (clk),  .Q (\reg_data_r[29][19] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1552
-register_file, "DFFX1 \reg_data_r_reg[29][6] ( .D (n2582),  .CK (clk),  .Q (\reg_data_r[29][6] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 1554
-register_file, "DFFX2 \reg_data_r_reg[29][8] ( .D (n2584),  .CK (clk),  .Q (\reg_data_r[29][8] ));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21072
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/tag_r_reg[18] ( .D (n7944),  .CK (clk),  .QN (n22497));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21097
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[121] ( .D (n11151),  .CK (clk),  .QN (n22536));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21099
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[89] ( .D (n11119),  .CK (clk),  .QN (n22538));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21101
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[59] ( .D (n11089),  .CK (clk),  .QN (n22675));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21103
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[57] ( .D (n11087),  .CK (clk),  .QN (n22535));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21105
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[41] ( .D (n11071),  .CK (clk),  .QN (n22533));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21107
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[25] ( .D (n11055),  .CK (clk),  .QN (n22537));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21111
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[55] ( .D (n11085),  .CK (clk),  .QN (n22690));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21118
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[120] ( .D (n11150),  .CK (clk),  .QN (n22666));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21204
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[56] ( .D (n11086),  .CK (clk),  .QN (n22665));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21206
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[54] ( .D (n11084),  .CK (clk),  .QN (n22810));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21208
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[53] ( .D (n11083),  .CK (clk),  .QN (n22812));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21210
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[52] ( .D (n11082),  .CK (clk),  .QN (n22735));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21212
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[51] ( .D (n11081),  .CK (clk),  .QN (n22643));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21214
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[48] ( .D (n11078),  .CK (clk),  .QN (n22659));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21216
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[47] ( .D (n11077),  .CK (clk),  .QN (n22625));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21218
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[43] ( .D (n11073),  .CK (clk),  .QN (n22676));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21220
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[40] ( .D (n11070),  .CK (clk),  .QN (n22667));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21222
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[39] ( .D (n11069),  .CK (clk),  .QN (n22689));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21224
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[38] ( .D (n11068),  .CK (clk),  .QN (n22808));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21226
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[37] ( .D (n11067),  .CK (clk),  .QN (n22768));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21228
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[36] ( .D (n11066),  .CK (clk),  .QN (n22734));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21230
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[35] ( .D (n11065),  .CK (clk),  .QN (n22641));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21232
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[32] ( .D (n11062),  .CK (clk),  .QN (n22658));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21234
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[27] ( .D (n11057),  .CK (clk),  .QN (n22677));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21239
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[23] ( .D (n11053),  .CK (clk),  .QN (n22688));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21241
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[22] ( .D (n11052),  .CK (clk),  .QN (n22806));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21243
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[21] ( .D (n11051),  .CK (clk),  .QN (n22767));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21245
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[20] ( .D (n11050),  .CK (clk),  .QN (n22733));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21247
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[19] ( .D (n11049),  .CK (clk),  .QN (n22642));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21249
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[16] ( .D (n11046),  .CK (clk),  .QN (n22657));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21251
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[15] ( .D (n11045),  .CK (clk),  .QN (n22624));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21253
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[11] ( .D (n11041),  .CK (clk),  .QN (n22674));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21255
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[8] ( .D (n11038),  .CK (clk),  .QN (n22664));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21257
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[7] ( .D (n11037),  .CK (clk),  .QN (n22687));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21259
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[6] ( .D (n11036),  .CK (clk),  .QN (n22805));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21261
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[5] ( .D (n11035),  .CK (clk),  .QN (n22765));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21263
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[4] ( .D (n11034),  .CK (clk),  .QN (n22732));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21265
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[3] ( .D (n11033),  .CK (clk),  .QN (n22640));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21267
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[0] ( .D (n11030),  .CK (clk),  .QN (n22656));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21312
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[9] ( .D (n11039),  .CK (clk),  .QN (n22532));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21318
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[19] ( .D (n10755),  .CK (clk),  .QN (n22816));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21350
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[69] ( .D (n10833),  .CK (clk),  .QN (n22757));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21352
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[37] ( .D (n10865),  .CK (clk),  .QN (n22769));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21354
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[5] ( .D (n10897),  .CK (clk),  .QN (n22766));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21356
-CHIP, "DFFX1 \i_RISCV/EX/PC_step_r_reg[22] ( .D (n9151),  .CK (clk),  .Q (\i_RISCV/EX_MEM_PC_step [22]));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21358
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[4] ( .D (n10770),  .CK (clk),  .QN (n22782));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21360
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[1] ( .D (n10773),  .CK (clk),  .QN (n22776));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21371
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[102] ( .D (n10800),  .CK (clk),  .QN (n22800));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21376
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[70] ( .D (n10832),  .CK (clk),  .QN (n22798));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21378
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[54] ( .D (n10848),  .CK (clk),  .QN (n22811));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21380
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[53] ( .D (n10849),  .CK (clk),  .QN (n22813));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21382
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[38] ( .D (n10864),  .CK (clk),  .QN (n22809));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21384
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/data_r_reg[22] ( .D (n10880),  .CK (clk),  .QN (n22807));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21389
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[23] ( .D (n10751),  .CK (clk),  .QN (n22773));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21391
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[22] ( .D (n10752),  .CK (clk),  .QN (n22819));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21396
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[11] ( .D (n10763),  .CK (clk),  .QN (n22785));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21451
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[62] ( .D (n11092),  .CK (clk),  .QN (n22558));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21453
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[61] ( .D (n11091),  .CK (clk),  .QN (n22574));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21455
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[60] ( .D (n11090),  .CK (clk),  .QN (n22590));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21457
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[58] ( .D (n11088),  .CK (clk),  .QN (n22602));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21459
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[50] ( .D (n11080),  .CK (clk),  .QN (n22719));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21461
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[46] ( .D (n11076),  .CK (clk),  .QN (n22557));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21463
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[45] ( .D (n11075),  .CK (clk),  .QN (n22573));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21465
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[44] ( .D (n11074),  .CK (clk),  .QN (n22589));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21467
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[42] ( .D (n11072),  .CK (clk),  .QN (n22600));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21469
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[34] ( .D (n11064),  .CK (clk),  .QN (n22546));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21471
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[30] ( .D (n11060),  .CK (clk),  .QN (n22559));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21473
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[29] ( .D (n11059),  .CK (clk),  .QN (n22575));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21475
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[28] ( .D (n11058),  .CK (clk),  .QN (n22591));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21477
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[26] ( .D (n11056),  .CK (clk),  .QN (n22601));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21479
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[18] ( .D (n11048),  .CK (clk),  .QN (n22718));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21481
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[14] ( .D (n11044),  .CK (clk),  .QN (n22556));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21483
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[13] ( .D (n11043),  .CK (clk),  .QN (n22572));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21485
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[12] ( .D (n11042),  .CK (clk),  .QN (n22588));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21487
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[2] ( .D (n11032),  .CK (clk),  .QN (n22545));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21505
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[63] ( .D (n11093),  .CK (clk),  .QN (n22626));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21507
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[49] ( .D (n11079),  .CK (clk),  .QN (n22611));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21509
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[33] ( .D (n11063),  .CK (clk),  .QN (n22609));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21511
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[31] ( .D (n11061),  .CK (clk),  .QN (n22627));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21513
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[17] ( .D (n11047),  .CK (clk),  .QN (n22610));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21515
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[10] ( .D (n11040),  .CK (clk),  .QN (n22599));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21517
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[1].l/data_r_reg[1] ( .D (n11031),  .CK (clk),  .QN (n22608));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21530
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[24] ( .D (n10750),  .CK (clk),  .QN (n22821));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21542
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[0] ( .D (n10774),  .CK (clk),  .QN (n22825));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21544
-CHIP, "DFFX1 \I_cache/u_cache/iset_0/gen_blk2[0].l/tag_r_reg[10] ( .D (n10764),  .CK (clk),  .QN (n22837));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21569
-CHIP, "DFFX1 \D_cache/u_cache/lru_lines_r_reg[0] ( .D (n8930),  .CK (clk),  .Q (\D_cache/u_cache/lru_lines_r [0]));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21849
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[0] ( .D (n9951),  .CK (clk),  .QN (n22646));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21850
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[3] ( .D (n9948),  .CK (clk),  .QN (n22638));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21851
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[6] ( .D (n9945),  .CK (clk),  .QN (n22797));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21852
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[16] ( .D (n9935),  .CK (clk),  .QN (n22655));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21853
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[21] ( .D (n9930),  .CK (clk),  .QN (n22763));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21854
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[32] ( .D (n9919),  .CK (clk),  .QN (n22649));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21855
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[35] ( .D (n9916),  .CK (clk),  .QN (n22635));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21856
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[48] ( .D (n9903),  .CK (clk),  .QN (n22652));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21857
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[64] ( .D (n9887),  .CK (clk),  .QN (n22647));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21858
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[67] ( .D (n9884),  .CK (clk),  .QN (n22639));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21859
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[83] ( .D (n9868),  .CK (clk),  .QN (n22633));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21860
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[96] ( .D (n9855),  .CK (clk),  .QN (n22650));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21861
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[99] ( .D (n9852),  .CK (clk),  .QN (n22636));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21862
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[101] ( .D (n9850),  .CK (clk),  .QN (n22761));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21863
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[112] ( .D (n9839),  .CK (clk),  .QN (n22653));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21864
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[15] ( .D (n9936),  .CK (clk),  .QN (n22622));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21865
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[19] ( .D (n9932),  .CK (clk),  .QN (n22632));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21866
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[31] ( .D (n9920),  .CK (clk),  .QN (n22616));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21867
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[47] ( .D (n9904),  .CK (clk),  .QN (n22619));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21868
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[51] ( .D (n9900),  .CK (clk),  .QN (n22629));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21869
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[79] ( .D (n9872),  .CK (clk),  .QN (n22623));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21870
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[95] ( .D (n9856),  .CK (clk),  .QN (n22617));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21871
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[111] ( .D (n9840),  .CK (clk),  .QN (n22620));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21872
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[115] ( .D (n9836),  .CK (clk),  .QN (n22630));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21873
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[85] ( .D (n9866),  .CK (clk),  .QN (n22764));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21874
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[116] ( .D (n9835),  .CK (clk),  .QN (n22795));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21875
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[123] ( .D (n9828),  .CK (clk),  .QN (n22793));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21880
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[5] ( .D (n9946),  .CK (clk),  .QN (n22753));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21881
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[13] ( .D (n9938),  .CK (clk),  .QN (n22570));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21882
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[14] ( .D (n9937),  .CK (clk),  .QN (n22554));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21883
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[20] ( .D (n9931),  .CK (clk),  .QN (n22730));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21884
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[28] ( .D (n9923),  .CK (clk),  .QN (n22580));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21885
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[29] ( .D (n9922),  .CK (clk),  .QN (n22564));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21886
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[37] ( .D (n9914),  .CK (clk),  .QN (n22759));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21887
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[45] ( .D (n9906),  .CK (clk),  .QN (n22567));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21888
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[46] ( .D (n9905),  .CK (clk),  .QN (n22551));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21889
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[58] ( .D (n9893),  .CK (clk),  .QN (n22593));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21890
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[60] ( .D (n9891),  .CK (clk),  .QN (n22577));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21891
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[61] ( .D (n9890),  .CK (clk),  .QN (n22561));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21892
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[69] ( .D (n9882),  .CK (clk),  .QN (n22756));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21893
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[77] ( .D (n9874),  .CK (clk),  .QN (n22571));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21894
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[78] ( .D (n9873),  .CK (clk),  .QN (n22555));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21895
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[84] ( .D (n9867),  .CK (clk),  .QN (n22731));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21896
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[92] ( .D (n9859),  .CK (clk),  .QN (n22581));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21897
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[93] ( .D (n9858),  .CK (clk),  .QN (n22565));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21898
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[94] ( .D (n9857),  .CK (clk),  .QN (n22549));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21899
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[100] ( .D (n9851),  .CK (clk),  .QN (n22728));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21900
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[109] ( .D (n9842),  .CK (clk),  .QN (n22568));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21901
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[124] ( .D (n9827),  .CK (clk),  .QN (n22578));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21902
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[125] ( .D (n9826),  .CK (clk),  .QN (n22562));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21903
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[4] ( .D (n9947),  .CK (clk),  .QN (n22724));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21904
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[7] ( .D (n9944),  .CK (clk),  .QN (n22679));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21905
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[23] ( .D (n9928),  .CK (clk),  .QN (n22685));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21906
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[36] ( .D (n9915),  .CK (clk),  .QN (n22727));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21907
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[39] ( .D (n9912),  .CK (clk),  .QN (n22682));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21908
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[63] ( .D (n9888),  .CK (clk),  .QN (n22613));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21909
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[65] ( .D (n9886),  .CK (clk),  .QN (n22607));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21910
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[68] ( .D (n9883),  .CK (clk),  .QN (n22725));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21911
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[71] ( .D (n9880),  .CK (clk),  .QN (n22680));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21912
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[87] ( .D (n9864),  .CK (clk),  .QN (n22686));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21913
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[103] ( .D (n9848),  .CK (clk),  .QN (n22683));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21914
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[127] ( .D (n9824),  .CK (clk),  .QN (n22614));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21915
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[12] ( .D (n9939),  .CK (clk),  .QN (n22586));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21916
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[26] ( .D (n9925),  .CK (clk),  .QN (n22596));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21917
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[44] ( .D (n9907),  .CK (clk),  .QN (n22583));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21918
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[76] ( .D (n9875),  .CK (clk),  .QN (n22587));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21919
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[108] ( .D (n9843),  .CK (clk),  .QN (n22584));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21920
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[110] ( .D (n9841),  .CK (clk),  .QN (n22552));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21921
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[122] ( .D (n9829),  .CK (clk),  .QN (n22594));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21922
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[27] ( .D (n9924),  .CK (clk),  .QN (n22672));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21923
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[91] ( .D (n9860),  .CK (clk),  .QN (n22673));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21924
-CHIP, "DFFX2 \I_cache/mem_rdata_r_reg[107] ( .D (n9844),  .CK (clk),  .QN (n22670));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-../Syn/CHIP_syn.v, 21930
-CHIP, "EDFFTRXL \i_RISCV/EX/mem_wdata_r_reg[1] ( .RN (n22696),  .D (1'b1),  .E (n22518),  .CK (clk),  .QN (n23166));"
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
 Warning-[PCWM-W] Port connection width mismatch
 Final_tb.v, 192
 "TestBed testbed( .clk (clk),  .rst (rst_n),  .addr (DCACHE_addr),  .data (DCACHE_wdata),  .wen (DCACHE_wen),  .PC (PC),  .error_num (error_num),  .duration (duration),  .finish (finish));"
@@ -1766,35 +54,27 @@ Final_tb.v, 192
    ***    Turnoff delay: "FROM_FILE"
    ***    Approximation (mipd) policy: "MAXIMUM"
 
-   ***    SDF annotation begin: Fri Jun 14 22:25:38 2024
+   ***    SDF annotation begin: Sat Jun 15 01:20:24 2024
 
 
 SDF Info: +pulse_r/100, +pulse_e/100 in effect
 
 Warning-[SDFCOM_SWC] Simple Wire Connection
-../Syn/CHIP_syn.sdf, 44037
-module: INVX16, "instance: Final_tb.chip0.U13517"
-  SDF Warning: The path from U13517.Y to \i_RISCV/mul_inst .U1568.AN doesn't 
-  have a simple wire connection, delay will still be annotated.
-
-
-Warning-[SDFCOM_SWC] Simple Wire Connection
-../Syn/CHIP_syn.sdf, 44042
-module: INVX16, "instance: Final_tb.chip0.U13517"
-  SDF Warning: The path from U13517.Y to \i_RISCV/mul_inst .U1566.A doesn't 
+../Syn/CHIP_syn.sdf, 38783
+module: NAND2X8, "instance: Final_tb.chip0.U15380"
+  SDF Warning: The path from U15380.Y to \i_RISCV/mul_inst .U290.AN doesn't 
   have a simple wire connection, delay will still be annotated.
 
 
           Total errors: 0
-          Total warnings: 2
-   ***    SDF annotation completed: Fri Jun 14 22:25:39 2024
+          Total warnings: 1
+   ***    SDF annotation completed: Sat Jun 15 01:20:25 2024
 
 
 Starting vcs inline pass...
-170 modules and 4 UDPs read.
+165 modules and 3 UDPs read.
 recompiling module TestBed
 recompiling module Final_tb
-recompiling module slow_memory
 recompiling module register_file
 recompiling module dum_mul
 recompiling module CHIP
@@ -1821,14 +101,14 @@ recompiling module AND2X2
 recompiling module AND2X4
 recompiling module AND2X6
 recompiling module AND2X8
+recompiling module AND3X1
 recompiling module AND3X2
 recompiling module AND3X4
 recompiling module AND3X6
 recompiling module AND3X8
 recompiling module AND4X1
 recompiling module AND4X2
-recompiling module AND4X4
-recompiling module AND4X6
+recompiling module AOI21XL
 recompiling module AOI21X1
 recompiling module AOI21X2
 recompiling module AOI21X4
@@ -1838,14 +118,16 @@ recompiling module AOI22XL
 recompiling module AOI22X1
 recompiling module AOI22X2
 recompiling module AOI22X4
-recompiling module AOI222X1
-recompiling module AOI2BB1X2
-recompiling module AOI2BB1X4
+recompiling module AOI222XL
+recompiling module AOI31X1
 recompiling module AOI2BB2X1
-50 of 170 modules done
 recompiling module AOI2BB2X2
 recompiling module AOI2BB2X4
+50 of 165 modules done
+recompiling module AO21X2
 recompiling module AO21X4
+recompiling module AO22X1
+recompiling module AO22X2
 recompiling module MX2X1
 recompiling module MX2X2
 recompiling module MX2X4
@@ -1855,7 +137,6 @@ recompiling module MXI2X2
 recompiling module MXI2X4
 recompiling module MXI2X6
 recompiling module MX3X1
-recompiling module MX3X4
 recompiling module NAND2XL
 recompiling module NAND2X1
 recompiling module NAND2X2
@@ -1873,68 +154,66 @@ recompiling module NAND4X1
 recompiling module NAND4X2
 recompiling module NAND4X4
 recompiling module NAND4X6
-recompiling module NAND4X8
 recompiling module NAND2BX1
 recompiling module NAND2BX2
 recompiling module NAND2BX4
+recompiling module NAND3BX1
 recompiling module NAND3BX2
-recompiling module NAND3BX4
-recompiling module NAND4BX4
 recompiling module NOR2XL
 recompiling module NOR2X1
 recompiling module NOR2X2
 recompiling module NOR2X4
 recompiling module NOR2X6
 recompiling module NOR2X8
-recompiling module NOR3XL
 recompiling module NOR3X1
 recompiling module NOR3X2
 recompiling module NOR3X4
 recompiling module NOR3X6
-recompiling module NOR3X8
-recompiling module NOR4X4
-100 of 170 modules done
+recompiling module NOR4X1
+recompiling module NOR4X2
 recompiling module NOR4X6
 recompiling module NOR2BX1
 recompiling module NOR2BX2
+100 of 165 modules done
 recompiling module NOR2BX4
-recompiling module NOR3BX1
+recompiling module NOR3BX2
+recompiling module NOR3BX4
 recompiling module OR2X1
 recompiling module OR2X2
 recompiling module OR2X4
 recompiling module OR2X6
 recompiling module OR2X8
-recompiling module OR3X2
-recompiling module OR3X6
+recompiling module OR4X2
 recompiling module OAI21XL
 recompiling module OAI21X1
 recompiling module OAI21X2
 recompiling module OAI21X4
+recompiling module OAI211XL
 recompiling module OAI211X1
-recompiling module OAI211X2
 recompiling module OAI22XL
 recompiling module OAI22X1
 recompiling module OAI22X2
 recompiling module OAI22X4
-recompiling module OAI222X1
-recompiling module OAI31X1
 recompiling module OAI2BB1X1
 recompiling module OAI2BB1X2
 recompiling module OAI2BB1X4
-recompiling module OAI2BB2XL
 recompiling module OAI2BB2X2
-recompiling module OAI2BB2X4
 recompiling module OA21XL
+recompiling module OA21X1
 recompiling module OA21X2
 recompiling module OA21X4
 recompiling module OA22X2
-recompiling module OA22X4
 recompiling module CLKXOR2X2
 recompiling module CLKXOR2X4
 recompiling module CLKXOR2X8
 recompiling module XOR2X1
 recompiling module XOR2X2
 recompiling module XOR2X4
+recompiling module XOR3XL
+recompiling module XOR3X1
+recompiling module XOR3X2
+recompiling module XOR3X4
+recompiling module XNOR2XL
 recompiling module XNOR2X1
 recompiling module XNOR2X2
 recompiling module XNOR2X4
@@ -1944,49 +223,48 @@ recompiling module CLKINVX1
 recompiling module CLKINVX2
 recompiling module CLKINVX3
 recompiling module CLKINVX6
-150 of 170 modules done
 recompiling module CLKAND2X3
-recompiling module CLKAND2X4
 recompiling module CLKAND2X8
+150 of 165 modules done
 recompiling module CLKMX2X2
-recompiling module CLKMX2X3
 recompiling module CLKMX2X4
-recompiling module CLKMX2X6
-recompiling module ACHCINX2
-recompiling module ACHCINX4
-recompiling module ACHCONX2
-recompiling module DFFX1
-recompiling module DFFX2
-recompiling module DFFX4
+recompiling module ADDHXL
+recompiling module ADDHX1
+recompiling module ADDFX1
+recompiling module ADDFX2
+recompiling module ADDFHX1
+recompiling module ADDFHX2
+recompiling module ADDFHX4
 recompiling module DFFQX2
 recompiling module DFFQX4
-recompiling module EDFFTRXL
 recompiling module DFFHQX2
 recompiling module DFFHQX4
 recompiling module DFFHQX8
-recompiling module DFFRHQX2
-All of 170 modules done
+164 of 165 modules done
+	However, due to incremental compilation, only 164 modules need to be compiled. 
 make[2]: Entering directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
-make[2]: Warning: File `filelist.cu' has modification time 173 s in the future
-make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+make[2]: Warning: File `filelist.cu' has modification time 174 s in the future
+make[3]: Warning: File `filelist.cu' has modification time 174 s in the future
 rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
 make[3]: warning:  Clock skew detected.  Your build may be incomplete.
-make[3]: Warning: File `filelist.cu' has modification time 173 s in the future
+make[3]: Warning: File `filelist.cu' has modification time 174 s in the future
+ld -shared  -Bsymbolic   -o .//../simv.daidir//_cuarc0.so objs/amcQw_d.o 
+rm -f _cuarc0.so
 make[3]: warning:  Clock skew detected.  Your build may be incomplete.
 if [ -x ../simv ]; then chmod a-x ../simv; fi
-g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/2022.06/linux64/lib -L/usr/cad/synopsys/vcs/2022.06/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _12385_archive_1.so objs/udps/uYEPC.o objs/udps/U7Vwg.o objs/udps/CjLsY.o objs/udps/exIG1.o  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/2022.06//share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
+g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/2022.06/linux64/lib -L/usr/cad/synopsys/vcs/2022.06/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1     _22467_archive_1.so _prev_archive_1.so _cuarc0.so objs/udps/U7Vwg.o objs/udps/CjLsY.o objs/udps/exIG1.o  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/2022.06/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/2022.06//share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
 ../simv up to date
 make[2]: warning:  Clock skew detected.  Your build may be incomplete.
 make[2]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src/csrc'
 Chronologic VCS simulator copyright 1991-2022
 Contains Synopsys proprietary information.
-Compiler version T-2022.06_Full64; Runtime version T-2022.06_Full64;  Jun 14 22:25 2024
+Compiler version T-2022.06_Full64; Runtime version T-2022.06_Full64;  Jun 15 01:20 2024
 Doing SDF annotation ...... Done
 -----------------------------------------------------
 
 START!!! Simulation Start .....
 
-CYCLE TIME is          10 ns
+CYCLE TIME is           3 ns
 
 -----------------------------------------------------
 
@@ -2000,22 +278,43 @@ FSDB Dumper for VCS, Release Verdi_T-2022.06, Linux x86_64/64bit, 05/29/2022
 *Verdi* : End of traversing.
 *Verdi* : Begin traversing the scopes, layer (0).
 *Verdi* : End of traversing.
+-----------------------------------------------------
+
+CACHE Informations: 
+
+DCache Stalled Cycles: read          z, write          z
+
+ICache Read Miss Rate: -nan%
+
+ICache Stalled Cycles: read          z, write          z
+
+-----------------------------------------------------
+
+Branch Prediction Informations: 
+
+Total prediction:          z
+
+Prediction Correct:          x
+
+Prediction Wrong:          z
+
+Prediction Correct Rate: -nan%
+
+-----------------------------------------------------
+
+--------------------------- Simulation FINISH !!---------------------------
 ============================================================================
 
-           Error!!! There is something wrong with your code ...!          
-
-                       The test result is .....FAIL                     
+ \(^o^)/ CONGRATULATIONS!!  The simulation result is PASS!!!
 
 ============================================================================
-Possible solution: The first answer may not be correct.
-
-$finish called from file "Final_tb.v", line 244.
-$finish at simulation time          10000095100
+$finish called from file "Final_tb.v", line 320.
+$finish at simulation time               910500
            V C S   S i m u l a t i o n   R e p o r t 
-Time: 10000095100 ps
-CPU Time:     11.890 seconds;       Data structure size:   6.4Mb
-Fri Jun 14 22:25:59 2024
-CPU time: 6.111 seconds to compile + 2.013 seconds to elab + 1.133 seconds to link + 11.944 seconds in simulation
+Time: 910500 ps
+CPU Time:      1.610 seconds;       Data structure size:   6.0Mb
+Sat Jun 15 01:20:36 2024
+CPU time: 5.846 seconds to compile + 1.897 seconds to elab + .938 seconds to link + 1.650 seconds in simulation
 # ncverilog Final_tb.v slow_memory.v ../Syn/CHIP_syn.v  -v /home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/Verilog/tsmc13.v +access+wrc +v2k +define+noHazard \
-# +define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=10 +neg_tchk
+# +define+SDF  +define+SDF_FILE=\"../Syn/CHIP_syn.sdf\" +define+CYCLE=3 +neg_tchk
 make[1]: Leaving directory `/home/raid7_2/userb10/b10054/DSD/DSD_Final/Src'
