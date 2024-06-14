@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : CHIP
 Version: U-2022.12
-Date   : Fri Jun 14 00:53:22 2024
+Date   : Fri Jun 14 22:23:17 2024
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,9 +14,9 @@ Date   : Fri Jun 14 00:53:22 2024
 Operating Conditions: slow   Library: slow
 Wire Load Model Mode: top
 
-  Startpoint: i_RISCV/IF/u0/stored_addr_r_reg[0]
+  Startpoint: i_RISCV/EX/alu_result_r_reg[5]
               (rising edge-triggered flip-flop clocked by CLK)
-  Endpoint: i_RISCV/IF/inst_ppl_r_reg[30]
+  Endpoint: i_RISCV/IF/inst_ppl_r_reg[28]
             (rising edge-triggered flip-flop clocked by CLK)
   Path Group: CLK
   Path Type: max
@@ -29,46 +29,44 @@ Wire Load Model Mode: top
   --------------------------------------------------------------------------
   clock CLK (rise edge)                                   0.00       0.00
   clock network delay (ideal)                             0.50       0.50
-  i_RISCV/IF/u0/stored_addr_r_reg[0]/CK (DFFQX4)          0.00 #     0.50 r
-  i_RISCV/IF/u0/stored_addr_r_reg[0]/Q (DFFQX4)           0.18       0.68 r
-  U18910/Y (XNOR2X4)                                      0.11       0.79 f
-  U14497/Y (AND3X6)                                       0.12       0.91 f
-  U17359/Y (NAND3X8)                                      0.06       0.97 r
-  U17355/Y (NOR2X8)                                       0.05       1.02 f
-  U15848/Y (NAND2X8)                                      0.09       1.11 r
-  U15846/Y (MXI2X4)                                       0.13       1.24 f
-  U19656/Y (NAND2X6)                                      0.07       1.32 r
-  U19657/Y (NAND2X8)                                      0.09       1.40 f
-  U16660/Y (NAND2X8)                                      0.09       1.49 r
-  U16917/Y (NOR2X8)                                       0.05       1.54 f
-  U16221/Y (INVX16)                                       0.09       1.63 r
-  U16916/Y (BUFX20)                                       0.10       1.73 r
-  U12647/Y (INVX4)                                        0.04       1.77 f
-  U16426/Y (AOI2BB2X4)                                    0.09       1.86 r
-  U17424/Y (NAND4X4)                                      0.08       1.94 f
-  U17095/Y (XOR2X4)                                       0.09       2.03 r
-  U16019/Y (NAND4X6)                                      0.09       2.12 f
-  U16241/Y (NOR2X8)                                       0.08       2.20 r
-  U16024/Y (NAND3X8)                                      0.05       2.25 f
-  U13953/Y (INVX12)                                       0.05       2.30 r
-  U17784/Y (NAND3X8)                                      0.08       2.38 f
-  U19979/Y (INVX20)                                       0.07       2.45 r
-  U18189/Y (NAND3X8)                                      0.06       2.51 f
-  U18188/Y (BUFX20)                                       0.12       2.63 f
-  U20000/Y (OR2X4)                                        0.12       2.76 f
-  U16039/Y (NAND3X2)                                      0.06       2.82 r
-  i_RISCV/IF/inst_ppl_r_reg[30]/D (DFFHQX4)               0.00       2.82 r
-  data arrival time                                                  2.82
+  i_RISCV/EX/alu_result_r_reg[5]/CK (DFFHQX4)             0.00 #     0.50 r
+  i_RISCV/EX/alu_result_r_reg[5]/Q (DFFHQX4)              0.15       0.65 r
+  U12914/Y (INVX8)                                        0.07       0.72 f
+  U16929/Y (INVX16)                                       0.07       0.79 r
+  U16465/Y (NAND2X4)                                      0.05       0.84 f
+  U16464/Y (OAI21X4)                                      0.15       0.98 r
+  U16934/Y (BUFX20)                                       0.12       1.10 r
+  U12509/Y (INVX20)                                       0.06       1.16 f
+  U12842/Y (INVX8)                                        0.06       1.22 r
+  U17038/Y (NAND2X2)                                      0.05       1.28 f
+  U12767/Y (NAND3X2)                                      0.11       1.39 r
+  U17039/Y (XNOR2X4)                                      0.11       1.50 r
+  U14876/Y (NAND3X6)                                      0.07       1.57 f
+  U14875/Y (NOR2X6)                                       0.14       1.71 r
+  U14801/Y (NAND4X4)                                      0.08       1.79 f
+  U16699/Y (AND2X8)                                       0.10       1.89 f
+  U16376/Y (NAND2X8)                                      0.05       1.94 r
+  U17097/Y (NOR2X8)                                       0.06       2.00 f
+  U14485/Y (INVX8)                                        0.10       2.10 r
+  U12502/Y (NAND2X4)                                      0.07       2.17 f
+  U12454/Y (NAND2X4)                                      0.10       2.27 r
+  U12350/Y (INVX6)                                        0.07       2.34 f
+  U21557/Y (BUFX20)                                       0.14       2.48 f
+  U15275/Y (OAI2BB2X4)                                    0.13       2.62 f
+  U15274/Y (NOR2X4)                                       0.07       2.69 r
+  U15273/Y (NAND2X2)                                      0.05       2.74 f
+  i_RISCV/IF/inst_ppl_r_reg[28]/D (DFFQX2)                0.00       2.74 f
+  data arrival time                                                  2.74
 
   clock CLK (rise edge)                                   2.50       2.50
   clock network delay (ideal)                             0.50       3.00
   clock uncertainty                                      -0.10       2.90
-  i_RISCV/IF/inst_ppl_r_reg[30]/CK (DFFHQX4)              0.00       2.90 r
-  library setup time                                     -0.08       2.82
-  data required time                                                 2.82
+  i_RISCV/IF/inst_ppl_r_reg[28]/CK (DFFQX2)               0.00       2.90 r
+  library setup time                                     -0.16       2.74
+  data required time                                                 2.74
   --------------------------------------------------------------------------
-  data required time                                                 2.82
-  data arrival time                                                 -2.82
+  data required time                                                 2.74
+  data arrival time                                                 -2.74
   --------------------------------------------------------------------------
   slack (MET)                                                        0.00
 
